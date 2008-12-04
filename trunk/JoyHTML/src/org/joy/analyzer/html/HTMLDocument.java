@@ -5,6 +5,7 @@
 
 package org.joy.analyzer.html;
 
+import org.cyberneko.html.parsers.DOMParser;
 import org.joy.analyzer.Document;
 
 /**
@@ -14,6 +15,8 @@ import org.joy.analyzer.Document;
 public class HTMLDocument extends Document{
 
     public HTMLDocument createHTMLDocument(String str){
+        DOMParser parser = new DOMParser();
+        Document doc = (Document) parser.getDocument();
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
