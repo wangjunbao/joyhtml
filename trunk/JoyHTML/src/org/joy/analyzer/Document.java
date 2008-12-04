@@ -5,6 +5,8 @@
 
 package org.joy.analyzer;
 
+import java.util.List;
+
 /**
  *
  * @author Lamfeeling
@@ -16,11 +18,10 @@ public abstract class Document {
         this.content = content;
     }
 
-    public abstract String getParagraphs();
-     
+    public abstract List<Paragraph> getParagraphs();
+    public abstract String getTitle();
+    
     public String getContent() {
         return content;
     }
-
-    
 }
