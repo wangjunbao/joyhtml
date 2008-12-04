@@ -19,6 +19,7 @@ public class HTMLDocument extends Document {
         DOMParser parser = new DOMParser();
         Document doc = (Document) parser.getDocument();
         //TODO: add parser code here
+
         
         throw new UnsupportedOperationException("Not supported yet.");
     }
