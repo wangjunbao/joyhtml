@@ -16,17 +16,17 @@ import org.joy.analyzer.Paragraph;
 public class HTMLDocument extends Document {
 
     private org.w3c.dom.Document doc;
-
+    private List<Anchor> anchors;
+    private List<Paragraph> paragraphs;
     /**
      * 从指定的字符串中构造一个HTMLDocument
      * @param str 所制定的字符串
      * @return 由指定的字符串够早的文档类
      */
-    public HTMLDocument createHTMLDocument(String str) {
+    public static HTMLDocument createHTMLDocument(String str) {
         DOMParser parser = new DOMParser();
-        Document doc = (Document) parser.getDocument();
-        //TODO: 在这里加入解析HTML的代码
-        throw new UnsupportedOperationException("Not supported yet.");
+        org.w3c.dom.Document doc = (org.w3c.dom.Document) parser.getDocument();
+        return new HTMLDocument(str, doc);
     }
 
     /**
@@ -36,16 +36,21 @@ public class HTMLDocument extends Document {
      */
     protected HTMLDocument(String content, org.w3c.dom.Document doc) {
         super(content);
+        parse();
         this.doc = doc;
     }
 
+    private void parse(){
+        //TODO: 利用此类中的Document变量分析HTML，分析代码写这里。??方法之後，所有的私有变量都被赋予合适的初始值。
+        throw new UnsupportedOperationException();
+    }
     /**
      * 获取文本中的正文段落
      * @return 返回文档中的正文段落的集合
      */
     @Override
     public List<Paragraph> getParagraphs() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return paragraphs;
     }
 
     /**
@@ -53,7 +58,7 @@ public class HTMLDocument extends Document {
      * @return HTML文档的连接集合
      */
     public List<Anchor> getAnchors() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return anchors;
     }
 
     /**
