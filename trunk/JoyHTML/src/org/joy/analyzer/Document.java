@@ -17,7 +17,7 @@ public abstract class Document {
     }
 
     public abstract String getParagraphs();
-    
+     
     public String getContent() {
         return content;
     }
