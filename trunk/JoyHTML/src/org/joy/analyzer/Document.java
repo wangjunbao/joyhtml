@@ -8,7 +8,7 @@ package org.joy.analyzer;
 import java.util.List;
 
 /**
- *
+ * ³éÏóÎÄµµÀà
  * @author Lamfeeling
  */
 public abstract class Document {
