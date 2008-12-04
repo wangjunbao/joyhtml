@@ -42,6 +42,7 @@ public class HTMLDocument extends Document {
 
     private void parse(){
         //TODO: 利用此类中的Document变量分析HTML，分析代码写这里。??方法之後，所有的私有变量都被赋予合适的初始值。
+        System.out.println("H");
         throw new UnsupportedOperationException();
     }
     /**
