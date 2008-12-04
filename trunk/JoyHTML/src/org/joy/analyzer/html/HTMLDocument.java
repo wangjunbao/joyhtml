@@ -26,6 +26,10 @@ public class HTMLDocument extends Document {
     public static HTMLDocument createHTMLDocument(String str) {
         DOMParser parser = new DOMParser();
         org.w3c.dom.Document doc = (org.w3c.dom.Document) parser.getDocument();
+                System.out.println("H");
+
+        
+
         return new HTMLDocument(str, doc);
     }
 
