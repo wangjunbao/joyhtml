@@ -1,11 +1,11 @@
-/*
+ï»¿/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package org.joy.analyzer.html;
 
 /**
- * ÃèÊöÃªÎÄ±¾ÊµÌåÀà¡£
+ * æè¿°é”šæ–‡æœ¬å®ä½“ç±»ã€‚
  * @author Lamfeeling
  */
 public class Anchor {
@@ -14,9 +14,9 @@ public class Anchor {
     private String URL;
 
     /**
-     * ¹¹Ôìº¯Êı
-     * @param text ÃªÎÄ±¾
-     * @param URL ÃªÎÄ±¾Ö¸ÏòµÄÁ´½Ó
+     * æ„é€ å‡½æ•°
+     * @param text é”šæ–‡æœ¬
+     * @param URL é”šæ–‡æœ¬æŒ‡å‘çš„é“¾æ¥
      */
     public Anchor(String text, String URL) {
         this.text = text;
@@ -34,3 +34,4 @@ public class Anchor {
         return URL;
     }
 }
+e
