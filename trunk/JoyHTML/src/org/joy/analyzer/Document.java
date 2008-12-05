@@ -14,8 +14,8 @@ import java.util.List;
 public abstract class Document {
     private String content;
 
-    protected abstract List<Paragraph> getParagraphs();
-    protected abstract String getTitle();
+    public abstract List<Paragraph> getParagraphs();
+    public abstract String getTitle();
 
     /**
      * 构造一个抽象文档

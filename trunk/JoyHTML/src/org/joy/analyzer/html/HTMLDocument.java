@@ -23,13 +23,9 @@ public class HTMLDocument extends Document {
      * @param str 所制定的字符串
      * @return 由指定的字符串够早的文档类
      */
-    public static HTMLDocument createHTMLDocument(String str) {
+    public static HTMLDocument createHTMLDocument(String URL, String str) {
         DOMParser parser = new DOMParser();
         org.w3c.dom.Document doc = (org.w3c.dom.Document) parser.getDocument();
-                System.out.println("H");
-
-        
-
         return new HTMLDocument(str, doc);
     }
 
