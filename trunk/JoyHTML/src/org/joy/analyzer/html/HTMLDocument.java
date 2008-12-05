@@ -4,6 +4,7 @@
  */
 package org.joy.analyzer.html;
 
+import org.joy.analyzer.html.*;
 import java.util.List;
 import org.cyberneko.html.parsers.DOMParser;
 import org.joy.analyzer.Document;
@@ -18,6 +19,7 @@ public class HTMLDocument extends Document {
     private org.w3c.dom.Document doc;
     private List<Anchor> anchors;
     private List<Paragraph> paragraphs;
+    private String URL;
     /**
      * 从指定的字符串中构造一个HTMLDocument
      * @param str 所制定的字符串
@@ -26,23 +28,27 @@ public class HTMLDocument extends Document {
     public static HTMLDocument createHTMLDocument(String URL, String str) {
         DOMParser parser = new DOMParser();
         org.w3c.dom.Document doc = (org.w3c.dom.Document) parser.getDocument();
-        return new HTMLDocument(str, doc);
+        return new HTMLDocument(URL,str, doc);
     }
 
     /**
      * 受保护的构造方法，不可以直接构造
+     * @param URL 网页的URL地址
      * @param content 用于构造文档的字符串
      * @param doc 由上文分析器分析出的Document类
      */
-    protected HTMLDocument(String content, org.w3c.dom.Document doc) {
+    protected HTMLDocument(String URL,String content, org.w3c.dom.Document doc) {
         super(content);
         parse();
         this.doc = doc;
+        this.URL = URL;
     }
 
     private void parse(){
         //TODO: 利用此类中的Document变量分析HTML，分析代码写这里。??方法之後，所有的私有变量都被赋予合适的初始值。
-        System.out.println("H");
+        Parser p = new Parser(URL, doc);
+        p.parse();
+        anchors = p.getAnchors();
         throw new UnsupportedOperationException();
     }
     /**
