@@ -16,14 +16,14 @@ import org.w3c.dom.NodeList;
  */
 public class Parser {
 
-    private Vector<Anchor> anchors;
-    private String context;
+    private Vector<Anchor> anchors=new Vector<Anchor>();
     private org.w3c.dom.Document doc;
+    private String context;
 
     //用网页中的元素生成链接
     private Anchor generateLink(Element e) {
         try {
-            URL u = new URL(new URL(context), e.getAttribute("href"));
+            URL u = new URL(new URL(context),e.getAttribute("href"));
             String url = u.toString().toLowerCase();
             url = url.replaceAll("\\.\\/", "");
             //避免主页重定向
@@ -33,9 +33,11 @@ public class Parser {
             {
                 url = url + "/";
             }
+            System.out.println(url);
             return new Anchor(e.getTextContent(), url);
-        } catch (MalformedURLException ex) {
+        } catch (Exception ex) {
             //System.out.println("");
+            ex.printStackTrace();
         }
         return null;
     }
@@ -56,9 +58,9 @@ public class Parser {
         extractLinks();
     }
 
-    public Parser(String URL, org.w3c.dom.Document doc) {
+    public Parser(String URL,org.w3c.dom.Document doc) {
         this.doc = doc;
-        this.context = URL;
+        this.context=URL;
     }
 
     /**

@@ -16,6 +16,7 @@ public abstract class Document {
 
     public abstract List<Paragraph> getParagraphs();
     public abstract String getTitle();
+   
 
     /**
      * 构造一个抽象文档

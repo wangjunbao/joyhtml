@@ -4,11 +4,20 @@
  */
 package org.joy.analyzer.html;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.joy.analyzer.html.*;
 import java.util.List;
 import org.cyberneko.html.parsers.DOMParser;
 import org.joy.analyzer.Document;
 import org.joy.analyzer.Paragraph;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * HTML文本类。
@@ -16,7 +25,7 @@ import org.joy.analyzer.Paragraph;
  */
 public class HTMLDocument extends Document {
 
-    private org.w3c.dom.Document doc;
+    private static  org.w3c.dom.Document doc;
     private List<Anchor> anchors;
     private List<Paragraph> paragraphs;
     private String URL;
@@ -27,7 +36,15 @@ public class HTMLDocument extends Document {
      */
     public static HTMLDocument createHTMLDocument(String URL, String str) {
         DOMParser parser = new DOMParser();
-        org.w3c.dom.Document doc = (org.w3c.dom.Document) parser.getDocument();
+        try {
+             parser.parse(new InputSource(new StringReader(str)));
+           //add InputSorce  HD
+        } catch (SAXException ex) {
+            Logger.getLogger(HTMLDocument.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(HTMLDocument.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         org.w3c.dom.Document doc = (org.w3c.dom.Document) parser.getDocument();
         return new HTMLDocument(URL,str, doc);
     }
 
@@ -39,9 +56,10 @@ public class HTMLDocument extends Document {
      */
     protected HTMLDocument(String URL,String content, org.w3c.dom.Document doc) {
         super(content);
-        parse();
-        this.doc = doc;
+         this.doc = doc;
         this.URL = URL;
+        parse();
+       
     }
 
     private void parse(){
@@ -49,7 +67,7 @@ public class HTMLDocument extends Document {
         Parser p = new Parser(URL, doc);
         p.parse();
         anchors = p.getAnchors();
-        throw new UnsupportedOperationException();
+       // throw new UnsupportedOperationException();
     }
     /**
      * 获取文本中的正文段落
