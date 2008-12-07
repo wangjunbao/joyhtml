@@ -24,7 +24,7 @@ public class HTMLDocument extends Document {
     private org.w3c.dom.Document doc;
     private List<Anchor> anchors;
     private List<Paragraph> paragraphs;
-    private String URL;
+    private String url;
     /**
      * 从指定的字符串中构造一个HTMLDocument
      * @param str 所制定的字符串
@@ -51,17 +51,17 @@ public class HTMLDocument extends Document {
      * @param content 用于构造文档的字符串
      * @param doc 由上文分析器分析出的Document类
      */
-    protected HTMLDocument(String URL,String content, org.w3c.dom.Document doc) {
+    protected HTMLDocument(String url,String content, org.w3c.dom.Document doc) {
         super(content);
          this.doc = doc;
-        this.URL = URL;
+        this.url = url;
         parse();
        
     }
 
     private void parse(){
         //TODO: 利用此类中的Document变量分析HTML，分析代码写这里。方法之後，所有的私有变量都被赋予合适的初始值。
-        Parser p = new Parser(URL, doc);
+        Parser p = new Parser(url, doc);
         p.parse();
         anchors = p.getAnchors();
     }

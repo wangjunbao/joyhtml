@@ -11,16 +11,16 @@ package org.joy.analyzer.html;
 public class Anchor {
 
     private String text;
-    private String URL;
+    private String url;
 
     /**
      * 构造函数
      * @param text 锚文本
      * @param URL 锚文本指向的链接
      */
-    public Anchor(String text, String URL) {
+    public Anchor(String text, String url) {
         this.text = text;
-        this.URL = URL;
+        this.url = url;
     }
 
     public Anchor() {
@@ -31,6 +31,6 @@ public class Anchor {
     }
 
     public String getURL() {
-        return URL;
+        return url;
     }
 }
