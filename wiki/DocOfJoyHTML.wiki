@@ -32,7 +32,7 @@ lib/: 引用库
 }}}
 
 您的输出应该类似于：
-
+{{{
    =>   http://news.baidu.com/view.html
 网页   =>   http://www.baidu.com/
 贴吧   =>   http://tieba.baidu.com/
@@ -41,7 +41,7 @@ MP3   =>   http://mp3.baidu.com/
 图片   =>   http://image.baidu.com/
 视频   =>   http://video.baidu.com/
 
-
+}}}
 正如您看到的，一个简单的操作，JoyHTML就为您提取出了网页中所有的超链接。
 
 =想了解更多？=
