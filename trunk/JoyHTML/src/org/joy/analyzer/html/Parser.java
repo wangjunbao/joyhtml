@@ -16,26 +16,28 @@ import org.w3c.dom.NodeList;
  */
 public class Parser {
 
-    private Vector<Anchor> anchors=new Vector<Anchor>();
+    private Vector<Anchor> anchors = new Vector<Anchor>();
     private org.w3c.dom.Document doc;
     private String context;
 
     //用网页中的元素生成链接
     private Anchor generateLink(Element e) {
         try {
-            URL u = new URL(new URL(context),e.getAttribute("href"));
+            URL u = new URL(new URL(context), e.getAttribute("href"));
             String url = u.toString().toLowerCase();
             url = url.replaceAll("\\.\\/", "");
             //避免主页重定向
-            if (url.endsWith("index.htm") || url.endsWith("index.html") || url.endsWith("index.asp") || url.endsWith("default.aspx") || url.endsWith("index.php") || url.endsWith("index.jsp")) {
+            if (url.endsWith("index.htm") || url.endsWith("index.html") ||
+                    url.endsWith("index.asp") || url.endsWith("default.aspx") ||
+                    url.endsWith("index.php") || url.endsWith("index.jsp")) {
                 url = url.substring(0, url.lastIndexOf("/") + 1);
-            } else if (u.getPath().indexOf(".") == -1 && !url.endsWith("/")) //一律写成**/的形式
-            {
+            } else if (u.getPath().indexOf(".") == -1 && !url.endsWith("/")) {
+                //一律写成**/的形式
                 url = url + "/";
             }
             System.out.println(url);
             return new Anchor(e.getTextContent(), url);
-        } catch (Exception ex) {
+        } catch (MalformedURLException ex) {
             //System.out.println("");
             ex.printStackTrace();
         }
@@ -58,9 +60,9 @@ public class Parser {
         extractLinks();
     }
 
-    public Parser(String URL,org.w3c.dom.Document doc) {
+    public Parser(String URL, org.w3c.dom.Document doc) {
         this.doc = doc;
-        this.context=URL;
+        this.context = URL;
     }
 
     /**

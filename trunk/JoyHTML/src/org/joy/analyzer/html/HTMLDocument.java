@@ -4,11 +4,8 @@
  */
 package org.joy.analyzer.html;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.StringReader;
-import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.joy.analyzer.html.*;
@@ -64,6 +61,7 @@ public class HTMLDocument extends Document {
 
     private void parse(){
         //TODO: 利用此类中的Document变量分析HTML，分析代码写这里。??方法之後，所有的私有变量都被赋予合适的初始值。
+        System.out.println("HELLO");
         Parser p = new Parser(URL, doc);
         p.parse();
         anchors = p.getAnchors();

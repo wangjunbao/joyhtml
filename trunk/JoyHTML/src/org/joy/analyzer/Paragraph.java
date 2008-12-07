@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.joy.analyzer;
 
 /**
@@ -10,6 +9,7 @@ package org.joy.analyzer;
  * @author Lamfeeling
  */
 public class Paragraph {
+
     private String text;
     private int weight;
 
@@ -28,6 +28,4 @@ public class Paragraph {
     public int getWeight() {
         return weight;
     }
-
-    
 }
