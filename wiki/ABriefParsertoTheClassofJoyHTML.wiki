@@ -4,18 +4,24 @@
 = Introduction =
 JoyHTML中的各类剖析
 
- Anchor类：
+Anchor类：
 各变量
+
 String URL   存放超链接(该变量不符合JAVA命名规则，有待改进)
+
 String test    该超链接所对应的文本
+
 本类设有 Getters
+
 如：
 网页      http://www.baidu.com/
 贴吧      http://tieba.baidu.com/
 
 
 Document类:
-String content   以String 形式存放待解析的网页文本，content就是文本内容
+
+String content   
+以String 形式存放待解析的网页文本，content就是文本内容
 采用面向对象思维
 本类设有Getters
 
