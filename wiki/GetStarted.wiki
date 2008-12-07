@@ -1,3 +1,4 @@
+#labels Featured
 = 介绍 =
 
 JoyHTML的结构简介，欢迎各位修改
