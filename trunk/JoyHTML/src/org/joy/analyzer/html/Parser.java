@@ -35,10 +35,8 @@ public class Parser {
                 //一律写成**/的形式
                 url = url + "/";
             }
-            System.out.println(url);
             return new Anchor(e.getTextContent(), url);
         } catch (MalformedURLException ex) {
-            //System.out.println("");
             ex.printStackTrace();
         }
         return null;

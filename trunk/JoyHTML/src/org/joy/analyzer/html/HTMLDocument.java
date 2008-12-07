@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.joy.analyzer.html.*;
 import java.util.List;
 import org.cyberneko.html.parsers.DOMParser;
 import org.joy.analyzer.Document;
@@ -22,7 +21,7 @@ import org.xml.sax.SAXException;
  */
 public class HTMLDocument extends Document {
 
-    private static  org.w3c.dom.Document doc;
+    private org.w3c.dom.Document doc;
     private List<Anchor> anchors;
     private List<Paragraph> paragraphs;
     private String URL;
@@ -31,18 +30,19 @@ public class HTMLDocument extends Document {
      * @param str 所制定的字符串
      * @return 由指定的字符串够早的文档类
      */
-    public static HTMLDocument createHTMLDocument(String URL, String str) {
+    public static HTMLDocument createHTMLDocument(String URL, String str) throws ParseException {
         DOMParser parser = new DOMParser();
         try {
              parser.parse(new InputSource(new StringReader(str)));
-           //add InputSorce  HD
         } catch (SAXException ex) {
+            //如果解析错误，要抛出异常
             Logger.getLogger(HTMLDocument.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ParseException(ex.getMessage());
         } catch (IOException ex) {
+            // never reach here
             Logger.getLogger(HTMLDocument.class.getName()).log(Level.SEVERE, null, ex);
         }
-         org.w3c.dom.Document doc = (org.w3c.dom.Document) parser.getDocument();
-        return new HTMLDocument(URL,str, doc);
+        return new HTMLDocument(URL,str,  parser.getDocument());
     }
 
     /**
@@ -60,12 +60,10 @@ public class HTMLDocument extends Document {
     }
 
     private void parse(){
-        //TODO: 利用此类中的Document变量分析HTML，分析代码写这里。??方法之後，所有的私有变量都被赋予合适的初始值。
-        System.out.println("HELLO");
+        //TODO: 利用此类中的Document变量分析HTML，分析代码写这里。方法之後，所有的私有变量都被赋予合适的初始值。
         Parser p = new Parser(URL, doc);
         p.parse();
         anchors = p.getAnchors();
-       // throw new UnsupportedOperationException();
     }
     /**
      * 获取文本中的正文段落
@@ -73,7 +71,8 @@ public class HTMLDocument extends Document {
      */
     @Override
     public List<Paragraph> getParagraphs() {
-        return paragraphs;
+        //return paragraphs;
+        throw new UnsupportedOperationException();
     }
 
     /**

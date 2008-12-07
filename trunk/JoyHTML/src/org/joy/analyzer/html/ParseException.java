@@ -11,4 +11,8 @@ package org.joy.analyzer.html;
  */
 public class ParseException extends Exception{
 
+    public ParseException(String msg) {
+        super(msg);
+    }
+
 }
