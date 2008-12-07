@@ -1,10 +1,11 @@
 #summary One-sentence summary of this page.
 #labels Featured
 
-= Introduction =
-JoyHTML中的各类剖析
+= 代码结构指南 =
 
-Anchor类：
+==JoyHTML中的各类剖析==
+
+=Anchor类：=
 各变量
 
 String URL   存放超链接(该变量不符合JAVA命名规则，有待改进)
@@ -19,14 +20,15 @@ String test    该超链接所对应的文本
 贴吧      http://tieba.baidu.com/
 
 
-Document类:
+==Document类:==
 
 String content   
 以String 形式存放待解析的网页文本，content就是文本内容
 采用面向对象思维
 本类设有Getters
 
-Parser类：
+
+==Parser类：==
 
 本类由HTMLDocument调用
 
@@ -37,7 +39,7 @@ Parser类：
 (PS:个人觉得用ArrayList更节省空间)
 
 
-HTMLDocument extends Document：
+==HTMLDocument extends Document：==
 继承Document；
 
 以面向对象的思维建立一个解析类
@@ -51,12 +53,3 @@ str 即传递待解析的网页文本，String格式
 通过调用静态方法createHTMLDocument(String URL, String str)来建立一个对象
 
 该对象建立以后自动生成Anchor的一个Vector集合anchors，可以通过Getters调用
-
-
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
