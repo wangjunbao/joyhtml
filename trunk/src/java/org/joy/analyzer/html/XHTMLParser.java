@@ -6,7 +6,6 @@ package org.joy.analyzer.html;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -38,7 +37,7 @@ public class XHTMLParser {
     private static final String[] INFO_NODE = {"P", "SPAN", "BR"};
     private static final String LINK_NODE = "A";
     private static final String[] TITLE = {"H1", "H2", "H3"};
-    private static final String[] INVALID_TAGS = {"STYLE", "COMMENT", "SCRIPT", "OPTION"};
+    private static final String[] INVALID_TAGS = {"STYLE", "COMMENT", "SCRIPT", "OPTION", "LI"};
     public static final int TITLE_WEIGHT = 200;
     public static final int PLAIN_TEXT_WEIGHT = 30;
     public static final int ANCHOR_TEXT_WEIGHT = 10;
@@ -95,9 +94,9 @@ public class XHTMLParser {
     }
 
     private String filter(String text) {
-        text = text.replaceAll("[^\u4e00-\u9fa5|a-z|A-Z|0-9|０-９,.，。:；|\\s|\\@]", " ");
+        text = text.replaceAll("[^\u4e00-\u9fa5|a-z|A-Z|0-9|０-９,.，。:；?!|\\s|\\@]", " ");
         text = text.replaceAll("[【】]", " ");
-        text = text.replaceAll("\n", " ");
+        text = text.replaceAll("\n+", " ");
         text = text.replaceAll("\\|", "");
         text = text.replaceAll("\\s+", " ");
         text = text.trim();
@@ -180,8 +179,10 @@ public class XHTMLParser {
         }
         return 0;
     }
+    boolean needWarp = false;
 
     private String ExtractText(Node n) {
+
         if (n.getNodeType() == Node.TEXT_NODE) {
             String temp = filter(n.getTextContent()).trim();
             if (!temp.equals("")) {
@@ -194,64 +195,75 @@ public class XHTMLParser {
             if (isInvalidNode((Element) n)) {
                 return "";
             }
-            Element e = (Element) n;
-            if (isLinkNode(e)) {
-                isInAnchor = true;
-            }
+
             NodeList children = n.getChildNodes();
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < children.getLength(); i++) {
-                String line = ExtractText(children.item(i));
-                if(!line.trim().equals(""))
-                    sb.append(line+"\r\n");
+                if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                    Element eChild = (Element) children.item(i);
+                    if (isInfoNode(eChild) || isImportantNode(eChild) ||
+                            isLargeNode(eChild)) {
+                        needWarp = true;
+                    }
+                }
+
+                String line = "";
+                if (children.item(i).getNodeName().equals("A")) {
+                    line = ExtractText(children.item(i));
+                } else {
+                    int anchorLen = anchorTextLength(children.item(i));
+                    int textLen = textLength(children.item(i));
+                    if ((float) anchorLen / textLen < 0.5) {
+                        line = ExtractText(children.item(i));
+                    } else {
+                        if (textLen != 0) {
+                            System.out.println();
+                            System.out.println(anchorLen);
+                            System.out.println(textLen);
+                            System.out.println((float) anchorLen / textLen);
+                            System.out.println();
+                        }
+                    }
+                }
+
+                if (!line.trim().equals("")) {
+                    if (needWarp) {
+                        sb.append(line + "\r\n    ");
+                    } else {
+                        sb.append(line);
+                    }
+                }
+                needWarp = false;
             }
-            isInAnchor = false;
             return sb.toString();
         }
         return "";
     }
     private boolean isInAnchor;
 
-//    public int anchorTextLength(Node n) {
-//        if (n.getNodeType() == Node.TEXT_NODE) {
-//            if (isInAnchor) {
-//                return filter(n.getTextContent()).trim().length();
-//            } else {
-//                return 0;
-//            }
-//        }
-//        if (n.getNodeType() == Node.ELEMENT_NODE) {
-//            int length = 0;
-//            Element elmt = (Element) n;
-//            if (isInvalidNode(elmt)) {
-//                return 0;
-//            }
-//            NodeList children = n.getChildNodes();
-//            for (int i = 0; i < children.getLength(); i++) {
-//                if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-//                    Element e = (Element) children.item(i);
-//                    if (e.getTagName().equals("A")) {
-//                        isInAnchor = true;
-//                    }
-//                }
-//                length += anchorTextLength(children.item(i));
-//                isInAnchor = false;
-//
-//            }
-//            return length;
-//        }
-//        return 0;
-//    }
-//
-//    private boolean isStopNode(Node n) {
-//        //如果是超链接Node，则不是StopNode
-//        if (n.getNodeType() == Node.ELEMENT_NODE) {
-//            if (isLinkNode((Element) n)) {
-//                return false;
-//            }
-//        }
-//        return anchorTextLength(n) / (float) textLength(n) > 0.8f;
-//    }
+    public int anchorTextLength(Node n) {
+        if (n.getNodeType() == Node.TEXT_NODE) {
+            if (isInAnchor) {
+                return filter(n.getTextContent()).trim().length();
+            } else {
+                return 0;
+            }
+        }
+        if (n.getNodeType() == Node.ELEMENT_NODE) {
+            int length = 0;
+            NodeList children = n.getChildNodes();
+            if (isLinkNode((Element) n)) {
+                isInAnchor = true;
+            }
+            for (int i = 0; i < children.getLength(); i++) {
+                length += anchorTextLength(children.item(i));
+            }
+            isInAnchor = false;
+            return length;
+        }
+        return 0;
+    }
+
     private boolean isLinkNode(Element e) {
         if (e.getTagName().equals(LINK_NODE)) {
             return true;
@@ -301,9 +313,6 @@ public class XHTMLParser {
             if (isInvalidNode(e)) {
                 return;
             }
-//            if(isStopNode(node)){
-//                stopNodes.add(node);
-//            }
             numInfoNodes += isInfoNode(e) ? 1 : 0;
             numLinks += isLinkNode(e) ? 1 : 0;
             //如果是超链接，则添加
@@ -375,7 +384,7 @@ public class XHTMLParser {
             }
             parser.parse(sb.toString(), "http://localhost");
 
-            FileWriter w = new FileWriter("c:/77/" +f.getName() + ".txt");
+            FileWriter w = new FileWriter("77/" + f.getName() + ".txt");
             w.write(parser.getBody().replaceAll("\\r\\n+", "\r\n"));
             w.close();
         //System.out.println("http://abc/./pac?a123".replaceAll("\\.\\/", ""));    //  System.out.println((new URL("http://bac.com/a").getFile()));
