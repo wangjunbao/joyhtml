@@ -26,7 +26,7 @@ import org.xml.sax.SAXException;
 
 /**
  * This Class is only for test purpose, and will not appear in our final version
- *  So you should NOT use or reference this class for any reason.
+ *  So you should NOT use or refer this class for any reason.
  * This Class can be neglected when you write document
  * @author Lamfeeling
  */
