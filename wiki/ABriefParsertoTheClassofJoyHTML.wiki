@@ -53,3 +53,8 @@ str 即传递待解析的网页文本，String格式
 通过调用静态方法createHTMLDocument(String URL, String str)来建立一个对象
 
 该对象建立以后自动生成Anchor的一个Vector集合anchors，可以通过Getters调用
+
+==工作流程==
+
+
+[http://joyhtml.googlecode.com/files/flow.JPG]
