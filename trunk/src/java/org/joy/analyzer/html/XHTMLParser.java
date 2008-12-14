@@ -373,9 +373,9 @@ public class XHTMLParser {
 
     public static void main(String args[]) throws IOException, ParseException {
         XHTMLParser parser = new XHTMLParser();
-        File folder = new File("d:/772/");
+        File folder = new File("c:/77/");
         for (File f : folder.listFiles()) {
-            FileReader reader = new FileReader("d:/772/" + f.getName());
+            FileReader reader = new FileReader("c:/77/" + f.getName());
             BufferedReader r = new BufferedReader(reader);
             StringBuilder sb = new StringBuilder();
             String line;
@@ -384,7 +384,7 @@ public class XHTMLParser {
             }
             parser.parse(sb.toString(), "http://localhost");
 
-            FileWriter w = new FileWriter("77/" + f.getName() + ".txt");
+            FileWriter w = new FileWriter("c:/77res/" + f.getName() + ".txt");
             w.write(parser.getBody().replaceAll("\\r\\n+", "\r\n"));
             w.close();
         //System.out.println("http://abc/./pac?a123".replaceAll("\\.\\/", ""));    //  System.out.println((new URL("http://bac.com/a").getFile()));
