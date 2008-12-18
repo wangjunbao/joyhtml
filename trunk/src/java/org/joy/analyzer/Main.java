@@ -7,6 +7,7 @@ package org.joy.analyzer;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import org.joy.analyzer.html.Anchor;
 import org.joy.analyzer.html.HTMLDocument;
@@ -33,9 +34,14 @@ public class Main {
         }
         br.close();
 
-        HTMLDocument doc = HTMLDocument.createHTMLDocument("http://news.baidu.com", sb.toString());
+        HTMLDocument doc = HTMLDocument.createHTMLDocument("http://news.sina.com.cn", sb.toString());
         for(Anchor a:doc.getAnchors()){
+            if(a!=null)
             System.out.println(a.getText()+"   =>   "+a.getURL());
+
+            FileWriter w = new FileWriter("d:/test.txt");
+        w.write(doc.getBodyText());//.replaceAll("\\r\\n+", "\r\n"));
+        w.close();
         }
     }
 }

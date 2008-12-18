@@ -16,7 +16,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
- * HTML文本类。
+ * HTML文本类�1�7�1�7
  * @author Lamfeeling
  */
 public class HTMLDocument extends Document {
@@ -25,10 +25,11 @@ public class HTMLDocument extends Document {
     private List<Anchor> anchors;
     private List<Paragraph> paragraphs;
     private String url;
+    private String bodyText="";
     /**
-     * 从指定的字符串中构造一个HTMLDocument
-     * @param str 所制定的字符串
-     * @return 由指定的字符串够早的文档类
+     * 从指定的字符串中构�1�7�一个HTMLDocument
+     * @param str 扄1�7制定的字符串
+     * @return 由指定的字符串够早的文档籄1�7
      */
     public static HTMLDocument createHTMLDocument(String URL, String str) throws ParseException {
         DOMParser parser = new DOMParser();
@@ -46,10 +47,10 @@ public class HTMLDocument extends Document {
     }
 
     /**
-     * 受保护的构造方法，不可以直接构造
+     * 受保护的构�1�7�方法，不可以直接构逄1�7
      * @param URL 网页的URL地址
-     * @param content 用于构造文档的字符串
-     * @param doc 由上文分析器分析出的Document类
+     * @param content 用于构�1�7�文档的字符丄1�7
+     * @param doc 由上文分析器分析出的Document籄1�7
      */
     protected HTMLDocument(String url,String content, org.w3c.dom.Document doc) {
         super(content);
@@ -60,14 +61,19 @@ public class HTMLDocument extends Document {
     }
 
     private void parse(){
-        //TODO: 利用此类中的Document变量分析HTML，分析代码写这里。方法之後，所有的私有变量都被赋予合适的初始值。
+        //TODO: 利用此类中的Document变量分析HTML，分析代码写这里。方法之後，扄1�7有的私有变量都被赋予合�1�7�的初始值�1�7�1�7
         Parser p = new Parser(url, doc);
         p.parse();
         anchors = p.getAnchors();
+        
+        //     ��ȡ����
+        Extractor ext=new Extractor(doc,getContent());
+        ext.extract();
+        bodyText=ext.getTextBody();
     }
     /**
      * 获取文本中的正文段落
-     * @return 返回文档中的正文段落的集合
+     * @return 返回文档中的正文段落的集各1�7
      */
     @Override
     public List<Paragraph> getParagraphs() {
@@ -76,16 +82,16 @@ public class HTMLDocument extends Document {
     }
 
     /**
-     * 返回HTML文档的连接集合
-     * @return HTML文档的连接集合
+     * 返回HTML文档的连接集各1�7
+     * @return HTML文档的连接集各1�7
      */
     public List<Anchor> getAnchors() {
         return anchors;
     }
 
     /**
-     * 返回HTML文本的标题
-     * @return HTML文本的标题
+     * 返回HTML文本的标预1�7
+     * @return HTML文本的标预1�7
      */
     @Override
     public String getTitle() {
@@ -93,10 +99,14 @@ public class HTMLDocument extends Document {
     }
 
     /**
-     * 返回文本构建的的DOM树
-     * @return Dom树文档对象
+     * 返回文本构建的的DOM栄1�7
+     * @return Dom树文档对豄1�7
      */
     public org.w3c.dom.Document getDoc() {
         return doc;
     }
+
+	public String getBodyText() {
+		return bodyText;
+	}
 }
