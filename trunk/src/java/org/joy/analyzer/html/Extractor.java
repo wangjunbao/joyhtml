@@ -26,9 +26,16 @@ public class Extractor {
     	this.content=content;
 		
 	}
+
+    private void reset() {
+        nodeList.clear();
+        textSize = 0;
+        numLinks = 1;
+        numInfoNodes = 0;
+    }
     public void extract()
     {
-    	
+    	reset();
     	getTitle();
     	Node bodyNode=doc.getElementsByTagName("BODY").item(0);
     	statistics(bodyNode);
@@ -106,7 +113,7 @@ public class Extractor {
             if (NodeQuality.isInvalidNode(e)) {
                 return;
             }
-            //º∆À„»®÷ÿ
+            //ÔøΩÔøΩÔøΩÔøΩ»®ÔøΩÔøΩ
             weight += NodeQuality.isImportantNode(e) ? 1 : 0;
             weight += NodeQuality.isLargeNode(e) ? 0.5 : 0;
             weight += NodeQuality.isTitleNode(e) ? 1 : 0;
@@ -123,7 +130,7 @@ public class Extractor {
 		
 	}
     //===============?
-    //Ω‚ Õœ¬¬È∑≥£¨À¸µƒ◊˜”√
+    //ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÈ∑≥ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ
     private float fn(float x) {
         if (x > 0.8f) {
             return 0.8f;
@@ -136,7 +143,7 @@ public class Extractor {
 		if(node==null)
 		{
 			return;
-		}//“—Œﬁchild∑µªÿ
+		}//ÔøΩÔøΩÔøΩÔøΩchildÔøΩÔøΩÔøΩÔøΩ
 		if(node.getNodeType()==Node.TEXT_NODE)
 		{
 			textSize+=this.filter(node.getTextContent()).length();
@@ -197,8 +204,7 @@ public class Extractor {
 		
 	}
 	 private String filter(String text) {
-		 text = text.replaceAll("[^\u4e00-\u9fa5|a-z|A-Z|0-9|£∞-£π,.£¨°£:£ª?!|\\s|\\@]", " ");
-	        text = text.replaceAll("[°æ°ø]", " ");
+		 text = text.replaceAll("[^\u4e00-\u9fa5|\\w ,.Ôºå„ÄÇ\"‚Äú‚Äù:ÔºöÔºõÔºü?„Ää„Äã<>ÔºÅ!|\\s|\\@]", " ");
 	        text = text.replaceAll("\n+", " ");
 	        text = text.replaceAll("\\|", "");
 	        text = text.replaceAll("\\s+", " ");
@@ -264,7 +270,7 @@ public class Extractor {
 	 public String getTextBody()
     {
     	
-    	return title + " " + body;
+    	return title + "\n" + body;
     }
 
 }
