@@ -204,7 +204,7 @@ public class Extractor {
 		
 	}
 	 private String filter(String text) {
-		 text = text.replaceAll("[^\u2e80-\ufffdh|\\w]", " ");
+		 text = text.replaceAll("[^\u2e80-\ufffdh ~@#$%&:,.';\"<>*+_-|\\w]", " ");
 	        text = text.replaceAll("\n+", " ");
 	        text = text.replaceAll("\\|", "");
 	        text = text.replaceAll("\\s+", " ");
