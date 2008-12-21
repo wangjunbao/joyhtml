@@ -4,6 +4,8 @@
  */
 package org.joy.analyzer;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Lamfeeling
@@ -11,12 +13,13 @@ package org.joy.analyzer;
 public class Paragraph {
 
     private String text;
-    private int weight;
+    private double weight;
+    private ArrayList<String> highlight = new ArrayList<String>();
 
     public Paragraph() {
     }
 
-    public Paragraph(String text, int weight) {
+    public Paragraph(String text, double weight) {
         this.text = text;
         this.weight = weight;
     }
@@ -25,7 +28,7 @@ public class Paragraph {
         return text;
     }
 
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
 }

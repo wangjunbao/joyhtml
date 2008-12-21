@@ -6,9 +6,10 @@ package org.joy.analyzer.html;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.Vector;
+import org.joy.analyzer.Paragraph;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
@@ -20,6 +21,7 @@ public class Parser {
     private Vector<Anchor> anchors = new Vector<Anchor>();
     private org.w3c.dom.Document doc;
     private String context;
+    private TextExtractor e;
 
     //用网页中的元素生成链接
     private Anchor generateLink(Element e) {
@@ -57,11 +59,13 @@ public class Parser {
      */
     public void parse() {
         extractLinks();
+        e.extract();
     }
 
     public Parser(String URL, org.w3c.dom.Document doc) {
         this.doc = doc;
         this.context = URL;
+        e = new TextExtractor(doc);
     }
 
     /**
@@ -70,5 +74,9 @@ public class Parser {
      */
     public Vector<Anchor> getAnchors() {
         return anchors;
+    }
+
+    public List<Paragraph> getParagraphs() {
+        return e.getParagraphList();
     }
 }

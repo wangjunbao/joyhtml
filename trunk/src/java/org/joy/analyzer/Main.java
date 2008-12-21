@@ -39,9 +39,9 @@ public class Main {
             if(a!=null)
             System.out.println(a.getText()+"   =>   "+a.getURL());
 
-            FileWriter w = new FileWriter("d:/test.txt");
-        w.write(doc.getBodyText());//.replaceAll("\\r\\n+", "\r\n"));
-        w.close();
+     //       FileWriter w = new FileWriter("d:/test.txt");
+        //w.write(doc.getBodyText());//.replaceAll("\\r\\n+", "\r\n"));
+       // w.close();
         }
     }
 }

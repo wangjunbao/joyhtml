@@ -5,14 +5,16 @@ package org.joy.analyzer.html;
 
 import java.util.*;
 import java.io.*;
+import java.util.ArrayList;
 import org.xml.sax.InputSource;
 import org.w3c.dom.*;
 import org.cyberneko.html.parsers.DOMParser;
-import org.joy.analyzer.Utility;
+import org.joy.analyzer.Paragraph;
 
 /**
  * @version 1.0
  * @author JINJUN
+ * @modified by Liu Song
  * <pre>the class provide the method to get the most important part
  * of the dom tree,so you can keep point at the most useful text
  * with least time
@@ -29,6 +31,13 @@ import org.joy.analyzer.Utility;
  *  </pre>
  */
 public class TextExtractor {
+
+    /**
+     * @return the paragraphList
+     */
+    public List<Paragraph> getParagraphList() {
+        return paragraphList;
+    }
 
     /**
      * a class store the node information
@@ -54,39 +63,13 @@ public class TextExtractor {
          */
         private double priority = -3;
 
-        public Mark(Node node) {
-            super();
-            if (node != null) {
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    if (Utility.isLinkNode((Element) node)) {
-                        this.numAnchorText = Utility.filter(node.getTextContent()).length();
-                    } 
-                } else if (node.getNodeType() == Node.TEXT_NODE) {
-                    this.numText = Utility.filter(node.getTextContent()).length();
-                }
-
-                TextExtractor.this.numTotalText += numText;
-                TextExtractor.this.numTotalAnchorText += numAnchorText;
-            }
+        public Mark(Node node, int numText, int numAnchorText) {
             this.node = node;
+            this.numAnchorText = numAnchorText;
+            this.numText = numText;
         }
-
-        private void increaseTextCount(int numText) {
-            this.numText += numText;
-            TextExtractor.this.numTotalText += numText;
-        }
-
-        private void increaseAnchorTextCount(int numAnchorText) {
-            this.numAnchorText += numAnchorText;
-            TextExtractor.this.numTotalAnchorText += numAnchorText;
-        }
-
-        public void increaseMark(Mark mark) {
-            increaseTextCount(mark.numText);
-            increaseAnchorTextCount(mark.numAnchorText);
-        }
-
         //平滑函数
+
         private double fn(double x) {
             if (x > 0.8f) {
                 return 0.8f;
@@ -97,7 +80,7 @@ public class TextExtractor {
         /**
          * account the priority
          */
-        public double getPriority() {
+        public double weight() {
             /**
              * this is the strategy to account the priority
              *
@@ -108,15 +91,15 @@ public class TextExtractor {
                     Element e = (Element) node;
                     priority += Utility.isImportantNode(e) ? 1 : 0;
                     priority += Utility.isLargeNode(e) ? 0.5 : 0;
-                   // priority += Utility.isHeading(e) ? 1 : 0;
-                    priority += fn(Utility.numInfoNode(e) / (float) (numTotalnfoNodes));
+                    // priority += Utility.isHeading(e) ? 1 : 0;
+                    priority += 0.5*fn(Utility.numInfoNode(e) / (float) (numTotalnfoNodes));
                 }
-                if (TextExtractor.this.numTotalText != 0 && TextExtractor.this.numTotalAnchorText != 0) {
-                    priority += fn(1.0 * numText / TextExtractor.this.numTotalText - 1.0 * numAnchorText / TextExtractor.this.numTotalAnchorText);
-                } else if (TextExtractor.this.numTotalText != 0) {
-                    priority += fn(1.0 * numText / TextExtractor.this.numTotalText);
-                } else if (TextExtractor.this.numTotalAnchorText != 0) {
-                    priority += fn(-1.0 * numAnchorText / TextExtractor.this.numTotalAnchorText);
+                if (TextExtractor.this.totalTextLen != 0 && TextExtractor.this.totalAnchorTextLen != 0) {
+                    priority += fn(1.0 * numText / TextExtractor.this.totalTextLen - 1.0 * numAnchorText / TextExtractor.this.totalAnchorTextLen);
+                } else if (TextExtractor.this.totalTextLen != 0) {
+                    priority += fn(1.0 * numText / TextExtractor.this.totalTextLen);
+                } else if (TextExtractor.this.totalAnchorTextLen != 0) {
+                    priority += fn(-1.0 * numAnchorText / TextExtractor.this.totalAnchorTextLen);
                 } else {
                     priority = 0;
                 }
@@ -127,7 +110,7 @@ public class TextExtractor {
 
         @Override
         public int compareTo(Mark mark) {
-            if (this.getPriority() > mark.getPriority()) {
+            if (this.weight() > mark.weight()) {
                 return 1;
             }
             return -1;
@@ -136,17 +119,18 @@ public class TextExtractor {
     /**
      * store the number of text not in anchor
      */
-    private int numTotalText = 0;
+    private int totalTextLen = 0;
     /**
      * store the number of text not in anchor
      */
-    private int numTotalAnchorText = 0;
+    private int totalAnchorTextLen = 0;
     private int numTotalnfoNodes = 0;
     /**
      * visit every node and count the factors that affect the priority
      * of this node
      */
     private List<Mark> markList = new ArrayList<Mark>();
+    private List<Paragraph> paragraphList = new ArrayList<Paragraph>();
     private Document doc;
 
     public TextExtractor(Document doc) {
@@ -155,36 +139,25 @@ public class TextExtractor {
 
     }
 
-    public String getHeadings() {
-        //get headings
-        StringBuilder sb = new StringBuilder();
-        for (String tagName : Utility.HEADING_TAGS) {
-            NodeList t = doc.getElementsByTagName(tagName);
-            for (int i = 0; i < t.getLength(); i++) {
-                String s = Utility.filter(t.item(i).getTextContent());
-                sb.append(s + "\n");
-            }
-        }
-        return sb.toString();
-    }
-
     /**
-     *
-     * @return string Content text
+     * 
+     * @return string whole text on the web
      */
-    public String getContentText() {
+    public String extract() {
         Node body = doc.getElementsByTagName("BODY").item(0);
+        String whole = getInnerText(body);
+        totalTextLen = whole.length();
         numTotalnfoNodes = Utility.numInfoNode((Element) body);
-        countNode(body);
 
+        countNode(body);
         //sort the mark list
         Collections.sort(markList);
-        for (Mark m : markList) {
-            System.out.println(m.priority + " " + m.node);
-        }
         Mark mark = markList.get(markList.size() - 1);
+        String bodyText = getInnerText(mark.node);
 
-        return getHeadings() + getText(mark.node);
+        //extract all the paragraphs, add them to the paragraph list
+        paragraphList = new ParagraphExtractor(bodyText, whole).extract();
+        return bodyText;
     }
 
     /**
@@ -192,23 +165,40 @@ public class TextExtractor {
      * @param node
      * @return the text in the node and its offspring
      */
-    private String getText(Node node) {
+    private String getInnerText(Node node) {
         if (node.getNodeType() == Node.TEXT_NODE) {
             return Utility.filter(((Text) node).getData());
         }
-
 
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
             if (Utility.isInvalidNode(element)) {
                 return "";
             }
-            String nodeText = "";
+
+            StringBuilder nodeText = new StringBuilder();
+
+            //get the highlight
+            if (Utility.isHeading(element)) {
+                nodeText.append("<" + element.getTagName() + ">");
+            }
             NodeList list = element.getChildNodes();
             for (int i = 0; i < list.getLength(); i++) {
-                nodeText += getText(list.item(i));
+                String t = getInnerText(list.item(i));
+                //whether we need to add extra space?
+                if (Utility.isSpace(element)) {
+                    t += " ";
+                }
+                nodeText.append(t);
             }
-            return nodeText;
+            if (Utility.isHeading(element)) {
+                nodeText.append("</" + element.getTagName() + ">");
+            }
+            //break the line
+            if (Utility.isParagraph(element) && nodeText.toString().trim().length() != 0) {
+                nodeText.append("\r\n");
+            }
+            return nodeText.toString().replaceAll("[\r\n]+", "\r\n");
         }
 
         return "";
@@ -220,33 +210,36 @@ public class TextExtractor {
      * @return Mark information about node
      * this method is used to collect the information and calculate priority
      */
-    private Mark countNode(Node node) {
+    private void countNode(Node node) {
         if (node.getNodeType() == Node.TEXT_NODE) {
-            return new Mark(node);
+            return;
         }
 
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
 
             if (Utility.isLinkNode(element)) {
-                // When it is a anchor tag, add to the mark list
-                Mark mark = new Mark(node);
-                return mark;
+                totalAnchorTextLen += getInnerText(element).length();
             } else if (Utility.isInvalidNode(element)) {
-                return new Mark(null);
+                return;
             } else {
-                NodeList list = element.getChildNodes();
-                Mark mark = new Mark(node);
-                for (int i = 0; i < list.getLength(); i++) {
-                    Mark t = countNode(list.item(i));
-                    mark.increaseMark(t);
+                int anchorTextLen = 0;
+                NodeList anchors = element.getElementsByTagName("A");
+                for (int i = 0; i < anchors.getLength(); i++) {
+                    anchorTextLen += getInnerText(anchors.item(i)).length();
                 }
-                markList.add(mark);
-                return mark;
+                int textLen = getInnerText(node).length();
+                markList.add(new Mark(node,
+                        textLen,
+                        anchorTextLen));
+                NodeList list = element.getChildNodes();
+                for (int i = 0; i < list.getLength(); i++) {
+                    countNode(list.item(i));
+                }
             }
         }
 
-        return new Mark(null);
+        return;
     }
 
     /**
@@ -257,18 +250,23 @@ public class TextExtractor {
      * ����ʹ�õĻ�ṹ
      */
     public static void main(String[] args) throws Exception {
-        BufferedReader reader = new BufferedReader(new FileReader("d://res2/20081217142301442.html"));
-        DOMParser parser = new DOMParser();
-        parser.parse(new InputSource(reader));
-        Document doc = parser.getDocument();
+        File folder = new File("d:/res2/");
+        for (File f : folder.listFiles()) {
+            DOMParser parser = new DOMParser();
+            BufferedReader reader = new BufferedReader(new FileReader("d://res2/" + f.getName()));
+            parser.parse(new InputSource(reader));
+            Document doc = parser.getDocument();
 
-        TextExtractor optimiser = new TextExtractor(doc);
-        String text = optimiser.getContentText();
-        System.out.println(text);
-
-        FileWriter fw = new FileWriter("c:/a.txt");
-        fw.write(text);
-        fw.close();
-
+            TextExtractor extractor = new TextExtractor(doc);
+            String str = extractor.extract();
+            StringBuffer sb = new StringBuffer();
+            for (Paragraph p : extractor.getParagraphList()) {
+                sb.append(p.getText() + "\r\n" + p.getWeight() + "\r\n");
+            }
+            System.out.println(str);
+            FileWriter fw = new FileWriter("d:/res3/" + f.getName() + ".txt");
+            fw.write(sb.toString());
+            fw.close();
+        }
     }
 }
