@@ -108,12 +108,14 @@ public class TestGUI extends Frame{
                     if (a != null) {
                         urlArea.setText(urlArea.getText()+a.getText() + "   =>   " + a.getURL()+"\n");
                     }
-                    for (Paragraph p : doc.getParagraphs()) {
+
+                }
+
+                for (Paragraph p : doc.getParagraphs()) {
                         if (p != null) {
                             pargArea.setText(pargArea.getText()+p.getText() + "     -----" + p.getWeight()+"\n");
                         }
                     }
-                }
             } catch (ParseException ex) {
                 Logger.getLogger(TestGUI.class.getName()).log(Level.SEVERE, null, ex);
             }

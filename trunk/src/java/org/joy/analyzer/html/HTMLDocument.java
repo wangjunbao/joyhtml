@@ -74,8 +74,8 @@ public class HTMLDocument extends Document {
      */
     @Override
     public List<Paragraph> getParagraphs() {
-        //return paragraphs;
-        throw new UnsupportedOperationException();
+        return paragraphs;
+        //throw new UnsupportedOperationException();
     }
 
     /**
