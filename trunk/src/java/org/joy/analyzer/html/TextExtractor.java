@@ -92,7 +92,7 @@ public class TextExtractor {
                     priority += Utility.isImportantNode(e) ? 1 : 0;
                     priority += Utility.isLargeNode(e) ? 0.5 : 0;
                     // priority += Utility.isHeading(e) ? 1 : 0;
-                    priority += 0.5*fn(Utility.numInfoNode(e) / (float) (numTotalnfoNodes));
+                    priority += 0.5 * fn(Utility.numInfoNode(e) / (float) (numTotalnfoNodes));
                 }
                 if (TextExtractor.this.totalTextLen != 0 && TextExtractor.this.totalAnchorTextLen != 0) {
                     priority += fn(1.0 * numText / TextExtractor.this.totalTextLen - 1.0 * numAnchorText / TextExtractor.this.totalAnchorTextLen);
@@ -145,15 +145,15 @@ public class TextExtractor {
      */
     public String extract() {
         Node body = doc.getElementsByTagName("BODY").item(0);
-        String whole = getInnerText(body);
-        totalTextLen = whole.length();
+        String whole = getInnerText(body, true);
+        totalTextLen = getInnerText(body, false).length();
+        
         numTotalnfoNodes = Utility.numInfoNode((Element) body);
-
-        countNode(body);
+        evaluateNodes(body);
         //sort the mark list
         Collections.sort(markList);
         Mark mark = markList.get(markList.size() - 1);
-        String bodyText = getInnerText(mark.node);
+        String bodyText = getInnerText(mark.node, true);
 
         //extract all the paragraphs, add them to the paragraph list
         paragraphList = new ParagraphExtractor(bodyText, whole).extract();
@@ -165,7 +165,7 @@ public class TextExtractor {
      * @param node
      * @return the text in the node and its offspring
      */
-    private String getInnerText(Node node) {
+    private String getInnerText(Node node, boolean viewMode) {
         if (node.getNodeType() == Node.TEXT_NODE) {
             return Utility.filter(((Text) node).getData());
         }
@@ -175,27 +175,32 @@ public class TextExtractor {
             if (Utility.isInvalidNode(element)) {
                 return "";
             }
-
             StringBuilder nodeText = new StringBuilder();
-
-            //get the highlight
-            if (Utility.isHeading(element)) {
+            //replace the line break with space,
+            //beacause inappropriate line break may cause the paragraph corrupt.
+            if (viewMode && element.getTagName().equals("BR")) {
+                nodeText.append(" ");
+            }
+            //let the appearance tags stay
+            if (viewMode && Utility.isHeading(element)) {
                 nodeText.append("<" + element.getTagName() + ">");
             }
             NodeList list = element.getChildNodes();
             for (int i = 0; i < list.getLength(); i++) {
-                String t = getInnerText(list.item(i));
+                String t = getInnerText(list.item(i), viewMode);
                 //whether we need to add extra space?
-                if (Utility.isSpace(element)) {
+                if (viewMode && Utility.isSpace(element)) {
                     t += " ";
                 }
                 nodeText.append(t);
             }
-            if (Utility.isHeading(element)) {
+            if (viewMode && Utility.isHeading(element)) {
                 nodeText.append("</" + element.getTagName() + ">");
             }
-            //break the line
-            if (Utility.isParagraph(element) && nodeText.toString().trim().length() != 0) {
+            //break the line, if the element is a REAL BIG tag, such as DIV,TABLE
+            if (viewMode &&
+                    Utility.isParagraph(element) &&
+                    nodeText.toString().trim().length() != 0) {
                 nodeText.append("\r\n");
             }
             return nodeText.toString().replaceAll("[\r\n]+", "\r\n");
@@ -210,7 +215,7 @@ public class TextExtractor {
      * @return Mark information about node
      * this method is used to collect the information and calculate priority
      */
-    private void countNode(Node node) {
+    private void evaluateNodes(Node node) {
         if (node.getNodeType() == Node.TEXT_NODE) {
             return;
         }
@@ -219,22 +224,23 @@ public class TextExtractor {
             Element element = (Element) node;
 
             if (Utility.isLinkNode(element)) {
-                totalAnchorTextLen += getInnerText(element).length();
+                totalAnchorTextLen += getInnerText(element, false).length();
             } else if (Utility.isInvalidNode(element)) {
                 return;
             } else {
+                // get anchor text length
                 int anchorTextLen = 0;
                 NodeList anchors = element.getElementsByTagName("A");
                 for (int i = 0; i < anchors.getLength(); i++) {
-                    anchorTextLen += getInnerText(anchors.item(i)).length();
+                    anchorTextLen += getInnerText(anchors.item(i), false).length();
                 }
-                int textLen = getInnerText(node).length();
+                int textLen = getInnerText(node, false).length();
                 markList.add(new Mark(node,
                         textLen,
                         anchorTextLen));
                 NodeList list = element.getChildNodes();
                 for (int i = 0; i < list.getLength(); i++) {
-                    countNode(list.item(i));
+                    evaluateNodes(list.item(i));
                 }
             }
         }
@@ -253,17 +259,23 @@ public class TextExtractor {
         File folder = new File("d:/res2/");
         for (File f : folder.listFiles()) {
             DOMParser parser = new DOMParser();
-            BufferedReader reader = new BufferedReader(new FileReader("d://res2/" + f.getName()));
+            BufferedReader reader = new BufferedReader(new FileReader("d://res2/" +f.getName()));
             parser.parse(new InputSource(reader));
             Document doc = parser.getDocument();
+
+            System.out.print(f.getName() + "....");
 
             TextExtractor extractor = new TextExtractor(doc);
             String str = extractor.extract();
             StringBuffer sb = new StringBuffer();
             for (Paragraph p : extractor.getParagraphList()) {
                 sb.append(p.getText() + "\r\n" + p.getWeight() + "\r\n");
+            //System.out.print(p.getWeight()+"...\n");
             }
-            System.out.println(str);
+            System.out.println(extractor.totalAnchorTextLen + ":  " + extractor.totalTextLen + "\t" +
+                    extractor.totalAnchorTextLen / (float) extractor.totalTextLen);
+
+            //System.out.println(str);
             FileWriter fw = new FileWriter("d:/res3/" + f.getName() + ".txt");
             fw.write(sb.toString());
             fw.close();
