@@ -41,16 +41,18 @@ public class Main {
             System.out.println(a.getText()+"   =>   "+a.getURL());
 
 
-            for(Paragraph p:doc.getParagraphs())
+           
+     //       FileWriter w = new FileWriter("d:/test.txt");
+        //w.write(doc.getBodyText());//.replaceAll("\\r\\n+", "\r\n"));
+       // w.close();
+        }
+
+         for(Paragraph p:doc.getParagraphs())
             {
                 if(p!=null)
                 {
                    System.out.println(p.getText()+"     -----"+p.getWeight());
                 }
             }
-     //       FileWriter w = new FileWriter("d:/test.txt");
-        //w.write(doc.getBodyText());//.replaceAll("\\r\\n+", "\r\n"));
-       // w.close();
-        }
     }
 }
