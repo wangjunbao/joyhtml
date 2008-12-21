@@ -12,6 +12,7 @@ import java.io.IOException;
 import org.joy.analyzer.html.Anchor;
 import org.joy.analyzer.html.HTMLDocument;
 import org.joy.analyzer.html.ParseException;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 /**
  *
@@ -39,6 +40,14 @@ public class Main {
             if(a!=null)
             System.out.println(a.getText()+"   =>   "+a.getURL());
 
+
+            for(Paragraph p:doc.getParagraphs())
+            {
+                if(p!=null)
+                {
+                   System.out.println(p.getText()+"     -----"+p.getWeight());
+                }
+            }
      //       FileWriter w = new FileWriter("d:/test.txt");
         //w.write(doc.getBodyText());//.replaceAll("\\r\\n+", "\r\n"));
        // w.close();
