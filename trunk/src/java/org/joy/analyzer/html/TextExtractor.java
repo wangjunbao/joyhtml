@@ -96,20 +96,21 @@ public class TextExtractor {
                     // priority += Utility.isHeading(e) ? 1 : 0;
                     weight += 0.5 * fn(Utility.numInfoNode(e) / (float) (numTotalnfoNodes));
                 }
-                if(text.toLowerCase().contains("copyright") ||
-                        text.toLowerCase().contains("all rights reserved")||
-                        text.toLowerCase().contains("版权")||
-                        text.toLowerCase().contains("©")||
-                        text.toLowerCase().contains("上一页")||
-                        text.toLowerCase().contains("下一页")){
-                        weight -= .5;
+                if (text.toLowerCase().contains("copyright") ||
+                        text.toLowerCase().contains("all rights reserved") ||
+                        text.toLowerCase().contains("版权") ||
+                        text.toLowerCase().contains("©") ||
+                        text.toLowerCase().contains("上一页") ||
+                        text.toLowerCase().contains("下一页") ||
+                        text.toLowerCase().contains("ICP备")) {
+                    weight -= .5;
                 }
                 if (TextExtractor.this.totalTextLen != 0 && TextExtractor.this.totalAnchorTextLen != 0) {
-                    weight += fn(4.0 * numText / TextExtractor.this.totalTextLen - 2.0 * numAnchorText / TextExtractor.this.totalAnchorTextLen);
+                    weight += fn(4.0 * numText / TextExtractor.this.totalTextLen - 2 * numAnchorText / TextExtractor.this.totalAnchorTextLen);
                 } else if (TextExtractor.this.totalTextLen != 0) {
                     weight += fn(4.0 * numText / TextExtractor.this.totalTextLen);
                 } else if (TextExtractor.this.totalAnchorTextLen != 0) {
-                    weight += fn(-2.0 * numAnchorText / TextExtractor.this.totalAnchorTextLen);
+                    weight += fn(-2 * numAnchorText / TextExtractor.this.totalAnchorTextLen);
                 } else {
                     weight = 0;
                 }
@@ -160,10 +161,16 @@ public class TextExtractor {
 
         numTotalnfoNodes = Utility.numInfoNode((Element) body);
         evaluateNodes(body);
-        //sort the mark list
-        Collections.sort(markList);
-        Mark mark = markList.get(markList.size() - 1);
-        String bodyText = getInnerText(mark.node, true);
+
+        String bodyText;
+        if (markList.size() == 0) {
+            bodyText = "";
+        } else {
+            //sort the mark list
+            Collections.sort(markList);
+            Mark mark = markList.get(markList.size() - 1);
+            bodyText = getInnerText(mark.node, true);
+        }
 
         //extract all the paragraphs, add them to the paragraph list
         paragraphList = new ParagraphExtractor(bodyText, whole).extract();
@@ -246,9 +253,11 @@ public class TextExtractor {
                 }
                 String text = getInnerText(node, false);
                 int textLen = text.length();
-                markList.add(new Mark(node, text,
-                        textLen,
-                        anchorTextLen));
+                if (textLen != 0) {
+                    markList.add(new Mark(node, text,
+                            textLen,
+                            anchorTextLen));
+                }
                 NodeList list = element.getChildNodes();
                 for (int i = 0; i < list.getLength(); i++) {
                     evaluateNodes(list.item(i));
