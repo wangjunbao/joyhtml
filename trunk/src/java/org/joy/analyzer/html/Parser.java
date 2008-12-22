@@ -40,7 +40,8 @@ public class Parser {
             }
             return new Anchor(e.getTextContent(), url);
         } catch (MalformedURLException ex) {
-            ex.printStackTrace();
+            //ex.printStackTrace();
+            System.out.println("链接生成错误"+ex.getMessage());
         }
         return null;
     }
