@@ -23,7 +23,7 @@ public class Utility {
     private static final String LINK_NODE = "A";
 
     public static String filter(String text) {
-        text = text.replaceAll("[^\u4e00-\u9fa5|a-z|A-Z|0-9|０-９,.，。:；：><?!\\-|\\s|\\@]", " ");
+        text = text.replaceAll("[^\u4e00-\u9fa5|a-z|A-Z|0-9|０-９,.，。:；：><?》《!\\-©|\\s|\\@]", " ");
         text = text.replaceAll("[【】]", " ");
         text = text.replaceAll("[\r\n]+", "\r\n");
         text = text.replaceAll("\n+", "\n");

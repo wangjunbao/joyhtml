@@ -61,12 +61,14 @@ public class TextExtractor {
         /**
          * store the priority,when it equals -3,mean unavailable
          */
-        private double priority = -3;
+        private double weight = -3;
+        private String text;
 
-        public Mark(Node node, int numText, int numAnchorText) {
+        public Mark(Node node, String text, int numText, int numAnchorText) {
             this.node = node;
             this.numAnchorText = numAnchorText;
             this.numText = numText;
+            this.text = text;
         }
         //平滑函数
 
@@ -85,27 +87,35 @@ public class TextExtractor {
              * this is the strategy to account the priority
              *
              */
-            if (priority == -3) {
+            if (weight == -3) {
                 if (node != null &&
                         node.getNodeType() == Node.ELEMENT_NODE) {
                     Element e = (Element) node;
-                    priority += Utility.isImportantNode(e) ? 1 : 0;
-                    priority += Utility.isLargeNode(e) ? 0.5 : 0;
+                    weight += Utility.isImportantNode(e) ? 1 : 0;
+                    weight += Utility.isLargeNode(e) ? 0.5 : 0;
                     // priority += Utility.isHeading(e) ? 1 : 0;
-                    priority += 0.5 * fn(Utility.numInfoNode(e) / (float) (numTotalnfoNodes));
+                    weight += 0.5 * fn(Utility.numInfoNode(e) / (float) (numTotalnfoNodes));
+                }
+                if(text.toLowerCase().contains("copyright") ||
+                        text.toLowerCase().contains("all rights reserved")||
+                        text.toLowerCase().contains("版权")||
+                        text.toLowerCase().contains("©")||
+                        text.toLowerCase().contains("上一页")||
+                        text.toLowerCase().contains("下一页")){
+                        weight -= .5;
                 }
                 if (TextExtractor.this.totalTextLen != 0 && TextExtractor.this.totalAnchorTextLen != 0) {
-                    priority += fn(1.0 * numText / TextExtractor.this.totalTextLen - 1.0 * numAnchorText / TextExtractor.this.totalAnchorTextLen);
+                    weight += fn(4.0 * numText / TextExtractor.this.totalTextLen - 2.0 * numAnchorText / TextExtractor.this.totalAnchorTextLen);
                 } else if (TextExtractor.this.totalTextLen != 0) {
-                    priority += fn(1.0 * numText / TextExtractor.this.totalTextLen);
+                    weight += fn(4.0 * numText / TextExtractor.this.totalTextLen);
                 } else if (TextExtractor.this.totalAnchorTextLen != 0) {
-                    priority += fn(-1.0 * numAnchorText / TextExtractor.this.totalAnchorTextLen);
+                    weight += fn(-2.0 * numAnchorText / TextExtractor.this.totalAnchorTextLen);
                 } else {
-                    priority = 0;
+                    weight = 0;
                 }
             }
 
-            return priority;
+            return weight;
         }
 
         @Override
@@ -147,7 +157,7 @@ public class TextExtractor {
         Node body = doc.getElementsByTagName("BODY").item(0);
         String whole = getInnerText(body, true);
         totalTextLen = getInnerText(body, false).length();
-        
+
         numTotalnfoNodes = Utility.numInfoNode((Element) body);
         evaluateNodes(body);
         //sort the mark list
@@ -234,8 +244,9 @@ public class TextExtractor {
                 for (int i = 0; i < anchors.getLength(); i++) {
                     anchorTextLen += getInnerText(anchors.item(i), false).length();
                 }
-                int textLen = getInnerText(node, false).length();
-                markList.add(new Mark(node,
+                String text = getInnerText(node, false);
+                int textLen = text.length();
+                markList.add(new Mark(node, text,
                         textLen,
                         anchorTextLen));
                 NodeList list = element.getChildNodes();
@@ -259,7 +270,7 @@ public class TextExtractor {
         File folder = new File("d:/res2/");
         for (File f : folder.listFiles()) {
             DOMParser parser = new DOMParser();
-            BufferedReader reader = new BufferedReader(new FileReader("d://res2/" +f.getName()));
+            BufferedReader reader = new BufferedReader(new FileReader("d://res2/" + f.getName()));
             parser.parse(new InputSource(reader));
             Document doc = parser.getDocument();
 

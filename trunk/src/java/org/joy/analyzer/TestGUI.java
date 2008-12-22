@@ -115,10 +115,10 @@ public class TestGUI extends Frame {
                 }
                 br = new BufferedReader(new StringReader(sb.toString().replaceAll(">\n*", ">\n")));
                 line = br.readLine();
-                while (line != null && !line.toLowerCase().matches(".*<meta.*content=.*")) {
+                while (line != null && !line.toLowerCase().matches(".*<meta.*content=.*charset=.*")) {
                     line = br.readLine();
                 }
-                encoding = line.toLowerCase().split("charset=")[1].replaceAll("[^a-z|1-9]", " ").split("\\s+")[0];
+                encoding = line.toLowerCase().split("charset=")[1].replaceAll("[^a-z|1-9|\\-]", " ").split("\\s+")[0];
                 charsetFound = true;
                 br.close();
             }
