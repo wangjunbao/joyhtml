@@ -16,10 +16,10 @@ public class Utility {
 
     private static final String[] LARGE_NODES = {"DIV", "TABLE"};
     private static final String[] IMPORTANT_NODES = {"TR", "TD"};
-    private static final String[] INFO_NODE = {"P", "SPAN", "BR"};
+    private static final String[] INFO_NODE = {"P", "SPAN"};
     public static final String[] HEADING_TAGS = {"TITLE", "H1", "H2", "H3", "H4", "H5", "H6", "H7"};
     private static final String[] INVALID_TAGS = {"STYLE", "COMMENT", "SCRIPT", "OPTION", "LI"};
-    private static final String[] SPACING_TAGS = {"B","SPAN"};
+    private static final String[] SPACING_TAGS = {"BR", "SPAN"};
     private static final String LINK_NODE = "A";
 
     public static String filter(String text) {

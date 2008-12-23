@@ -45,14 +45,15 @@ public class TextExtractor {
      */
     private class Mark implements Comparable<Mark> {
 
+        private int numInfoNode = 0;
         /**
          * store the number of text not in anchor in this node and its offspring
          */
-        private int numText = 0;
+        private int textLen = 0;
         /**
          * store the number of text not in anchor in this node and its offspring
          */
-        private int numAnchorText = 0;
+        private int anchorTextLen = 0;
         /**
          * store the associated node
          *  "Associated Node" ? Not clearly specified. -- Liu Song
@@ -66,9 +67,13 @@ public class TextExtractor {
 
         public Mark(Node node, String text, int numText, int numAnchorText) {
             this.node = node;
-            this.numAnchorText = numAnchorText;
-            this.numText = numText;
+            this.anchorTextLen = numAnchorText;
+            this.textLen = numText;
             this.text = text;
+
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                this.numInfoNode = Utility.numInfoNode((Element) node);
+            }
         }
         //平滑函数
 
@@ -91,31 +96,31 @@ public class TextExtractor {
                 if (node != null &&
                         node.getNodeType() == Node.ELEMENT_NODE) {
                     Element e = (Element) node;
-                    weight += Utility.isImportantNode(e) ? 1 : 0;
-                    weight += Utility.isLargeNode(e) ? 0.5 : 0;
-                    // priority += Utility.isHeading(e) ? 1 : 0;
-                    weight += 0.5 * fn(Utility.numInfoNode(e) / (float) (numTotalnfoNodes));
+                    weight += Utility.isImportantNode(e) ? .1 : 0;
+                    weight += Utility.isLargeNode(e) ? .1 : 0;
+                    weight += 0.2 * fn(numInfoNode / (double) (numTotalnfoNodes));
                 }
                 if (text.toLowerCase().contains("copyright") ||
                         text.toLowerCase().contains("all rights reserved") ||
-                        text.toLowerCase().contains("版权") ||
+                        text.toLowerCase().contains("版权所有") ||
                         text.toLowerCase().contains("©") ||
                         text.toLowerCase().contains("上一页") ||
                         text.toLowerCase().contains("下一页") ||
                         text.toLowerCase().contains("ICP备")) {
                     weight -= .5;
                 }
+                weight += 1.0- (double)anchorTextLen/ textLen;
                 if (TextExtractor.this.totalTextLen != 0 && TextExtractor.this.totalAnchorTextLen != 0) {
-                    weight += fn(4.0 * numText / TextExtractor.this.totalTextLen - 2 * numAnchorText / TextExtractor.this.totalAnchorTextLen);
+                    weight += 1.6 * fn((double) textLen / TextExtractor.this.totalTextLen) -
+                            .8 * anchorTextLen / TextExtractor.this.totalAnchorTextLen;
                 } else if (TextExtractor.this.totalTextLen != 0) {
-                    weight += fn(4.0 * numText / TextExtractor.this.totalTextLen);
+                    weight += 1.6 * fn((double) textLen / TextExtractor.this.totalTextLen);
                 } else if (TextExtractor.this.totalAnchorTextLen != 0) {
-                    weight += fn(-2 * numAnchorText / TextExtractor.this.totalAnchorTextLen);
+                    weight += -.8 * anchorTextLen / TextExtractor.this.totalAnchorTextLen;
                 } else {
                     weight = 0;
                 }
             }
-
             return weight;
         }
 
@@ -125,6 +130,12 @@ public class TextExtractor {
                 return 1;
             }
             return -1;
+        }
+
+        @Override
+        public String toString() {
+            return "local weight" + fn(3.0 * textLen / TextExtractor.this.totalTextLen -
+                    2.0 * anchorTextLen / TextExtractor.this.totalAnchorTextLen);
         }
     }
     /**
@@ -150,14 +161,43 @@ public class TextExtractor {
 
     }
 
+    private int anchorTextLen(Element e) {
+        int anchorLen = 0;
+        // get anchor text length
+        NodeList anchors = e.getElementsByTagName("A");
+        for (int i = 0; i < anchors.getLength(); i++) {
+            anchorLen += getInnerText(anchors.item(i), false).length();
+        }
+        return anchorLen;
+    }
+
+    private void cleanup(Element e) {
+        NodeList c = e.getChildNodes();
+        for (int i = 0; i < c.getLength(); i++) {
+            if (c.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                Element t = (Element) c.item(i);
+                if (Utility.isInvalidNode(t)) {
+                    e.removeChild(c.item(i));
+                } else {
+                    cleanup(t);
+                }
+            }
+        }
+    }
+
     /**
      * 
      * @return string whole text on the web
      */
     public String extract() {
         Node body = doc.getElementsByTagName("BODY").item(0);
+        //cleanup, remove the invalid tags
+        cleanup((Element) body);
         String whole = getInnerText(body, true);
+
         totalTextLen = getInnerText(body, false).length();
+        // get anchor text length
+        totalAnchorTextLen = anchorTextLen((Element) body);
 
         numTotalnfoNodes = Utility.numInfoNode((Element) body);
         evaluateNodes(body);
@@ -241,16 +281,13 @@ public class TextExtractor {
             Element element = (Element) node;
 
             if (Utility.isLinkNode(element)) {
-                totalAnchorTextLen += getInnerText(element, false).length();
+                //totalAnchorTextLen += getInnerText(element, false).length();
             } else if (Utility.isInvalidNode(element)) {
                 return;
             } else {
                 // get anchor text length
-                int anchorTextLen = 0;
-                NodeList anchors = element.getElementsByTagName("A");
-                for (int i = 0; i < anchors.getLength(); i++) {
-                    anchorTextLen += getInnerText(anchors.item(i), false).length();
-                }
+                int anchorTextLen = anchorTextLen(element);
+
                 String text = getInnerText(node, false);
                 int textLen = text.length();
                 if (textLen != 0) {
