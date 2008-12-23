@@ -100,14 +100,8 @@ public class TextExtractor {
                     weight += Utility.isLargeNode(e) ? .1 : 0;
                     weight += 0.2 * fn(numInfoNode / (double) (numTotalnfoNodes));
                 }
-                if (text.toLowerCase().contains("copyright") ||
-                        text.toLowerCase().contains("all rights reserved") ||
-                        text.toLowerCase().contains("版权所有") ||
-                        text.toLowerCase().contains("©") ||
-                        text.toLowerCase().contains("上一页") ||
-                        text.toLowerCase().contains("下一页") ||
-                        text.toLowerCase().contains("ICP备")) {
-                    weight -= .5;
+                if(Utility.containsNoise(text)){
+                    weight -=0.5;
                 }
                 weight += 1.0- (double)anchorTextLen/ textLen;
                 if (TextExtractor.this.totalTextLen != 0 && TextExtractor.this.totalAnchorTextLen != 0) {

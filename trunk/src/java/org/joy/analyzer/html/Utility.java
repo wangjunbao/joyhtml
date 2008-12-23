@@ -16,7 +16,7 @@ public class Utility {
 
     private static final String[] LARGE_NODES = {"DIV", "TABLE"};
     private static final String[] IMPORTANT_NODES = {"TR", "TD"};
-    private static final String[] INFO_NODE = {"P", "SPAN","H1","H2","B","I"};
+    private static final String[] INFO_NODE = {"P", "SPAN", "H1", "H2", "B", "I"};
     public static final String[] HEADING_TAGS = {"TITLE", "H1", "H2", "H3", "H4", "H5", "H6", "H7"};
     private static final String[] INVALID_TAGS = {"STYLE", "COMMENT", "SCRIPT", "OPTION", "LI"};
     private static final String[] SPACING_TAGS = {"BR", "SPAN"};
@@ -145,6 +145,19 @@ public class Utility {
         }
         //stronged texts
         if (e.getTagName().matches("[B|I|STRONG]")) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean containsNoise(String text) {
+        if (text.toLowerCase().contains("copyright") ||
+                text.toLowerCase().contains("all rights reserved") ||
+                text.toLowerCase().contains("版权所有") ||
+                text.toLowerCase().contains("©") ||
+                text.toLowerCase().contains("上一页") ||
+                text.toLowerCase().contains("下一页") ||
+                text.toLowerCase().contains("ICP备")) {
             return true;
         }
         return false;
