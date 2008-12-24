@@ -7,12 +7,10 @@ package org.joy.analyzer;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import org.joy.analyzer.html.Anchor;
 import org.joy.analyzer.html.HTMLDocument;
 import org.joy.analyzer.html.ParseException;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 /**
  *

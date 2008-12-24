@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 import org.joy.analyzer.Paragraph;
 
 /**
- *
+ * 从给定的半html文档字符中提取出段落
  * @author Lamfeeling
  */
 public class ParagraphExtractor {
@@ -64,6 +64,7 @@ public class ParagraphExtractor {
         while (line != null) {
             double weight = base;
             if (line.startsWith("<H")) {
+                //在這裡計算文檔的權重
                 weight += .3;
             }
             paraList.add(new Paragraph(line.replaceAll("</*H[1-9]>", ""), weight));

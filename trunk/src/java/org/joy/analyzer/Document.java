@@ -8,7 +8,7 @@ package org.joy.analyzer;
 import java.util.List;
 
 /**
- * 抽象文档类
+ * 抽象文档类,用来描述一个的属性，比如一个HTML文档，或者一个Doc文档。
  * @author Lamfeeling
  */
 public abstract class Document {

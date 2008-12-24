@@ -16,7 +16,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
- * HTML文本类�1�7�1�7
+ * HTML文档类
  * @author Lamfeeling
  */
 public class HTMLDocument extends Document {
@@ -27,9 +27,9 @@ public class HTMLDocument extends Document {
     private String url;
 
     /**
-     * 从指定的字符串中构�1�7�一个HTMLDocument
-     * @param str 扄1�7制定的字符串
-     * @return 由指定的字符串够早的文档籄1�7
+     * 利用指定的，符合HTML语法规则的字符串中构造一个HTML文档
+     * @param str 构造
+     * @return 由指定字符串够早的HTML文档
      */
     public static HTMLDocument createHTMLDocument(String URL, String str) throws ParseException {
         DOMParser parser = new DOMParser();
@@ -47,10 +47,10 @@ public class HTMLDocument extends Document {
     }
 
     /**
-     * 受保护的构�1�7�方法，不可以直接构逄1�7
+     * 受保护的方法，不可直接构造。
      * @param URL 网页的URL地址
-     * @param content 用于构�1�7�文档的字符丄1�7
-     * @param doc 由上文分析器分析出的Document籄1�7
+     * @param content 描述文档的HTML字符串
+     * @param doc 由HTML字符串解析出的Dom文档。
      */
     protected HTMLDocument(String url, String content, org.w3c.dom.Document doc) {
         super(content);
@@ -70,7 +70,7 @@ public class HTMLDocument extends Document {
 
     /**
      * 获取文本中的正文段落
-     * @return 返回文档中的正文段落的集各1�7
+     * @return 返回文档中的正文段落的集合
      */
     @Override
     public List<Paragraph> getParagraphs() {
@@ -79,16 +79,16 @@ public class HTMLDocument extends Document {
     }
 
     /**
-     * 返回HTML文档的连接集各1�7
-     * @return HTML文档的连接集各1�7
+     * 返回HTML文档的链接集合
+     * @return HTML文档的链接集合
      */
     public List<Anchor> getAnchors() {
         return anchors;
     }
 
     /**
-     * 返回HTML文本的标预1�7
-     * @return HTML文本的标预1�7
+     * 返回HTML文本的标题
+     * @return HTML文本的标题
      */
     @Override
     public String getTitle() {
@@ -96,8 +96,8 @@ public class HTMLDocument extends Document {
     }
 
     /**
-     * 返回文本构建的的DOM栄1�7
-     * @return Dom树文档对豄1�7
+     * 返回文本构建的的DOM树
+     * @return HTML构建的DOM树
      */
     public org.w3c.dom.Document getDoc() {
         return doc;

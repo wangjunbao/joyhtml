@@ -26,10 +26,18 @@ public class Anchor {
     public Anchor() {
     }
 
+    /**
+     * 獲取超鏈接锚文本
+     * @return 返回超鏈接錨文本
+     */
     public String getText() {
         return text;
     }
 
+    /**
+     * 获取超链接的URL地址
+     * @return
+     */
     public String getURL() {
         return url;
     }
