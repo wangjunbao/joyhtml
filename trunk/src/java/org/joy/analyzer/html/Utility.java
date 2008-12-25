@@ -29,7 +29,7 @@ public class Utility {
     private static final String[] TABLE_NODES = {"TR", "TD"};
     private static final String[] INFO_NODE = {"P", "SPAN", "H1", "H2", "B", "I"};
     public static final String[] HEADING_TAGS = {"TITLE", "H1", "H2", "H3", "H4", "H5", "H6", "H7"};
-    private static final String[] INVALID_TAGS = {"STYLE", "COMMENT", "SCRIPT", "OPTION", "LI"};
+    private static final String[] INVALID_TAGS = {"STYLE", "COMMENT", "SCRIPT", "OPTION", "UL"};
     private static final String[] SPACING_TAGS = {"BR", "SPAN"};
     private static final String LINK_NODE = "A";
 
@@ -57,14 +57,17 @@ public class Utility {
             byte[] buf = new byte[1024];
             if (!charsetFound) {
                 int len = in.read(buf);
+                while (len <= 32) {
+                    len = in.read(buf);
+                }
                 String header = new String(buf, 0, len);
                 Pattern p = Pattern.compile(".*<meta.*content=.*charset=.*", Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
                 Matcher m = p.matcher(header);
                 if (m.matches()) {
                     encoding = header.toLowerCase().split("charset=")[1].replaceAll("[^a-z|1-9|\\-]", " ").split("\\s+")[0];
                 } else {
-                    //如果没有的话，直接用utf-8解码
-                    encoding = "utf-8";
+                    //如果没有的话，直接用gb2312解码
+                    encoding = "gb2312";
                 }
             }
             //开始读取内容正文。
