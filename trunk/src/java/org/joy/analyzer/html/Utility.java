@@ -8,7 +8,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.logging.Level;
@@ -21,19 +20,24 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- *
+ * 分析中需要调用的一些静态方法，工具集
  * @author Lamfeeling
  */
 public class Utility {
 
     private static final String[] LARGE_NODES = {"DIV", "TABLE"};
-    private static final String[] IMPORTANT_NODES = {"TR", "TD"};
+    private static final String[] TABLE_NODES = {"TR", "TD"};
     private static final String[] INFO_NODE = {"P", "SPAN", "H1", "H2", "B", "I"};
     public static final String[] HEADING_TAGS = {"TITLE", "H1", "H2", "H3", "H4", "H5", "H6", "H7"};
     private static final String[] INVALID_TAGS = {"STYLE", "COMMENT", "SCRIPT", "OPTION", "LI"};
     private static final String[] SPACING_TAGS = {"BR", "SPAN"};
     private static final String LINK_NODE = "A";
 
+    /**
+     * 万能的Web下载方法，可以自动分析编码
+     * @param URL
+     * @return
+     */
     public static String getWebContent(String URL) {
         String s = "";
         try {
@@ -65,6 +69,7 @@ public class Utility {
             }
             
             conn = (HttpURLConnection) new URL(URL).openConnection();
+            //这里需要改进，可不可以读取之后不重新打开连接？
             in = conn.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(in, encoding));
             String line = br.readLine();
@@ -81,6 +86,11 @@ public class Utility {
         return s;
     }
 
+    /**
+     * 过滤掉HTML文本中的一些非常规符号。<b>任何获取HTML文本的调用都必须事先用这个方法过滤</b>
+     * @param text 需要过滤的文本
+     * @return 需要过滤的文本。
+     */
     public static String filter(String text) {
         text = text.replaceAll("[^\u4e00-\u9fa5|a-z|A-Z|0-9|０-９,.，。:；：><?》《!\\-©|\\s|\\@]", " ");
         text = text.replaceAll("[【】]", " ");
@@ -92,8 +102,13 @@ public class Utility {
         return text;
     }
 
-    public static boolean isImportantNode(Element e) {
-        for (String s : IMPORTANT_NODES) {
+    /**
+     * 是否是Table所包含的的元素？
+     * @param e
+     * @return 是否是Table所包含的的元素？
+     */
+    public static boolean isTableNodes(Element e) {
+        for (String s : TABLE_NODES) {
             if (e.getTagName().equals(s)) {
                 return true;
             }
@@ -101,6 +116,11 @@ public class Utility {
         return false;
     }
 
+    /**
+     * 是否是大的节点？ 例如div, table?
+     * @param e
+     * @return 是否是大的节点？
+     */
     public static boolean isLargeNode(Element e) {
         for (String s : LARGE_NODES) {
             if (e.getTagName().equals(s)) {
@@ -110,6 +130,11 @@ public class Utility {
         return false;
     }
 
+    /**
+     * 是否是包含信息的节点？
+     * @param e
+     * @return 是否是包含信息的节点？
+     */
     public static boolean isInfoNode(Element e) {
         for (String s : INFO_NODE) {
             if (e.getTagName().equals(s)) {
@@ -119,6 +144,11 @@ public class Utility {
         return false;
     }
 
+    /**
+     * 是否是标题节点？H1-H6
+     * @param e
+     * @return 是否是标题节点？
+     */
     public static boolean isHeading(Element e) {
         for (String s : HEADING_TAGS) {
             if (e.getTagName().equals(s)) {
@@ -128,6 +158,11 @@ public class Utility {
         return false;
     }
 
+    /**
+     * 是否是对文本分析无用的节点？
+     * @param e
+     * @return 是否是对文本分析无用的节点？
+     */
     public static boolean isInvalidNode(Element e) {
         for (String s : INVALID_TAGS) {
             if (e.getTagName().equals(s)) {
@@ -137,6 +172,11 @@ public class Utility {
         return false;
     }
 
+    /**
+     * 当前这个节点下包含多少个InfoNode?
+     * @param e
+     * @return 当前这个节点下包含多少个InfoNode?
+     */
     public static int numInfoNode(Element e) {
         int num = isInfoNode(e) ? 1 : 0;
         NodeList children = e.getChildNodes();
@@ -148,6 +188,11 @@ public class Utility {
         return num;
     }
 
+    /**
+     * 是否是超链接节点？
+     * @param e
+     * @return 是否是超链接节点？
+     */
     public static boolean isLinkNode(Element e) {
         if (e.getTagName().equals(LINK_NODE)) {
             return true;
@@ -155,6 +200,11 @@ public class Utility {
         return false;
     }
 
+    /**
+     * 当前节点下有多少超链接节点？
+     * @param e
+     * @return
+     */
     public static int numLinkNode(Element e) {
         int num = isLinkNode(e) ? 1 : 0;
         NodeList children = e.getChildNodes();
@@ -171,8 +221,8 @@ public class Utility {
      * @param e
      * @return
      */
-    public static boolean isParagraph(Element e) {
-        if (isHeading(e) || e.getTagName().equals("P") || isImportantNode(e) || isLargeNode(e)) {
+    public static boolean needWarp(Element e) {
+        if (isHeading(e) || e.getTagName().equals("P") || isTableNodes(e) || isLargeNode(e)) {
             return true;
         }
         return false;
@@ -183,7 +233,7 @@ public class Utility {
      * @param e
      * @return
      */
-    public static boolean isSpace(Element e) {
+    public static boolean needSpace(Element e) {
         for (String s : SPACING_TAGS) {
             if (e.getTagName().equals(s)) {
                 return true;
@@ -192,6 +242,11 @@ public class Utility {
         return false;
     }
 
+    /**
+     * wether this tag will effect the html appearance on browser？
+     * @param e
+     * @return wether this tag will effect the html appearance on browser？
+     */
     public static boolean isAppearanceTag(Element e) {
         //headings
         if (e.getTagName().matches("H[1-9]")) {
@@ -209,6 +264,11 @@ public class Utility {
         return false;
     }
 
+    /**
+     * Wether this text contains some regular noise on Internet?
+     * @param text
+     * @return Wether this text contains some regular noise on Internet? 
+     */
     public static boolean containsNoise(String text) {
         if (text.toLowerCase().contains("copyright") ||
                 text.toLowerCase().contains("all rights reserved") ||

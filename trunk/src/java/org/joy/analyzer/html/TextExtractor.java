@@ -96,7 +96,7 @@ public class TextExtractor {
                 if (node != null &&
                         node.getNodeType() == Node.ELEMENT_NODE) {
                     Element e = (Element) node;
-                    weight += Utility.isImportantNode(e) ? .1 : 0;
+                    weight += Utility.isTableNodes(e) ? .1 : 0;
                     weight += Utility.isLargeNode(e) ? .1 : 0;
                     weight += 0.2 * fn(numInfoNode / (double) (numTotalnfoNodes));
                 }
@@ -240,7 +240,7 @@ public class TextExtractor {
             for (int i = 0; i < list.getLength(); i++) {
                 String t = getInnerText(list.item(i), viewMode);
                 //whether we need to add extra space?
-                if (viewMode && Utility.isSpace(element)) {
+                if (viewMode && Utility.needSpace(element)) {
                     t += " ";
                 }
                 nodeText.append(t);
@@ -250,7 +250,7 @@ public class TextExtractor {
             }
             //break the line, if the element is a REAL BIG tag, such as DIV,TABLE
             if (viewMode &&
-                    Utility.isParagraph(element) &&
+                    Utility.needWarp(element) &&
                     nodeText.toString().trim().length() != 0) {
                 nodeText.append("\r\n");
             }
