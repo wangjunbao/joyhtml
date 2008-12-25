@@ -5,6 +5,7 @@
 package org.joy.analyzer.html;
 
 import java.io.BufferedReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -41,42 +42,42 @@ public class Utility {
     public static String getWebContent(String URL) {
         String s = "";
         try {
+            //从url打开stream
             InputStream in = null;
             HttpURLConnection conn = (HttpURLConnection) new URL(URL).openConnection();
+            in = conn.getInputStream();
+            //尝试从http头中获取字符集
             String contentType = conn.getHeaderField("Content-Type").toLowerCase();
-
             String encoding = "utf-8";
             boolean charsetFound = false;
             if (contentType.contains("charset")) {
                 encoding = contentType.split("charset=")[1];
                 charsetFound = true;
             }
+            //如果没有的话,读取头1024个字符，检查html的header
+            byte[] buf = new byte[1024];
             if (!charsetFound) {
-                in = conn.getInputStream();
-                BufferedReader br = new BufferedReader(new InputStreamReader(in, "utf-8"));
-                char[] buf = new char[1024];
-                int len = br.read(buf);
+                int len = in.read(buf);
                 String header = new String(buf, 0, len);
-                Pattern p = Pattern.compile(".*<meta.*content=.*charset=.*", Pattern.DOTALL|Pattern.CASE_INSENSITIVE);
+                Pattern p = Pattern.compile(".*<meta.*content=.*charset=.*", Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
                 Matcher m = p.matcher(header);
                 if (m.matches()) {
                     encoding = header.toLowerCase().split("charset=")[1].replaceAll("[^a-z|1-9|\\-]", " ").split("\\s+")[0];
                 } else {
+                    //如果没有的话，直接用utf-8解码
                     encoding = "utf-8";
                 }
-                charsetFound = true;
-                br.close();
             }
-            
-            conn = (HttpURLConnection) new URL(URL).openConnection();
-            //这里需要改进，可不可以读取之后不重新打开连接？
-            in = conn.getInputStream();
+            //开始读取内容正文。
             BufferedReader br = new BufferedReader(new InputStreamReader(in, encoding));
-            String line = br.readLine();
-            StringBuffer sb = new StringBuffer();
-            while (line != null) {
-                sb.append(line);
-                line = br.readLine();
+            String header = new String(buf, encoding);
+            //add the header to our content
+            StringBuffer sb = new StringBuffer(header);
+            char[] charBuf = new char[2048];
+            int len = br.read(charBuf);
+            while (len != -1) {
+                sb.append(charBuf, 0, len);
+                len = br.read(charBuf);
             }
             br.close();
             s = sb.toString();
