@@ -39,10 +39,10 @@
                 </li>
                 <br/>
                 <li>
-                <a href="samples.jsp" target="blank">
-                    更多例子...
-                </a>
-                 </li>
+                    <a href="samples.jsp">
+                        更多例子...
+                    </a>
+                </li>
                 <br/>
             </p>
             <%
