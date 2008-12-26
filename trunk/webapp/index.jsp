@@ -39,10 +39,10 @@
                 </li>
                 <br/>
                 <li>
-                    <a href="index.jsp?url=http%3A%2F%2Fnews.xinhuanet.com%2Fnewscenter%2F2008-12%2F24%2Fcontent_10554276.htm">
-                        温家宝主持会议部署搞活流通扩消费保外贸稳增措施
-                    </a>
-                </li>
+                <a href="samples.jsp" target="blank">
+                    更多例子...
+                </a>
+                 </li>
                 <br/>
             </p>
             <%
@@ -56,10 +56,10 @@
                 <a href="commit.jsp?vote=false&url=<%=request.getParameter("url")%>">否</a>
             </p>
             <%
-                                    }
-                                    String text = Utility.getWebContent(request.getParameter("url"));
+                    }
+                    String text = Utility.getWebContent(request.getParameter("url"));
 
-                                    HTMLDocument doc = HTMLDocument.createHTMLDocument(request.getParameter("url"), text);
+                    HTMLDocument doc = HTMLDocument.createHTMLDocument(request.getParameter("url"), text);
             %>
             <hr/>
             <p align="left">
@@ -68,7 +68,7 @@
                 </a>
             </p>
             <%
-                                    for (Paragraph p : doc.getParagraphs()) {
+                    for (Paragraph p : doc.getParagraphs()) {
             %>
             <p align="left" style=" font-size: <%=p.getWeight() * 20 + 10 + "pt"%>">
                 <%
@@ -84,8 +84,8 @@
                 %>
             </p>
             <%
-                                    }
-                                } catch (Exception e) {
+                    }
+                } catch (Exception e) {
             %>
             <h2>您的请求出错了，请检查您输入的是否是完整的URL（需要包括Http://的开头）:)</h2>
             <%            }
