@@ -15,45 +15,63 @@
         <title>Web信息抽取示例</title>
     </head>
     <body>
+        <a href="http://joyhtml.googlecode.com">想加入我们？看看我们的项目主页吧:)</a>
         <center>
-            <h2>请您输入需要抽取的Web页面URL:)</h2>
+            <h2>请您输入需要抽取的<font color="red">主题页面</font>URL:)</h2>
+            <h3><a href="mailto:lamfeeling@126.com">联系我们:lamfeeling@126.com</a></h3>
             <form action="index.jsp">
-                <input type="text" size="40" name="url" value="http://news.sina.com.cn/c/2008-12-11/155516828944.shtml" />
+                <input type="text" size="40" name="url" value="" />
                 <input type="submit" value="提取" />
             </form>
             <br/>
-            例子
-            <li>
-                <p>
-                <a href="index.jsp?url=http%3A%2F%2Fnews.sina.com.cn%2Fc%2F2008-12-25%2F113816919047.shtml">
-                    新浪新闻:石家庄市政府通报三鹿集团破产案情况
-                </a>
-                </p>
-            </li>
-            <li>
-                <p>
-                <a href="index.jsp?url=http%3A%2F%2Fnews.xinhuanet.com%2Fnewscenter%2F2008-12%2F24%2Fcontent_10554276.htm">
-                    温家宝主持会议部署搞活流通扩消费保外贸稳增措施
-                </a>
-                </p>
-            </li>
+            <br/>
+            <p>
+                例子            <br/>
+                <li>
+                    <a href="index.jsp?url=http%3A%2F%2Fnews.sina.com.cn%2Fc%2F2008-12-11%2F155516828944.shtml">
+                        马英九称与大陆交往未感受到政治压力
+                    </a>
+                </li>
+                <br/>
+                <li>
+                    <a href="index.jsp?url=http%3A%2F%2Fnews.sina.com.cn%2Fc%2F2008-12-25%2F113816919047.shtml">
+                        石家庄市政府通报三鹿集团破产案情况
+                    </a>
+                </li>
+                <br/>
+                <li>
+                    <a href="index.jsp?url=http%3A%2F%2Fnews.xinhuanet.com%2Fnewscenter%2F2008-12%2F24%2Fcontent_10554276.htm">
+                        温家宝主持会议部署搞活流通扩消费保外贸稳增措施
+                    </a>
+                </li>
+                <br/>
+            </p>
             <%
         if (request.getParameter("url") != null) {
-            String text = Utility.getWebContent(request.getParameter("url"));
-            HTMLDocument doc = HTMLDocument.createHTMLDocument(request.getParameter("url"), text);
-            for (Paragraph p : doc.getParagraphs()) {
+            if (request.getParameter("voted") == null) {
+            %>
+            <p>
+                <em style="color:red">您认为我们正确提取了正文内容吗？</em>
+                <a href="commit.jsp?vote=true&url=<%=request.getParameter("url")%>">是</a>
+                <a href="commit.jsp?vote=false&url=<%=request.getParameter("url")%>">否</a>
+            </p>
+            <%
+                }
+                String text = Utility.getWebContent(request.getParameter("url"));
+                HTMLDocument doc = HTMLDocument.createHTMLDocument(request.getParameter("url"), text);
+                for (Paragraph p : doc.getParagraphs()) {
             %>
             <p align="left" style=" font-size: <%=p.getWeight() * 20 + 10 + "pt"%>">
                 <%
-                    if (p.getWeight() >= 0.3) {
-                        out.print("<b>");
-                    }
+                if (p.getWeight() >= 0.3) {
+                    out.print("<b>");
+                }
                 %>
                 <%=p.getText() + "    <font color=red>权重：" + p.getWeight() + "</font>"%>
                 <%
-                    if (p.getWeight() >= 0.3) {
-                        out.print("</b>");
-                    }
+                if (p.getWeight() >= 0.3) {
+                    out.print("</b>");
+                }
                 %>
             </p>
             <%
