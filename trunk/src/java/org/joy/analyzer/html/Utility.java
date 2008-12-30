@@ -176,22 +176,6 @@ public class Utility {
     }
 
     /**
-     * 当前这个节点下包含多少个InfoNode?
-     * @param e
-     * @return 当前这个节点下包含多少个InfoNode?
-     */
-    public static int numInfoNode(Element e) {
-        int num = isInfoNode(e) ? 1 : 0;
-        NodeList children = e.getChildNodes();
-        for (int i = 0; i < children.getLength(); i++) {
-            if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                num += numInfoNode((Element) children.item(i));
-            }
-        }
-        return num;
-    }
-
-    /**
      * 是否是超链接节点？
      * @param e
      * @return 是否是超链接节点？
@@ -263,6 +247,22 @@ public class Utility {
         //stronged texts
         if (e.getTagName().matches("[B|I|STRONG]")) {
             return true;
+        }
+        return false;
+    }
+
+    public static boolean containsInput(Element e) {
+        NodeList inputs = e.getElementsByTagName("INPUT");
+        if (inputs.getLength() != 0) {
+            boolean allhidden = true;
+            for (int i = 0; i < inputs.getLength(); i++) {
+                Element ei = (Element) inputs.item(i);
+                if (!ei.getAttribute("TYPE").toLowerCase().equals("hidden")) {
+                    allhidden = false;
+                    break;
+                }
+            }
+            return !allhidden;
         }
         return false;
     }
