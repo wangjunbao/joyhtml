@@ -23,9 +23,10 @@ import org.w3c.dom.NodeList;
  * @version 1.0
  * @author JINJUN
  * @modified by Liu Song
- * <pre>the class provide the method to get the most important part
- * of the dom tree,so you can keep point at the most useful text
- * with least time
+ * <pre>
+ *      这个类将所有的正文文本从一篇HTML文档中提取出来，并且分成若干段落。
+ *      @note 段落 是指一篇HTML文档中，语义相对集中的一段文字。
+ *      每一个提取出来的段落将会获得一个权重。这个权重是该段落对HTML文档主题的贡献程度
  *
  *      Usage:
  *      BufferedReader reader = new BufferedReader(new FileReader(...));
@@ -33,42 +34,56 @@ import org.w3c.dom.NodeList;
  *		parser.parse(new InputSource(reader));
  *		Document doc = parser.getDocument();
 
- *		HTMLDocumentOptimizer optimiser = new HTMLDocumentOptimizer(doc);	
- *  	String text = optimiser.getImportantText();
+ *		TextExtractor extractor = new TextExtractor(doc);
+ *  	String text = extractor.extract();
  *  	System.out.println(text);
  *  </pre>
  */
 public class TextExtractor {
 
     /**
-     * @return the paragraphList
+     * 这个标记最大允许的锚文本密度，该值目前为.5
      */
-    public List<Paragraph> getParagraphList() {
-        return paragraphList;
-    }
+    public static final double MAX_ANCHOR_DEN = 0.5;
     /**
-     * store the number of text not in anchor
+     * 该HTML文档中有多少正文文字？
      */
     private int totalTextLen = 0;
     /**
-     * store the number of text not in anchor
+     * 该HTML文档中有多少超链接文字？
      */
     private int totalAnchorTextLen = 0;
+    /**
+     * 该HTML文档中有多少infoNodes?
+     */
     private int totalNumInfoNodes = 0;
     /**
-     * visit every node and count the factors that affect the priority
-     * of this node
+     * 标记列表
      */
     private List<Tag> tagList = new ArrayList<Tag>();
+    /**
+     * 段落列表
+     */
     private List<Paragraph> paragraphList = new ArrayList<Paragraph>();
+    /**
+     * w3cHTML文档模型
+     */
     private Document doc;
 
+    /**
+     * 利用給定的W3C文檔對象模型構造一個TextExtractor
+     * @param doc 所给定的W3C文档对象模型
+     */
     public TextExtractor(Document doc) {
         super();
         this.doc = doc;
 
     }
 
+    /**
+     * 删除文档中的一些显然不会包含主题信息的节点，例如script,style,等等，它们将影响我们的文本抽取器的分析。
+     * @param e 所需要清楚地w3c节点
+     */
     private void cleanup(Element e) {
         NodeList c = e.getChildNodes();
         for (int i = 0; i < c.getLength(); i++) {
@@ -83,23 +98,29 @@ public class TextExtractor {
         }
     }
 
+    /**
+     * 这个算法目前还不被使用，因为它将会扰乱评分系统的公平性。
+     * @deprecated 它将会扰乱评分系统的公平性。
+     * @param e
+     */
     private void adjust(Element e) {
         NodeList c = e.getChildNodes();
         for (int i = 0; i < c.getLength(); i++) {
             if (c.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                Element t = (Element) c.item(i);
-                if (new Tag(c.item(i)).isExtra()) {
+                Tag tag = new Tag((Element) c.item(i));
+                if (Utility.isLargeNode((Element) c.item(i)) &&
+                        tag.weight(totalTextLen, totalAnchorTextLen, totalNumInfoNodes) > 0.5) {
                     e.removeChild(c.item(i));
                 } else {
-                    cleanup(t);
+                    cleanup((Element) c.item(i));
                 }
             }
         }
     }
 
     /**
-     * 
-     * @return string whole text on the web
+     * 抽取HTML文本信息，并且分段，为每一段文本的主题相关性打分。
+     * @return 所抽取出的主题信息
      */
     public String extract() {
         long s = System.currentTimeMillis();
@@ -113,7 +134,7 @@ public class TextExtractor {
 
         totalNumInfoNodes = Tag.getNumInfoNode((Element) body);
 
-        evaluateNodes(body);
+        extractTags(body);
 
         String bodyText = "";
         if (tagList.size() == 0) {
@@ -131,60 +152,57 @@ public class TextExtractor {
                     }
                 }
             });
-            Tag max = tagList.get(tagList.size()-1);
+            Tag max = tagList.get(tagList.size() - 1);
             for (Tag t : tagList) {
                 System.out.println(t.getInnerText(false) + "\t" + t.getWeight());
             }
+            //print the method excution duration
             System.out.print("\t" + (System.currentTimeMillis() - s) + "\t");
-            //cleanup2((Element) max.node);
+            //adjust((Element) max.node);
             bodyText = max.getInnerText(true);
 
         }
 
         //extract all the paragraphs, add them to the paragraph list
-        paragraphList = new ParagraphExtractor(bodyText, whole).extract();
+        paragraphList = new ParagraphSplitter(bodyText, whole).split();
 
         return bodyText;
     }
 
     /**
-     *
-     * @param node
+     * 遍历每个Node对象，把每个Node都存储到taglist当中。
+     * @param node 所需要遍历的w3cNode对象
      * @return Mark information about node
      * this method is used to collect the information and calculate priority
      */
-    private void evaluateNodes(Node node) {
+    private void extractTags(Node node) {
         if (node.getNodeType() == Node.TEXT_NODE) {
             return;
         }
 
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
-
-            if (Utility.isLinkNode(element)) {
-                //totalAnchorTextLen += getInnerText(element, false).length();
-            } else if (Utility.isInvalidNode(element)) {
-                return;
-            } else {
-                tagList.add(new Tag(node));
-//                System.out.println(node.getTextContent());
-//                System.out.println("");
-                NodeList list = element.getChildNodes();
-                for (int i = 0; i < list.getLength(); i++) {
-                    evaluateNodes(list.item(i));
-                }
+            //add the tags
+            tagList.add(new Tag(node));
+            NodeList list = element.getChildNodes();
+            for (int i = 0; i < list.getLength(); i++) {
+                extractTags(list.item(i));
             }
         }
-
-        return;
     }
 
     /**
-     *
+     * 段落列表
+     * @return 段落列表
+     */
+    public List<Paragraph> getParagraphList() {
+        return paragraphList;
+    }
+
+    /**
+     * Test method
      * @param args
      * @throws Exception
-     * ��������
-     * ����ʹ�õĻ�ṹ
      */
     public static void main(String[] args) throws Exception {
         File folder = new File("d:/res2/");

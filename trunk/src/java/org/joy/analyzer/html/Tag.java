@@ -10,18 +10,22 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 /**
- *
+ * 一个HTML标记在此文本抽取系统中的抽象。
+ * 可以用它来获取此标记本身的一些特征参数，例如超文本密度等等。
  * @author Lamfeeling
  */
 public class Tag {
 
-    public static final double MAX_ANCHOR_DEN = 0.5;
     private Node node = null;
     private String text = "";
     private String anchorText = "";
     private int numInfoNodes = 0;
     private double weight = 0;
 
+    /**
+     * 用一个标准的w3cNode对象来生成一个Tag对象。
+     * @param node w3cNode对象。
+     */
     public Tag(Node node) {
         this.node = node;
         text = getInnerText(node, false);
@@ -32,8 +36,12 @@ public class Tag {
             numInfoNodes = getNumInfoNode((Element) node);
         }
     }
-    //平滑函数
 
+    /**
+     * 平滑函数，用来平滑我们的算法中的一些值。目前为了效率，我们使用非常粗糙的解题函数
+     * @param x 参数
+     * @return 平滑后的参数
+     */
     private static double fn(double x) {
         if (x > 0.8f) {
             return 0.8f;
@@ -41,17 +49,13 @@ public class Tag {
         return x;
     }
 
-    public boolean isExtra() {
-        if (node.getNodeType() == Node.ELEMENT_NODE) {
-            if (Utility.isLargeNode((Element) node)) {
-                if (anchorDensity() > 0.5) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
+    /**
+     * 通过所给的HTML全文参数，计算该链接在该HTML文档中的权重。
+     * @param totalT HTML文档的总字数。
+     * @param totalA HTML文档的总超链接字数。
+     * @param totalNumInfoNodes HTML文档的<a href="#">infoNode</a>个数。
+     * @return 该标签在所给参数的HTML文档当中的权重
+     */
     public double weight(int totalT, int totalA, int totalNumInfoNodes) {
         double weight = 0;
         if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -86,6 +90,13 @@ public class Tag {
         return anchorLen / (double) textLen;
     }
 
+    /**
+     * 通过所给的HTML参数计算该标记在该HTML文档中所站的份额比例。
+     * 计算方法是，alpha*文字所占的比例-beta超链接所占比例，公式参数详见函数内
+     * @param totalA 该HTML文档包含的超链接文本的字数。
+     * @param totalT 该HTML文档包含的文本字数。
+     * @return 这个标记所占的比例。
+     */
     private double share(int totalA, int totalT) {
         if (totalA == 0) {
             return 1.6 * fn((double) text.length() / totalT);
@@ -94,9 +105,9 @@ public class Tag {
     }
 
     /**
-     * 
-     * @param viewMode
-     * @return
+     *  获取这个标签包含的文本
+     * @param viewMode 是否依照浏览器显示的方式进行优化（将加入额外的空格和换行）？
+     * @return 这个标签所包含的实际文本。
      */
     public String getInnerText(boolean viewMode) {
         if (viewMode) {
@@ -106,10 +117,18 @@ public class Tag {
         }
     }
 
+    /**
+     * 这个标签包含的infoNode的个数。
+     * @return 这个标签包含的infoNode的个数。
+     */
     public int getNumInfoNodes() {
         return numInfoNodes;
     }
 
+    /**
+     * 这个标签所包含的锚文本字符
+     * @return 这个标签所包含的锚文本字符
+     */
     private String getAnchorText() {
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             return getAnchorText((Element) node);
@@ -117,18 +136,28 @@ public class Tag {
         return "";
     }
 
+    /**
+     * 获取这个类里的w3cNode对象
+     * @return
+     */
     public Node getNode() {
         return node;
     }
 
+    /**
+     * 获取这个标签的weight，一定要在调用weight方法之后使用
+     * @return 获取这个标签的weight
+     * @note 仅供调试使用
+     */
     public double getWeight() {
         return weight;
     }
 
     /**
-     *
-     * @param node
-     * @return the text in the node and its offspring
+     * 获取指定标签内所包含的有效文字
+     * @param node 所指定的标签
+     * @param viewMode viewMode 是否依照浏览器显示的方式进行优化（将加入额外的空格和换行）？
+     * @return 获取指定标签内所包含的有效文字
      */
     public static String getInnerText(Node node, boolean viewMode) {
         if (node.getNodeType() == Node.TEXT_NODE) {
@@ -174,6 +203,11 @@ public class Tag {
         return "";
     }
 
+    /**
+     * 这个标签所包含的锚文本字符
+     * @param e 所指定的w3cHTML元素
+     * @return 这个标签所包含的锚文本字符
+     */
     public static String getAnchorText(Element e) {
         StringBuilder anchorLen = new StringBuilder();
         // get anchor text length
@@ -186,7 +220,7 @@ public class Tag {
 
     /**
      * 当前这个节点下包含多少个InfoNode?
-     * @param e
+     * @param e 所给定的w3c元素
      * @return 当前这个节点下包含多少个InfoNode?
      */
     public static int getNumInfoNode(Element e) {
