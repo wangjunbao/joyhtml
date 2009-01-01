@@ -30,8 +30,8 @@ public class Tag {
         this.node = node;
         text = getInnerText(node, false);
         anchorText = getAnchorText();
-        System.out.println(text);
-        System.out.println("");
+//        System.out.println(text);
+//        System.out.println("");
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             numInfoNodes = getNumInfoNode((Element) node);
         }

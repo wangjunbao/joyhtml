@@ -125,8 +125,10 @@ public class TextExtractor {
     public String extract() {
         long s = System.currentTimeMillis();
         Node body = doc.getElementsByTagName("BODY").item(0);
-        //cleanup, remove the invalid tags
+        
+        //cleanup, remove the invalid tags,这句话貌似没有任何作用！！
         cleanup((Element) body);
+
         String whole = Tag.getInnerText(body, true);
         totalTextLen = Tag.getInnerText(body, false).length();
         // get anchor text length
@@ -153,27 +155,25 @@ public class TextExtractor {
                 }
             });
             Tag max = tagList.get(tagList.size() - 1);
-            for (Tag t : tagList) {
-                System.out.println(t.getInnerText(false) + "\t" + t.getWeight());
-            }
+//            for (Tag t : tagList) {
+//                System.out.println(t.getInnerText(false) + "\t" + t.getWeight());
+//            }
             //print the method excution duration
             System.out.print("\t" + (System.currentTimeMillis() - s) + "\t");
             //adjust((Element) max.node);
             bodyText = max.getInnerText(true);
 
         }
-
-        //extract all the paragraphs, add them to the paragraph list
-        paragraphList = new ParagraphSplitter(bodyText, whole).split();
-
+        if (!bodyText.trim().equals("")) {
+            //extract all the paragraphs, add them to the paragraph list
+            paragraphList = new ParagraphSplitter(bodyText, whole).split();
+        }
         return bodyText;
     }
 
     /**
      * 遍历每个Node对象，把每个Node都存储到taglist当中。
      * @param node 所需要遍历的w3cNode对象
-     * @return Mark information about node
-     * this method is used to collect the information and calculate priority
      */
     private void extractTags(Node node) {
         if (node.getNodeType() == Node.TEXT_NODE) {
@@ -182,6 +182,9 @@ public class TextExtractor {
 
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
+            if (Utility.isInvalidNode(element)) {
+                return;
+            }
             //add the tags
             tagList.add(new Tag(node));
             NodeList list = element.getChildNodes();
