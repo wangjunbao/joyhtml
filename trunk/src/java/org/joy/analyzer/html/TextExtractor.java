@@ -89,7 +89,7 @@ public class TextExtractor {
         for (int i = 0; i < c.getLength(); i++) {
             if (c.item(i).getNodeType() == Node.ELEMENT_NODE) {
                 Element t = (Element) c.item(i);
-                if (Utility.isInvalidNode(t)) {
+                if (Utility.isInvalidElement(t)) {
                     e.removeChild(c.item(i));
                 } else {
                     cleanup(t);
@@ -182,7 +182,7 @@ public class TextExtractor {
 
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
-            if (Utility.isInvalidNode(element)) {
+            if (Utility.isInvalidElement(element)) {
                 return;
             }
             //add the tags

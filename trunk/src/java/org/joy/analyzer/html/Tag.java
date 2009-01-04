@@ -30,8 +30,7 @@ public class Tag {
         this.node = node;
         text = getInnerText(node, false);
         anchorText = getAnchorText();
-//        System.out.println(text);
-//        System.out.println("");
+
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             numInfoNodes = getNumInfoNode((Element) node);
         }
@@ -101,7 +100,7 @@ public class Tag {
         if (totalA == 0) {
             return 1.6 * fn((double) text.length() / totalT);
         }
-        return 1.6 * fn((double) text.length() / totalT) - .8 * anchorText.length() / totalA;
+        return 1.6 * fn((double) text.length() / totalT) - 1.0 * anchorText.length() / totalA;
     }
 
     /**
@@ -166,7 +165,7 @@ public class Tag {
 
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
-            if (Utility.isInvalidNode(element)) {
+            if (Utility.isInvalidElement(element)) {
                 return "";
             }
             StringBuilder nodeText = new StringBuilder();

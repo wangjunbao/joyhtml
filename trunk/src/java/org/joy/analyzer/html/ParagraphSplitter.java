@@ -39,7 +39,7 @@ public class ParagraphSplitter {
 
             split(whole.substring(0, start), paragraphList, .1);
             //now, add the main body
-            split(body, paragraphList,.3);
+            split(body, paragraphList, .3);
 
             split(whole.substring(end), paragraphList, .1);
             return paragraphList;
@@ -66,7 +66,11 @@ public class ParagraphSplitter {
                 //在这里给文档的主题相关度加上显示上的得分因素，比如大标题等等
                 weight += .3;
             }
-            paraList.add(new Paragraph(line.replaceAll("</*H[1-9]>", ""), weight));
+            String t = line.replaceAll("</*H[1-9]>", "");
+            if (!t.trim().equals("")) {
+                //跳过空行
+                paraList.add(new Paragraph(t, weight));
+            }
             line = r.readLine();
         }
     }

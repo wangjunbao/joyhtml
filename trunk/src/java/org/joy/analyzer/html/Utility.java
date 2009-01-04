@@ -29,7 +29,7 @@ public class Utility {
     private static final String[] TABLE_NODES = {"TR", "TD"};
     private static final String[] INFO_NODE = {"P", "SPAN", "H1", "H2", "B", "I"};
     public static final String[] HEADING_TAGS = {"TITLE", "H1", "H2", "H3", "H4", "H5", "H6", "H7"};
-    private static final String[] INVALID_TAGS = {"STYLE", "COMMENT", "SCRIPT", "OPTION", "UL"};
+    private static final String[] INVALID_TAGS = {"STYLE", "COMMENT", "SCRIPT", "OPTION"};
     private static final String[] SPACING_TAGS = {"BR", "SPAN"};
     private static final String LINK_NODE = "A";
 
@@ -73,6 +73,9 @@ public class Utility {
             //开始读取内容正文。
             BufferedReader br = new BufferedReader(new InputStreamReader(in, encoding));
             String header = new String(buf, encoding);
+            if (!header.startsWith("<")) {
+                header = "<" + header;
+            }
             //add the header to our content
             StringBuffer sb = new StringBuffer(header);
             char[] charBuf = new char[2048];
@@ -166,7 +169,7 @@ public class Utility {
      * @param e
      * @return 是否是对文本分析无用的节点？
      */
-    public static boolean isInvalidNode(Element e) {
+    public static boolean isInvalidElement(Element e) {
         for (String s : INVALID_TAGS) {
             if (e.getTagName().equals(s)) {
                 return true;

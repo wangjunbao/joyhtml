@@ -21,7 +21,7 @@ public class Parser {
     private Vector<Anchor> anchors = new Vector<Anchor>();
     private org.w3c.dom.Document doc;
     private String context;
-    private TextExtractor e;
+    private TextExtractor textExtractor;
 
     //用网页中的元素生成链接
     private Anchor generateLink(Element e) {
@@ -60,13 +60,13 @@ public class Parser {
      */
     public void parse() {
         extractLinks();
-        e.extract();
+        textExtractor.extract();
     }
 
     public Parser(String URL, org.w3c.dom.Document doc) {
         this.doc = doc;
         this.context = URL;
-        e = new TextExtractor(doc);
+        textExtractor = new TextExtractor(doc);
     }
 
     /**
@@ -78,6 +78,6 @@ public class Parser {
     }
 
     public List<Paragraph> getParagraphs() {
-        return e.getParagraphList();
+        return textExtractor.getParagraphList();
     }
 }
