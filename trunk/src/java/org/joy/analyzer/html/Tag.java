@@ -98,7 +98,7 @@ public class Tag {
         if (totalA == 0) {
             return 1.6 * fn((double) text.length() / totalT);
         }
-        return 1.6 * fn((double) text.length() / totalT) - 1.0 * anchorText.length() / totalA;
+        return 1.6 * fn((double) text.length() / totalT) - .8 * anchorText.length() / totalA;
     }
 
     /**
