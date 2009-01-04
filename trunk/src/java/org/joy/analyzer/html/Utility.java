@@ -14,7 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.joy.analyzer.TestGUI;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -87,7 +86,7 @@ public class Utility {
             br.close();
             s = sb.toString();
         } catch (IOException ex) {
-            Logger.getLogger(TestGUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Utility.class.getName()).log(Level.SEVERE, null, ex);
         }
         return s;
     }

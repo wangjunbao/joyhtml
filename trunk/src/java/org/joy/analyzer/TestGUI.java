@@ -1,8 +1,10 @@
+package org.joy.analyzer;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.joy.analyzer;
+
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -25,6 +27,7 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
+import org.joy.analyzer.Paragraph;
 import org.joy.analyzer.html.Anchor;
 import org.joy.analyzer.html.HTMLDocument;
 import org.joy.analyzer.html.ParseException;
