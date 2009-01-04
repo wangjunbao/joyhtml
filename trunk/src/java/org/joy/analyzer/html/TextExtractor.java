@@ -125,10 +125,9 @@ public class TextExtractor {
     public String extract() {
         long s = System.currentTimeMillis();
         Node body = doc.getElementsByTagName("BODY").item(0);
-        
-        //cleanup, remove the invalid tags,这句话貌似没有任何作用！！
+        //cleanup, remove the invalid tags,
         cleanup((Element) body);
-
+        
         String whole = Tag.getInnerText(body, true);
         totalTextLen = Tag.getInnerText(body, false).length();
         // get anchor text length

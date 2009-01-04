@@ -20,7 +20,6 @@ public class Tag {
     private String text = "";
     private String anchorText = "";
     private int numInfoNodes = 0;
-    private double weight = 0;
 
     /**
      * 用一个标准的w3cNode对象来生成一个Tag对象。
@@ -71,7 +70,6 @@ public class Tag {
 
         weight += 1.0 - anchorDensity();
         weight += share(totalA, totalT);
-        this.weight = weight;
         return weight;
     }
 
@@ -141,15 +139,6 @@ public class Tag {
      */
     public Node getNode() {
         return node;
-    }
-
-    /**
-     * 获取这个标签的weight，一定要在调用weight方法之后使用
-     * @return 获取这个标签的weight
-     * @note 仅供调试使用
-     */
-    public double getWeight() {
-        return weight;
     }
 
     /**
