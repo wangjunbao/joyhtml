@@ -20,6 +20,7 @@ import org.joy.analyzer.Paragraph;
 public class ParagraphSplitter {
 
     private String body,  whole;
+    private int offset = 0;
 
     public ParagraphSplitter(String body, String whole) {
         this.body = body;
@@ -31,6 +32,8 @@ public class ParagraphSplitter {
      * @throws java.io.IOException
      */
     public List<Paragraph> split() {
+        //reset the offset
+        offset = 0;
         try {
             ArrayList<Paragraph> paragraphList = new ArrayList<Paragraph>();
             //seperate the main body with other parts of the whold text
@@ -60,6 +63,7 @@ public class ParagraphSplitter {
     private void split(String str, ArrayList<Paragraph> paraList, double base) throws IOException {
         BufferedReader r = new BufferedReader(new StringReader(str));
         String line = r.readLine();
+
         while (line != null) {
             double weight = base;
             if (line.startsWith("<H")) {
@@ -69,7 +73,9 @@ public class ParagraphSplitter {
             String t = line.replaceAll("</*H[1-9]>", "");
             if (!t.trim().equals("")) {
                 //跳过空行
-                paraList.add(new Paragraph(t, weight));
+                paraList.add(new Paragraph(t, weight, offset));
+                //计算下一个paragraph的偏移
+                offset += t.length();
             }
             line = r.readLine();
         }

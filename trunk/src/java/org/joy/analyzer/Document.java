@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.joy.analyzer;
 
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -12,11 +12,35 @@ import java.util.List;
  * @author Lamfeeling
  */
 public abstract class Document {
-    private String content;
 
-    public abstract List<Paragraph> getParagraphs();
+    private String content;
+    protected List<Paragraph> paragraphs;
+
+    /**
+     * 获取文本中的正文段落
+     * @return 返回文档中的正文段落的集合
+     */
+    public List<Paragraph> getParagraphs() {
+        return paragraphs;
+    }
+
+    /**
+     * 获取文章的全部文字。
+     * @return 文章的全部文字
+     */
+    public String getBody() {
+        StringBuffer sb = new StringBuffer();
+        for (Paragraph p : paragraphs) {
+            sb.append(p.getText());
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 获取文档的标题
+     * @return 文档的标题
+     */
     public abstract String getTitle();
-   
 
     /**
      * 构造一个抽象文档

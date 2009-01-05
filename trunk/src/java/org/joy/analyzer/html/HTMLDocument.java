@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 import java.util.List;
 import org.cyberneko.html.parsers.DOMParser;
 import org.joy.analyzer.Document;
-import org.joy.analyzer.Paragraph;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -23,7 +22,6 @@ public class HTMLDocument extends Document {
 
     private org.w3c.dom.Document doc;
     private List<Anchor> anchors;
-    private List<Paragraph> paragraphs;
     private String url;
 
     /**
@@ -66,16 +64,6 @@ public class HTMLDocument extends Document {
         p.parse();
         anchors = p.getAnchors();
         paragraphs = p.getParagraphs();
-    }
-
-    /**
-     * 获取文本中的正文段落
-     * @return 返回文档中的正文段落的集合
-     */
-    @Override
-    public List<Paragraph> getParagraphs() {
-        return paragraphs;
-        //throw new UnsupportedOperationException();
     }
 
     /**

@@ -4,8 +4,6 @@ package org.joy.analyzer;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -115,7 +113,7 @@ public class TestGUI extends Frame {
                 }
                 for (Paragraph p : doc.getParagraphs()) {
                     if (p != null) {
-                        setDocs(p.getText() + "     -----" + p.getWeight() + "\n", Color.red, false, (int) (p.getWeight() * 30 + 10));
+                        setDocs(p.getText() + "     -----" + p.getWeight() + "偏移:" + p.getOffset() + "\n", Color.red, false, (int) (p.getWeight() * 30 + 10));
                     }
                 }
             } catch (ParseException ex) {

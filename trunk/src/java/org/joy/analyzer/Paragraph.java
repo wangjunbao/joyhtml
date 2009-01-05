@@ -22,6 +22,11 @@ public class Paragraph {
      * 段落的权重。
      */
     private double weight;
+    /**
+     * 段落开始相对于整个文章的偏移
+     */
+    private int offset;
+    
     private ArrayList<String> highlight = new ArrayList<String>();
 
     public Paragraph() {
@@ -31,10 +36,12 @@ public class Paragraph {
      * 由指定的文字和权重构造一个新的段落对象
      * @param text 段落文字
      * @param weight 段落权重
+     * @param offset 段落开始相对于整个文章的偏移
      */
-    public Paragraph(String text, double weight) {
+    public Paragraph(String text, double weight, int offset) {
         this.text = text;
         this.weight = weight;
+        this.offset = offset;
     }
 
     /**
@@ -52,4 +59,9 @@ public class Paragraph {
     public double getWeight() {
         return weight;
     }
+
+    public int getOffset() {
+        return offset;
+    }
+    
 }
