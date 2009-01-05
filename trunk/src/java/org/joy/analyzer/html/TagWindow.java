@@ -10,11 +10,11 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 /**
- * 一个HTML标记在此文本抽取系统中的抽象。
+ * 一个HTML标记窗在此文本抽取系统中的抽象。
  * 可以用它来获取此标记本身的一些特征参数，例如超文本密度等等。
  * @author Lamfeeling
  */
-public class Tag {
+public class TagWindow {
 
     private Node node = null;
     private String text = "";
@@ -25,7 +25,7 @@ public class Tag {
      * 用一个标准的w3cNode对象来生成一个Tag对象。
      * @param node w3cNode对象。
      */
-    public Tag(Node node) {
+    public TagWindow(Node node) {
         this.node = node;
         text = getInnerText(node, false);
         anchorText = getAnchorText();

@@ -60,7 +60,7 @@ public class TextExtractor {
     /**
      * 标记列表
      */
-    private List<Tag> tagList = new ArrayList<Tag>();
+    private List<TagWindow> windowsList = new ArrayList<TagWindow>();
     /**
      * 段落列表
      */
@@ -107,7 +107,7 @@ public class TextExtractor {
         NodeList c = e.getChildNodes();
         for (int i = 0; i < c.getLength(); i++) {
             if (c.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                Tag tag = new Tag((Element) c.item(i));
+                TagWindow tag = new TagWindow((Element) c.item(i));
                 if (Utility.isLargeNode((Element) c.item(i)) &&
                         tag.weight(totalTextLen, totalAnchorTextLen, totalNumInfoNodes) > 0.5) {
                     e.removeChild(c.item(i));
@@ -128,23 +128,23 @@ public class TextExtractor {
         //cleanup, remove the invalid tags,
         cleanup((Element) body);
         
-        String whole = Tag.getInnerText(body, true);
-        totalTextLen = Tag.getInnerText(body, false).length();
+        String whole = TagWindow.getInnerText(body, true);
+        totalTextLen = TagWindow.getInnerText(body, false).length();
         // get anchor text length
-        totalAnchorTextLen = Tag.getAnchorText((Element) body).length();
+        totalAnchorTextLen = TagWindow.getAnchorText((Element) body).length();
 
-        totalNumInfoNodes = Tag.getNumInfoNode((Element) body);
+        totalNumInfoNodes = TagWindow.getNumInfoNode((Element) body);
 
-        extractTags(body);
+        extractWindows(body);
 
         String bodyText = "";
-        if (tagList.size() == 0) {
+        if (windowsList.size() == 0) {
             bodyText = "";
         } else {
             //get the max score
-            Collections.sort(tagList, new Comparator<Tag>() {
+            Collections.sort(windowsList, new Comparator<TagWindow>() {
 
-                public int compare(Tag t1, Tag t2) {
+                public int compare(TagWindow t1, TagWindow t2) {
                     if (t1.weight(totalTextLen, totalAnchorTextLen, totalNumInfoNodes) >
                             t2.weight(totalTextLen, totalAnchorTextLen, totalNumInfoNodes)) {
                         return 1;
@@ -153,7 +153,7 @@ public class TextExtractor {
                     }
                 }
             });
-            Tag max = tagList.get(tagList.size() - 1);
+            TagWindow max = windowsList.get(windowsList.size() - 1);
 //            for (Tag t : tagList) {
 //                System.out.println(t.getInnerText(false) + "\t" + t.getWeight());
 //            }
@@ -174,7 +174,7 @@ public class TextExtractor {
      * 遍历每个Node对象，把每个Node都存储到taglist当中。
      * @param node 所需要遍历的w3cNode对象
      */
-    private void extractTags(Node node) {
+    private void extractWindows(Node node) {
         if (node.getNodeType() == Node.TEXT_NODE) {
             return;
         }
@@ -185,10 +185,10 @@ public class TextExtractor {
                 return;
             }
             //add the tags
-            tagList.add(new Tag(node));
+            windowsList.add(new TagWindow(node));
             NodeList list = element.getChildNodes();
             for (int i = 0; i < list.getLength(); i++) {
-                extractTags(list.item(i));
+                extractWindows(list.item(i));
             }
         }
     }
