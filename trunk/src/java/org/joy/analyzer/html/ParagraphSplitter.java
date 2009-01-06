@@ -22,6 +22,11 @@ public class ParagraphSplitter {
     private String body,  whole;
     private int offset = 0;
 
+    /**
+     * 构造一个段落分解器
+     * @param body 需要分解的文章正文部分的半HTML文本
+     * @param whole 需要分解的文章的全文半HTML文本
+     */
     public ParagraphSplitter(String body, String whole) {
         this.body = body;
         this.whole = whole;
@@ -29,7 +34,7 @@ public class ParagraphSplitter {
 
     /**
      * split all the paragraphs from given text and add them to the paragraph list
-     * @throws java.io.IOException
+     * @return
      */
     public List<Paragraph> split() {
         //reset the offset

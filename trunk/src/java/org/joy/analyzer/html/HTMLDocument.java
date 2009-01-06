@@ -27,7 +27,9 @@ public class HTMLDocument extends Document {
     /**
      * 利用指定的，符合HTML语法规则的字符串中构造一个HTML文档
      * @param str 构造
+     * @param URL 所需要解析的HTML文档的链接地址是什么
      * @return 由指定字符串够早的HTML文档
+     * @throws ParseException
      */
     public static HTMLDocument createHTMLDocument(String URL, String str) throws ParseException {
         DOMParser parser = new DOMParser();

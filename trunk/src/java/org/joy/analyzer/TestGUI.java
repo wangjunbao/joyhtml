@@ -14,9 +14,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JScrollPane;
@@ -25,7 +22,6 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
-import org.joy.analyzer.Paragraph;
 import org.joy.analyzer.html.Anchor;
 import org.joy.analyzer.html.HTMLDocument;
 import org.joy.analyzer.html.ParseException;
@@ -111,9 +107,12 @@ public class TestGUI extends Frame {
                     }
 
                 }
+                int offset = 0;
                 for (Paragraph p : doc.getParagraphs()) {
                     if (p != null) {
                         setDocs(p.getText() + "     -----" + p.getWeight() + "偏移:" + p.getOffset() + "\n", Color.red, false, (int) (p.getWeight() * 30 + 10));
+                        System.out.println(offset);
+                        offset += p.getText().length();
                     }
                 }
             } catch (ParseException ex) {

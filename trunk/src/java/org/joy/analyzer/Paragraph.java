@@ -60,6 +60,10 @@ public class Paragraph {
         return weight;
     }
 
+    /**
+     * 获取段落相对于整篇文章的偏移
+     * @return 段落相对于整篇文章的偏移
+     */
     public int getOffset() {
         return offset;
     }

@@ -16,13 +16,16 @@ public class Anchor {
     /**
      * 构造函数
      * @param text 锚文本
-     * @param URL 锚文本指向的链接
+     * @param url 锚文本指向的链接
      */
     public Anchor(String text, String url) {
         this.text = text;
         this.url = url;
     }
 
+    /**
+     * bean 方法，默认构造函数
+     */
     public Anchor() {
     }
 

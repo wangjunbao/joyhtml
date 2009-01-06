@@ -4,7 +4,6 @@
  */
 package org.joy.analyzer;
 
-import java.util.HashSet;
 import java.util.List;
 
 /**
