@@ -26,7 +26,6 @@ public class Paragraph {
      * 段落开始相对于整个文章的偏移
      */
     private int offset;
-    
     private ArrayList<String> highlight = new ArrayList<String>();
 
     public Paragraph() {
@@ -42,6 +41,14 @@ public class Paragraph {
         this.text = text;
         this.weight = weight;
         this.offset = offset;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
     }
 
     /**
@@ -67,5 +74,4 @@ public class Paragraph {
     public int getOffset() {
         return offset;
     }
-    
 }

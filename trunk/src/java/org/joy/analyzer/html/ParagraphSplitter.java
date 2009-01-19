@@ -69,18 +69,31 @@ public class ParagraphSplitter {
         BufferedReader r = new BufferedReader(new StringReader(str));
         String line = r.readLine();
 
+        double lastWeight = 0;
         while (line != null) {
             double weight = base;
             if (line.startsWith("<H")) {
                 //在这里给文档的主题相关度加上显示上的得分因素，比如大标题等等
                 weight += .3;
             }
-            String t = line.replaceAll("</*H[1-9]>", "");
+            if (line.startsWith("<TITLE")) {
+                weight += .7;
+            }
+            String t = line.replaceAll("(</*H[1-9]>)|(</*TITLE>)", "");
             if (!t.trim().equals("")) {
-                //跳过空行
-                paraList.add(new Paragraph(t, weight, offset));
-                //计算下一个paragraph的偏移
-                offset += t.length();
+                if (weight == lastWeight) {
+                    //如果和上一个段落同样的权重，合并两段落
+                    String p = paraList.get(paraList.size() - 1).getText() + "\r\n" + t;
+                    paraList.get(paraList.size() - 1).setText(p);
+                    //计算下一个paragraph的偏移
+                    offset += t.length()+2;
+                } else {
+                    //如果不一样，开始一个新的段落
+                    paraList.add(new Paragraph(t, weight, offset));
+                    lastWeight = weight;
+                    //计算下一个paragraph的偏移
+                    offset += t.length();
+                }
             }
             line = r.readLine();
         }

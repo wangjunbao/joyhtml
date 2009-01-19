@@ -22,6 +22,7 @@ public class Parser {
     private org.w3c.dom.Document doc;
     private String context;
     private TextExtractor textExtractor;
+    private String mainBody;
 
     //用网页中的元素生成链接
     private Anchor generateLink(Element e) {
@@ -41,7 +42,7 @@ public class Parser {
             return new Anchor(e.getTextContent(), url);
         } catch (MalformedURLException ex) {
             //ex.printStackTrace();
-            System.out.println("链接生成错误"+ex.getMessage());
+            System.out.println("链接生成错误" + ex.getMessage());
         }
         return null;
     }
@@ -51,7 +52,10 @@ public class Parser {
         NodeList nl = doc.getElementsByTagName("A");
         for (int i = 0; i < nl.getLength(); i++) {
             Element e = (Element) nl.item(i);
-            anchors.add(generateLink(e));
+            Anchor a = generateLink(e);
+            if (a != null) {
+                anchors.add(a);
+            }
         }
     }
 
@@ -60,7 +64,7 @@ public class Parser {
      */
     public void parse() {
         extractLinks();
-        textExtractor.extract();
+        mainBody = textExtractor.extract();
     }
 
     public Parser(String URL, org.w3c.dom.Document doc) {
@@ -79,5 +83,9 @@ public class Parser {
 
     public List<Paragraph> getParagraphs() {
         return textExtractor.getParagraphList();
+    }
+
+    public String getMainBody() {
+        return mainBody;
     }
 }

@@ -127,8 +127,7 @@ public class TextExtractor {
         Node body = doc.getElementsByTagName("BODY").item(0);
         //cleanup, remove the invalid tags,
         cleanup((Element) body);
-        
-        String whole = TagWindow.getInnerText(body, true);
+
         totalTextLen = TagWindow.getInnerText(body, false).length();
         // get anchor text length
         totalAnchorTextLen = TagWindow.getAnchorText((Element) body).length();
@@ -163,6 +162,13 @@ public class TextExtractor {
             bodyText = max.getInnerText(true);
 
         }
+        //我们所有的段落，别忘了加上标题
+        String whole = TagWindow.getInnerText(body, true);
+        if(!whole.trim().startsWith("<TITLE>")){
+            whole ="<TITLE>" + doc.getElementsByTagName("TITLE").item(0).getTextContent() 
+                    + "</TITLE>\r\n"+whole;
+        }
+
         if (!bodyText.trim().equals("")) {
             //extract all the paragraphs, add them to the paragraph list
             paragraphList = new ParagraphSplitter(bodyText, whole).split();

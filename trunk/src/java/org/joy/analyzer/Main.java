@@ -23,34 +23,33 @@ public class Main {
      */
     public static void main(String[] args) throws ParseException, FileNotFoundException, IOException {
         // TODO 在这里添加测试代码
-        FileReader r =  new FileReader("test.htm");
+        FileReader r = new FileReader("test.htm");
         BufferedReader br = new BufferedReader(r);
         String line = br.readLine();
-        StringBuffer sb =new StringBuffer();
-        while(line!=null){
+        StringBuffer sb = new StringBuffer();
+        while (line != null) {
             sb.append(line);
             line = br.readLine();
         }
         br.close();
 
         HTMLDocument doc = HTMLDocument.createHTMLDocument("http://news.sina.com.cn", sb.toString());
-        for(Anchor a:doc.getAnchors()){
-            if(a!=null)
-            System.out.println(a.getText()+"   =>   "+a.getURL());
+        for (Anchor a : doc.getAnchors()) {
+            if (a != null) {
+                System.out.println(a.getText() + "   =>   " + a.getURL());
+            }
 
 
-           
-     //       FileWriter w = new FileWriter("d:/test.txt");
+
+        //       FileWriter w = new FileWriter("d:/test.txt");
         //w.write(doc.getBodyText());//.replaceAll("\\r\\n+", "\r\n"));
-       // w.close();
+        // w.close();
         }
 
-         for(Paragraph p:doc.getParagraphs())
-            {
-                if(p!=null)
-                {
-                   System.out.println(p.getText()+"     -----"+p.getWeight());
-                }
+        for (Paragraph p : doc.getParagraphs()) {
+            if (p != null) {
+                System.out.println(p.getText() + "     -----" + p.getWeight());
             }
+        }
     }
 }

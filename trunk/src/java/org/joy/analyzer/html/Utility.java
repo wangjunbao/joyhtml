@@ -28,7 +28,7 @@ public class Utility {
     private static final String[] TABLE_NODES = {"TR", "TD"};
     private static final String[] INFO_NODE = {"P", "SPAN", "H1", "H2", "B", "I"};
     public static final String[] HEADING_TAGS = {"TITLE", "H1", "H2", "H3", "H4", "H5", "H6", "H7"};
-    private static final String[] INVALID_TAGS = {"STYLE", "COMMENT", "SCRIPT", "OPTION"};
+    private static final String[] INVALID_TAGS = {"STYLE", "COMMENT", "SCRIPT", "OPTION","IFRAME"};
     private static final String[] SPACING_TAGS = {"BR", "SPAN"};
     private static final String LINK_NODE = "A";
 
@@ -72,9 +72,6 @@ public class Utility {
             //开始读取内容正文。
             BufferedReader br = new BufferedReader(new InputStreamReader(in, encoding));
             String header = new String(buf, encoding);
-            if (!header.startsWith("<")) {
-                header = "<" + header;
-            }
             //add the header to our content
             StringBuffer sb = new StringBuffer(header);
             char[] charBuf = new char[2048];
@@ -85,6 +82,9 @@ public class Utility {
             }
             br.close();
             s = sb.toString();
+            if(!s.trim().startsWith("<")){
+                s = "<"+s.trim();
+            }
         } catch (IOException ex) {
             Logger.getLogger(Utility.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -97,7 +97,7 @@ public class Utility {
      * @return 需要过滤的文本。
      */
     public static String filter(String text) {
-        text = text.replaceAll("[^\u4e00-\u9fa5|a-z|A-Z|0-9|０-９,.，。:；：><?》《\"”“!\\-©|\\s|\\@]", " ");
+        text = text.replaceAll("[^\u4e00-\u9fa5|a-z|A-Z|0-9|０-９,.，。:；：><?…》《\"”“!\\-©|\\s|\\@]", " ");
         text = text.replaceAll("[【】]", " ");
         text = text.replaceAll("[\r\n]+", "\r\n");
         text = text.replaceAll("\n+", "\n");
