@@ -2,7 +2,6 @@ package ICTCLAS.I3S.AC;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.UnsupportedEncodingException;
 
 public class ICTCLAS30 {
     public native   boolean ICTCLAS_Init(byte[] sPath);
