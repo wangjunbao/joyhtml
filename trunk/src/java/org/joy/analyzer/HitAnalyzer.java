@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.joy.analyzer.scoring.Scorer;
+import org.joy.analyzer.scoring.ZeroScorer;
 import org.joy.nlp.WordSpliter;
 
 /**
@@ -19,7 +20,7 @@ import org.joy.nlp.WordSpliter;
 public class HitAnalyzer extends Analyzer {
 
     private WordSpliter spliter;
-    private List<Hit> hitList= new ArrayList<Hit>();
+    private List<Hit> hitList = new ArrayList<Hit>();
     private Set<String> termSet;
 
     public HitAnalyzer(Document doc, WordSpliter spliter) {
@@ -38,22 +39,24 @@ public class HitAnalyzer extends Analyzer {
 
     @Override
     public void doAnalyze() {
+        doAnalyze(new ZeroScorer());
+    }
+
+    public void doAnalyze(Scorer s) {
         termSet = getTerms(doc.getContent());
         String content = doc.getContent();
         for (String term : termSet) {
             int index = content.indexOf(term);
             Hit h = new Hit(term);
             while (index != -1) {
+                h.setScore(s.getScore(h.getTerm()));
                 h.addPos(index);
-                index = content.indexOf(term, index+1);
+                index = content.indexOf(term, index + 1);
             }
             hitList.add(h);
         }
     }
 
-    public void doAnalyze(Scorer s){
-        
-    }
     public Set<String> getTermSet() {
         return termSet;
     }
