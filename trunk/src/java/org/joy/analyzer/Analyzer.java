@@ -9,11 +9,11 @@ package org.joy.analyzer;
  *
  * @author Lamfeeling
  */
-public class Analyzer {
-    private Document doc;
+public abstract class Analyzer {
+    protected Document doc;
     public Analyzer(Document doc){
         this.doc = doc;
     }
 
-    
+    public abstract void doAnalyze();
 }

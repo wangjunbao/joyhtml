@@ -12,7 +12,7 @@ import java.util.List;
  */
 public abstract class Document {
 
-    private String content;
+    private String data;
     protected List<Paragraph> paragraphs;
 
     /**
@@ -27,7 +27,7 @@ public abstract class Document {
      * 获取文章的全部文字。
      * @return 文章的全部文字
      */
-    public String getBody() {
+    public String getContent() {
         StringBuffer sb = new StringBuffer();
         for (Paragraph p : paragraphs) {
             sb.append(p.getText());
@@ -45,15 +45,15 @@ public abstract class Document {
      * 构造一个抽象文档
      * @param content 文档的自负表现形式，即未经改变的纯字符串形式
      */
-    public Document(String content) {
-        this.content = content;
+    public Document(String data) {
+        this.data = data;
     }
 
     /**
      * 获取文档的纯字符串形式。
      * @return 要解析的文档字符串形式
      */
-    public String getContent() {
-        return content;
+    public String getData() {
+        return data;
     }
 }

@@ -11,35 +11,33 @@ import java.util.Vector;
  * @author Lamfeeling
  */
 public class Hit {
-    public Hit(String body)
-    {
-        this.body=body;
-        weight=0;
-        pos=new Vector<Integer>();
+
+    private double score;
+    private String term;
+    private Vector<Integer> pos;
+
+    public Hit(String body) {
+        this.term = body;
+        pos = new Vector<Integer>();
+    }
+
+    public double getScore() {
+        return score;
+    }
+
+    public void setScore(double score) {
+        this.score = score;
     }
 
     public Vector<Integer> getPos() {
         return pos;
     }
 
-    public void setPos(Vector<Integer> pos) {
-        this.pos = pos;
+    public void addPos(int pos) {
+        this.pos.add(pos);
     }
 
-    public String getBody() {
-        return body;
+    public String getTerm() {
+        return term;
     }
-
-    public double getWeight() {
-        return weight;
-    }
-
-
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-    String body;
-    double weight;
-    Vector<Integer> pos;
 }

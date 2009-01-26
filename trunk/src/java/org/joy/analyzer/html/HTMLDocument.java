@@ -23,7 +23,7 @@ public class HTMLDocument extends Document {
     private org.w3c.dom.Document doc;
     private List<Anchor> anchors;
     private String url;
-    private String mainBody;
+    private String body;
 
     /**
      * 利用指定的，符合HTML语法规则的字符串中构造一个HTML文档
@@ -66,7 +66,7 @@ public class HTMLDocument extends Document {
         p.parse();
         anchors = p.getAnchors();
         paragraphs = p.getParagraphs();
-        mainBody = p.getMainBody();
+        body = p.getMainBody();
     }
 
     /**
@@ -98,7 +98,7 @@ public class HTMLDocument extends Document {
      * 获得的网页当中的主题正文
      * @return 获得的网页当中的主题正文
      */
-    public String getMainBody() {
-        return mainBody;
+    public String getBody() {
+        return body;
     }
 }
