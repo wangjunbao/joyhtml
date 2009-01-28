@@ -57,7 +57,9 @@ public class WordSpliter {
         String[] s = t.trim().split("\\s");
         ArrayList<Word> words = new ArrayList();
         for (String cell : s) {
-            words.add(new Word(cell));
+            if (cell.contains("/")) {
+                words.add(new Word(cell));
+            }
         }
         return words.toArray(new Word[0]);
     }

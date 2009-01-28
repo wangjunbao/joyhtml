@@ -4,20 +4,13 @@
  */
 package org.joy.analyzer.scoring;
 
-import org.joy.analyzer.*;
-import java.util.List;
-
 /**
  *
  * @author Administrator
  */
 public class PWFScorer extends Scorer {
 
-    public PWFScorer(List<Paragraph> paragraphs) {
-        super(paragraphs);
-    }
-
-    private void doAnalyze() {
+    public PWFScorer() {
     }
 
     @Override

@@ -5,14 +5,12 @@
 package org.joy.analyzer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.joy.analyzer.scoring.FrequencyScorer;
 import org.joy.analyzer.scoring.Scorer;
-import org.joy.analyzer.scoring.ZeroScorer;
 import org.joy.analyzer.terms.SimpleTermExtractor;
 import org.joy.analyzer.terms.TermExtractor;
 import org.joy.nlp.WordSpliter;
@@ -32,11 +30,6 @@ public class HitAnalyzer extends Analyzer {
         this.spliter = spliter;
     }
 
-    private HashSet<String> getTerms(String s, TermExtractor term) {
-        term.load(spliter.splitToWords(s));
-        return term.getTerms();
-    }
-
     public List<Hit> getHits() {
         return hitList;
     }
@@ -44,7 +37,7 @@ public class HitAnalyzer extends Analyzer {
     @Override
     public void doAnalyze() {
         try {
-            doAnalyze(ZeroScorer.class, SimpleTermExtractor.class);
+            doAnalyze(FrequencyScorer.class, SimpleTermExtractor.class);
         } catch (InstantiationException ex) {
             Logger.getLogger(HitAnalyzer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
@@ -57,7 +50,9 @@ public class HitAnalyzer extends Analyzer {
         TermExtractor extractor = extractorClass.newInstance();
 
         scorer.load(doc.getParagraphs());
-        termSet = getTerms(doc.getContent(),extractor);
+        extractor.load(spliter.splitToWords(doc.getContent()));
+        termSet = extractor.getTerms();
+        
         String content = doc.getContent();
         for (String term : termSet) {
             int index = content.indexOf(term);

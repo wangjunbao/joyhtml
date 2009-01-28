@@ -11,7 +11,6 @@ package org.joy.analyzer.scoring;
 public class ZeroScorer extends Scorer {
 
     public ZeroScorer() {
-        super(null);
     }
 
     @Override

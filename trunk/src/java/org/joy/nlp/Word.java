@@ -17,7 +17,6 @@ public class Word {
     }
 
     public Word(String s) {
-        System.out.println(s);
         int i = s.lastIndexOf("/");
         tag = s.substring(i + 1, s.length());
         text = s.substring(0, i);

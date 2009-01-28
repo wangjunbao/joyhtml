@@ -4,16 +4,14 @@
  */
 package org.joy.analyzer;
 
-import org.joy.analyzer.HitAnalyzer;
-import ICTCLAS.I3S.AC.ICTCLAS30;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.URL;
+import java.util.Arrays;
 import org.joy.analyzer.html.HTMLDocument;
 import org.joy.analyzer.html.ParseException;
 import org.joy.nlp.WordSpliter;
@@ -46,17 +44,8 @@ public class Main {
         HitAnalyzer a = new HitAnalyzer(doc, new WordSpliter());
         a.doAnalyze();
         System.setOut(new PrintStream("c:/a.txt"));
-        System.out.println(a.getTermSet());
+        System.out.println(Arrays.toString(a.getTermSet().toArray(new String[0])));
+        System.out.println(Arrays.toString(a.getHits().toArray(new Hit[0])));
 
-//        KeyWords keywords=new KeyWords(doc.getParagraphs());
-//        for(Hit hit:keywords.getHitList())
-//        {
-//            System.out.print(hit.getTerm()+"---"+hit.getWeight()+"---");
-//            for(int i=0;i<hit.getPos().size();i++)
-//            {
-//                System.out.print(hit.getPos().get(i)+"  ");
-//            }
-//            System.out.println();
-//        }
     }
 }

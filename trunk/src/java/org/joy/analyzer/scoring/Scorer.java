@@ -14,12 +14,16 @@ import java.util.List;
 public abstract class Scorer {
 
     protected List<Paragraph> paragraphs;
+    protected String fulltext="";
 
     public Scorer() {
     }
 
     public void load(List<Paragraph> paragraphs) {
         this.paragraphs = paragraphs;
+        for (Paragraph p : paragraphs) {
+            fulltext += p.getText();
+        }
     }
 
     public abstract double getScore(String term);
