@@ -13,9 +13,12 @@ import java.util.List;
  */
 public abstract class Scorer {
 
-    private List<Paragraph> paragraphs;
+    protected List<Paragraph> paragraphs;
 
-    public Scorer(List<Paragraph> paragraphs) {
+    public Scorer() {
+    }
+
+    public void load(List<Paragraph> paragraphs) {
         this.paragraphs = paragraphs;
     }
 

@@ -6,6 +6,7 @@ package org.joy.nlp;
 
 import ICTCLAS.I3S.AC.ICTCLAS30;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,6 +52,16 @@ public class WordSpliter {
         }
     }
 
+    public Word[] splitToWords(String text) {
+        String t = new String(split(text, true));
+        String[] s = t.trim().split("\\s");
+        ArrayList<Word> words = new ArrayList();
+        for (String cell : s) {
+            words.add(new Word(cell));
+        }
+        return words.toArray(new Word[0]);
+    }
+
     public void close() {
         synchronized (waiter) {
             if (i != null) {
@@ -62,8 +73,9 @@ public class WordSpliter {
 
     public static void main(String[] args) {
         WordSpliter w = new WordSpliter();
-        System.out.println(w.split("中国人是好人", false));
+        System.out.println(w.split("美国中央情报局是特务间谍机构。", true));
         System.out.println(Arrays.asList(w.split("中国人都是好人啊！")));
+        w.splitToWords("中国大陆是共产党控制的。");
         w.close();
         System.out.println(w.split("中国人是好人", false));
     }
