@@ -4,6 +4,8 @@
  */
 package org.joy.analyzer;
 
+import org.joy.analyzer.HitAnalyzer;
+import org.joy.analyzer.Hit;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;

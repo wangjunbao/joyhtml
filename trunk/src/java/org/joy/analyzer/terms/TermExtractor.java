@@ -18,7 +18,7 @@ public abstract class TermExtractor {
     public TermExtractor() {
     }
 
-    public void load(Word[] words) {
+    public void setWords(Word[] words) {
         this.words = words;
     }
 

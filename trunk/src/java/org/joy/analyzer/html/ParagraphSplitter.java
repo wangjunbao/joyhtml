@@ -34,7 +34,7 @@ public class ParagraphSplitter {
 
     /**
      * split all the paragraphs from given text and add them to the paragraph list
-     * @return
+     * @return 分裂过后的段落
      */
     public List<Paragraph> split() {
         //reset the offset

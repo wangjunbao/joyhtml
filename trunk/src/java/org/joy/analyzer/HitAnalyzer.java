@@ -16,7 +16,7 @@ import org.joy.analyzer.terms.TermExtractor;
 import org.joy.nlp.WordSpliter;
 
 /**
- *
+ * 用于分析和提取文章中Hit的分析器
  * @author Administrator
  */
 public class HitAnalyzer extends Analyzer {
@@ -25,11 +25,20 @@ public class HitAnalyzer extends Analyzer {
     private List<Hit> hitList = new ArrayList<Hit>();
     private Set<String> termSet;
 
+    /**
+     * 构造一个HitAnaylzer
+     * @param doc 所要分析的文档对象
+     * @param spliter 所用的分词器
+     */
     public HitAnalyzer(Document doc, WordSpliter spliter) {
         super(doc);
         this.spliter = spliter;
     }
 
+    /**
+     * 获取分析结果
+     * @return 该片文章当中的Hits
+     */
     public List<Hit> getHits() {
         return hitList;
     }
@@ -49,8 +58,8 @@ public class HitAnalyzer extends Analyzer {
         Scorer scorer = scorerClass.newInstance();
         TermExtractor extractor = extractorClass.newInstance();
 
-        scorer.load(doc.getParagraphs());
-        extractor.load(spliter.splitToWords(doc.getContent()));
+        scorer.setParagraphs(doc.getParagraphs());
+        extractor.setWords(spliter.splitToWords(doc.getContent()));
         termSet = extractor.getTerms();
         
         String content = doc.getContent();

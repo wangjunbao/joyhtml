@@ -5,7 +5,7 @@
 package org.joy.analyzer.scoring;
 
 /**
- *
+ * 零分算法，给所有的关键词打0分
  * @author Administrator
  */
 public class ZeroScorer extends Scorer {

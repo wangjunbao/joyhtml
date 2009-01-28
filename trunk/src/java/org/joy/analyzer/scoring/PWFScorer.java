@@ -5,10 +5,10 @@
 package org.joy.analyzer.scoring;
 
 /**
- *
+ * Paragraph Weighted Frequency Scorer，包含段落权重的频率打分法
  * @author Administrator
  */
-public class PWFScorer extends Scorer {
+public class PWFScorer extends Scorer{
 
     public PWFScorer() {
     }

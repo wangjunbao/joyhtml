@@ -39,7 +39,7 @@ public class Anchor {
 
     /**
      * 获取超链接的URL地址
-     * @return
+     * @return 超链接的URL地址
      */
     public String getURL() {
         return url;

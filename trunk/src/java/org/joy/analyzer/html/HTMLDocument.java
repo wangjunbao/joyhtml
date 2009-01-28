@@ -49,7 +49,7 @@ public class HTMLDocument extends Document {
 
     /**
      * 受保护的方法，不可直接构造。
-     * @param URL 网页的URL地址
+     * @param url 网页的URL地址
      * @param content 描述文档的HTML字符串
      * @param doc 由HTML字符串解析出的Dom文档。
      */
