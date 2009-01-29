@@ -8,7 +8,7 @@ ICTCLAS是中国科学院计算所开发的一套高性能分词套件，在本�
 
 = 如何？ =
 
-我们在您下载的源代码包中没有包括ICTCLAS的分词词典，=您需要另外[http://joyhtml.googlecode.com/files/ICTCLAS%E5%88%86%E8%AF%8D%E8%AF%8D%E5%85%B8.zip 下载]才能使用您的Joyhtml所有功能。=
+我们在您下载的源代码包中没有包括ICTCLAS的分词词典，*您需要另外[http://joyhtml.googlecode.com/files/ICTCLAS%E5%88%86%E8%AF%8D%E8%AF%8D%E5%85%B8.zip 下载]才能使用您的Joyhtml所有功能。*
 
 下载后，您把解压后的Data目录放到您的源代码文件夹下。
 
