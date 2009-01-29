@@ -1,9 +1,10 @@
-package org.joy.analyzer;
+package org.joy.analyzer.html;
 
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+import org.joy.analyzer.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -22,23 +23,20 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
-import org.joy.analyzer.html.Anchor;
-import org.joy.analyzer.html.HTMLDocument;
-import org.joy.analyzer.html.ParseException;
-import org.joy.analyzer.html.Utility;
+
 
 /**
  *
  * @author hd
  */
-public class GUIMain extends Frame {
+public class Main extends Frame {
 
     TextField urlText;
     JTextPane textArea;
     TextArea urlArea;
 
     public static void main(String[] args) {
-        new GUIMain().launchFrame();
+        new Main().launchFrame();
     }
 
     public void launchFrame() {
@@ -116,7 +114,7 @@ public class GUIMain extends Frame {
                     }
                 }
             } catch (ParseException ex) {
-                Logger.getLogger(GUIMain.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

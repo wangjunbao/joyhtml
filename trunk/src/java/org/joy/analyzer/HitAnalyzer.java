@@ -9,12 +9,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.joy.analyzer.scoring.FrequencyScorer;
 import org.joy.analyzer.scoring.PWFScorer;
 import org.joy.analyzer.scoring.Scorer;
 import org.joy.analyzer.terms.SimpleTermExtractor;
 import org.joy.analyzer.terms.TermExtractor;
-import org.joy.nlp.WordSpliter;
+import org.joy.nlp.ACWordSpliter;
 
 /**
  * 用于分析和提取文章中Hit的分析器
@@ -22,16 +21,23 @@ import org.joy.nlp.WordSpliter;
  */
 public class HitAnalyzer extends Analyzer {
 
-    private WordSpliter spliter;
+    private ACWordSpliter spliter;
     private List<Hit> hitList = new ArrayList<Hit>();
     private Set<String> termSet;
+
+    public HitAnalyzer() {
+    }
+
+    public void setSpliter(ACWordSpliter spliter) {
+        this.spliter = spliter;
+    }
 
     /**
      * 构造一个HitAnaylzer
      * @param doc 所要分析的文档对象
      * @param spliter 所用的分词器
      */
-    public HitAnalyzer(Document doc, WordSpliter spliter) {
+    public HitAnalyzer(Document doc, ACWordSpliter spliter) {
         super(doc);
         this.spliter = spliter;
     }
