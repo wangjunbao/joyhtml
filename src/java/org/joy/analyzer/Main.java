@@ -14,7 +14,7 @@ import java.net.URL;
 import java.util.Arrays;
 import org.joy.analyzer.html.HTMLDocument;
 import org.joy.analyzer.html.ParseException;
-import org.joy.nlp.WordSpliter;
+import org.joy.nlp.ACWordSpliter;
 
 /**
  *
@@ -41,7 +41,7 @@ public class Main {
         FileWriter w = new FileWriter("c:/output.txt");
         w.write(doc.getContent());
         w.close();
-        HitAnalyzer a = new HitAnalyzer(doc, new WordSpliter());
+        HitAnalyzer a = new HitAnalyzer(doc, new ACWordSpliter());
         a.doAnalyze();
         System.setOut(new PrintStream("c:/a.txt"));
         System.out.println(Arrays.toString(a.getTermSet().toArray(new String[0])));

@@ -4,81 +4,36 @@
  */
 package org.joy.nlp;
 
-import ICTCLAS.I3S.AC.ICTCLAS30;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
- *
+ * 分词系统的接口，任何其他的分词系统必须实现此接口。
  * @author Administrator
  */
-public class WordSpliter {
+public interface WordSpliter {
 
-    private static ICTCLAS30 i = null;
-    private final static Object waiter = new Object();
+    /**
+     * 关闭分词接口，释放分词资源
+     */
+    void close();
 
-    public WordSpliter() {
-        synchronized (waiter) {
-            if (i == null) {
-                try {
-                    i = new ICTCLAS30();
-                    i.ICTCLAS_Init("".getBytes("gb2312"));
-                } catch (UnsupportedEncodingException ex) {
-                    Logger.getLogger(WordSpliter.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-    }
+    /**
+     * 分词，把一段文本分解成一段string字符串
+     * @param text 要分词的文本
+     * @return 分完词的字符串数组
+     */
+    String[] split(String text);
 
-    public String[] split(String text) {
-        return split(text, false).split("\\s+");
-    }
+    /**
+     * 分词，把一段文本分解成一个字符串，当中用空格隔开
+     * @param text 要分解的字符串
+     * @param isTagged 是否需要标注POS TAG
+     * @return 返回分过词的字符串
+     */
+    String split(String text, boolean isTagged);
 
-    public String split(String text, boolean isTagged) {
-        synchronized (waiter) {
-            if (i == null) {
-                System.err.println("分词系统已经被关闭");
-                return null;
-            }
-            try {
-                return new String(i.ICTCLAS_ParagraphProcess(text.getBytes("gb2312"), isTagged ? 1 : 0), "gb2312");
-            } catch (UnsupportedEncodingException ex) {
-                Logger.getLogger(WordSpliter.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            return null;
-        }
-    }
-
-    public Word[] splitToWords(String text) {
-        String t = new String(split(text, true));
-        String[] s = t.trim().split("\\s");
-        ArrayList<Word> words = new ArrayList();
-        for (String cell : s) {
-            if (cell.contains("/")) {
-                words.add(new Word(cell));
-            }
-        }
-        return words.toArray(new Word[0]);
-    }
-
-    public void close() {
-        synchronized (waiter) {
-            if (i != null) {
-                i.ICTCLAS_Exit();
-                i = null;
-            }
-        }
-    }
-
-    public static void main(String[] args) {
-        WordSpliter w = new WordSpliter();
-        System.out.println(w.split("美国中央情报局是特务间谍机构。", true));
-        System.out.println(Arrays.asList(w.split("中国人都是好人啊！")));
-        w.splitToWords("中国大陆是共产党控制的。");
-        w.close();
-        System.out.println(w.split("中国人是好人", false));
-    }
+    /**
+     * 吧一段文本分解成一个Word数组
+     * @param text 要分解的字符串
+     * @return 返回分解好的Word数组
+     */
+    Word[] splitToWords(String text);
 }

@@ -13,6 +13,17 @@ public abstract class Analyzer {
 
     protected Document doc;
 
+    public Analyzer() {
+    }
+
+    /**
+     * 设置这个Analyzer需要分析的Doc,如果这个分析器不是基于Docment的，这个参数可以不设置
+     * @param doc
+     */
+    public void setDoc(Document doc) {
+        this.doc = doc;
+    }
+
     /**
      * 分析器构造函数
      * @param doc 传入一个文档对象以供分析用途。
