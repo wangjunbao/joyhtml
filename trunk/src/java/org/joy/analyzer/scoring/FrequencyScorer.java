@@ -6,6 +6,7 @@ package org.joy.analyzer.scoring;
 
 /**
  * 频率打分器，完全按照每个term的出现频率打分
+ * @note 需要的打分参数：paragraph
  * @author Administrator
  */
 public class FrequencyScorer extends Scorer {

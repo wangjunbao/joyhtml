@@ -4,8 +4,6 @@
  */
 package org.joy.analyzer;
 
-import org.joy.analyzer.HitAnalyzer;
-import org.joy.analyzer.Hit;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -29,7 +27,7 @@ public class Main {
      */
     public static void main(String[] args) throws FileNotFoundException, IOException, ParseException {
         // TODO 在这里添加测试代码
-        BufferedReader br = new BufferedReader(new InputStreamReader(new URL("http://sports.sina.com.cn/n/2009-01-19/11484178900.shtml").openStream()));
+        BufferedReader br = new BufferedReader(new InputStreamReader(new URL("http://scst.suda.edu.cn/article/20081229085402467.html").openStream()));
         String line = br.readLine();
         StringBuffer sb = new StringBuffer();
         while (line != null) {
@@ -38,7 +36,7 @@ public class Main {
         }
         br.close();
 
-        HTMLDocument doc = HTMLDocument.createHTMLDocument("http://sports.sina.com.cn/n/2009-01-19/11484178900.shtml", sb.toString());
+        HTMLDocument doc = HTMLDocument.createHTMLDocument("http://scst.suda.edu.cn/article/20081229085402467.html", sb.toString());
 
         FileWriter w = new FileWriter("c:/output.txt");
         w.write(doc.getContent());
@@ -47,7 +45,9 @@ public class Main {
         a.doAnalyze();
         System.setOut(new PrintStream("c:/a.txt"));
         System.out.println(Arrays.toString(a.getTermSet().toArray(new String[0])));
-        System.out.println(Arrays.toString(a.getHits().toArray(new Hit[0])));
+        Hit[] hits = a.getHits().toArray(new Hit[0]);
+        Arrays.sort(hits);
+        System.out.println(Arrays.toString(hits));
 
     }
 }

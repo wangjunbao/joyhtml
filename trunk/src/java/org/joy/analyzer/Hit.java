@@ -11,7 +11,7 @@ import java.util.Vector;
  * 以及它在文章当中所占比重的抽象。
  * @author Lamfeeling
  */
-public class Hit {
+public class Hit implements Comparable<Hit> {
 
     private double score;
     private String term;
@@ -73,5 +73,9 @@ public class Hit {
     @Override
     public String toString() {
         return term + ":" + score;
+    }
+
+    public int compareTo(Hit h) {
+        return Double.compare(getScore(), h.getScore());
     }
 }
