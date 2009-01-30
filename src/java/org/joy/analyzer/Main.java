@@ -27,7 +27,7 @@ public class Main {
      */
     public static void main(String[] args) throws FileNotFoundException, IOException, ParseException {
         // TODO 在这里添加测试代码
-        BufferedReader br = new BufferedReader(new InputStreamReader(new URL("http://scst.suda.edu.cn/article/20081229085402467.html").openStream()));
+        BufferedReader br = new BufferedReader(new InputStreamReader(new URL("http://sports.sohu.com/20090129/n261973174.shtml").openStream()));
         String line = br.readLine();
         StringBuffer sb = new StringBuffer();
         while (line != null) {
@@ -36,7 +36,7 @@ public class Main {
         }
         br.close();
 
-        HTMLDocument doc = HTMLDocument.createHTMLDocument("http://scst.suda.edu.cn/article/20081229085402467.html", sb.toString());
+        HTMLDocument doc = HTMLDocument.createHTMLDocument("http://sports.sohu.com/20090129/n261973174.shtml", sb.toString());
 
         FileWriter w = new FileWriter("c:/output.txt");
         w.write(doc.getContent());
