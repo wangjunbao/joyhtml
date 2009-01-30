@@ -153,9 +153,9 @@ public class TextExtractor {
                 }
             });
             TagWindow max = windowsList.get(windowsList.size() - 1);
-            for (TagWindow t : windowsList) {
-                System.out.println(t.getInnerText(false));
-            }
+//            for (TagWindow t : windowsList) {
+//                System.out.println(t.getInnerText(false));
+//            }
             //print the method excution duration
             System.out.print("\t" + (System.currentTimeMillis() - s) + "\t");
             //adjust((Element) max.node);
