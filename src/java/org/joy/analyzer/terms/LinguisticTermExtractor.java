@@ -15,7 +15,8 @@ import org.joy.nlp.Word;
  */
 public class LinguisticTermExtractor extends TermExtractor {
 
-    protected String pattern = "(( [^\\s]+/a[a-z]*)|( [^\\s]+/n[a-zZ]*))+( [^\\s]+/cc)*( [^\\s]+/n[a-z]*)";
+    protected String pattern = "(( [^\\s]+/a[a-z]*)|( [^\\s]+/b[a-z]*)|( [^\\s]+/n[a-zZ]*))+( [^\\s]+/n[a-z]*)";
+    private final static int MAX_LENGTH = 6;
 
     @Override
     public HashSet<String> getTerms() {
@@ -28,7 +29,9 @@ public class LinguisticTermExtractor extends TermExtractor {
             for (String s : t.split("\\s")) {
                 sb.append(new Word(s).getText());
             }
-            terms.add(sb.toString());
+            if (sb.length() <= MAX_LENGTH) {
+                terms.add(sb.toString());
+            }
         }
         return terms;
     }

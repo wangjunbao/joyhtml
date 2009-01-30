@@ -28,6 +28,6 @@ public class PWFScorer extends Scorer {
             }
             score += freqInP * p.getWeight();
         }
-        return score;
+        return score*Math.log(term.length());
     }
 }
