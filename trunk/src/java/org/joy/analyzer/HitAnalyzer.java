@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.joy.analyzer.scoring.PWFScorer;
 import org.joy.analyzer.scoring.Scorer;
-import org.joy.analyzer.terms.SimpleTermExtractor;
+import org.joy.analyzer.terms.LinguisticTermExtractor;
 import org.joy.analyzer.terms.TermExtractor;
 import org.joy.nlp.ACWordSpliter;
 
@@ -53,7 +53,7 @@ public class HitAnalyzer extends Analyzer {
     @Override
     public void doAnalyze() {
         try {
-            doAnalyze(PWFScorer.class, SimpleTermExtractor.class);
+            doAnalyze(PWFScorer.class, LinguisticTermExtractor.class);
         } catch (InstantiationException ex) {
             Logger.getLogger(HitAnalyzer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {

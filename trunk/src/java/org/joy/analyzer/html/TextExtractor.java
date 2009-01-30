@@ -153,9 +153,9 @@ public class TextExtractor {
                 }
             });
             TagWindow max = windowsList.get(windowsList.size() - 1);
-//            for (Tag t : tagList) {
-//                System.out.println(t.getInnerText(false) + "\t" + t.getWeight());
-//            }
+            for (TagWindow t : windowsList) {
+                System.out.println(t.getInnerText(false));
+            }
             //print the method excution duration
             System.out.print("\t" + (System.currentTimeMillis() - s) + "\t");
             //adjust((Element) max.node);
@@ -164,9 +164,8 @@ public class TextExtractor {
         }
         //我们所有的段落，别忘了加上标题
         String whole = TagWindow.getInnerText(body, true);
-        if(!whole.trim().startsWith("<TITLE>")){
-            whole ="<TITLE>" + doc.getElementsByTagName("TITLE").item(0).getTextContent() 
-                    + "</TITLE>\r\n"+whole;
+        if (!whole.trim().startsWith("<TITLE>")) {
+            whole = "<TITLE>" + Utility.filter(doc.getElementsByTagName("TITLE").item(0).getTextContent()) + "</TITLE>\r\n" + whole;
         }
 
         if (!bodyText.trim().equals("")) {
@@ -190,8 +189,10 @@ public class TextExtractor {
             if (Utility.isInvalidElement(element)) {
                 return;
             }
-            //add the tags
-            windowsList.add(new TagWindow(node));
+            if (!node.getTextContent().trim().equals("")) //add the tags
+            {
+                windowsList.add(new TagWindow(node));
+            }
             NodeList list = element.getChildNodes();
             for (int i = 0; i < list.getLength(); i++) {
                 extractWindows(list.item(i));
