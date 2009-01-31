@@ -4,6 +4,7 @@
  */
 package org.joy.analyzer;
 
+import java.text.DecimalFormat;
 import java.util.Vector;
 
 /**
@@ -72,7 +73,7 @@ public class Hit implements Comparable<Hit> {
      */
     @Override
     public String toString() {
-        return term + ":" + score;
+        return term + ":" +new DecimalFormat("0.00").format(score);
     }
 
     public int compareTo(Hit h) {

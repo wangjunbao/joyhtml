@@ -26,7 +26,7 @@ public abstract class TermExtractor {
             sb.append(w.getText()+"/"+w.getTag()+" ");
         }
         taggedtext = sb.toString();
-        System.out.println(taggedtext);
+    //    System.out.println(taggedtext);
     }
 
     public abstract HashSet<String> getTerms();
