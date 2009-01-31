@@ -76,6 +76,6 @@ public class Hit implements Comparable<Hit> {
     }
 
     public int compareTo(Hit h) {
-        return Double.compare(getScore(), h.getScore());
+        return Double.compare(h.getScore(), getScore());
     }
 }
