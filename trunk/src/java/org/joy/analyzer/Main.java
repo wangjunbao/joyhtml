@@ -25,10 +25,10 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException, IOException, ParseException {
         // TODO 在这里添加测试代码
         String data = org.joy.analyzer.html.Utility.getWebContent(
-                "http://scst.suda.edu.cn/article/20081229085402467.html");
+                "http://news.sina.com.cn/c/2008-12-11/155516828944.shtml");
 
         HTMLDocument doc = HTMLDocument.createHTMLDocument(
-                "http://scst.suda.edu.cn/article/20081229085402467.html", data);
+                "http://home.xiaonei.com/Home.do", data);
 
         FileWriter w = new FileWriter("c:/output.txt");
         w.write(doc.getContent());
@@ -38,7 +38,6 @@ public class Main {
         a.doAnalyze();
         System.out.println(Arrays.toString(a.getTermSet().toArray(new String[0])));
         Hit[] hits = a.getHits().toArray(new Hit[0]);
-        Arrays.sort(hits);
         System.out.println(Arrays.toString(hits));
 
     }
