@@ -8,7 +8,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 <%@page import="org.joy.analyzer.*" %>
+<%@page import="org.joy.nlp.*" %>
+<%@page import="java.util.*" %>
 <%@page import="org.joy.analyzer.html.*" %>
+<%@page import="java.text.*" %>
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -50,18 +54,39 @@
             try {
                 if (request.getParameter("voted") == null) {
             %>
+            <span style="text-align:left"><h3>主题关键字：</h3></span>
+
+
+            <%                    }
+                    String text = Utility.getWebContent(request.getParameter("url"));
+
+                    HTMLDocument doc = HTMLDocument.createHTMLDocument(request.getParameter("url"), text);
+            %>
+            <P STYLE="background-color:#FFFFCC;color:red">
+                <%
+                    ACWordSpliter s = new ACWordSpliter();
+                    HitAnalyzer a = new HitAnalyzer(doc, s);
+                    a.doAnalyze();
+                    List<Hit> hits = a.getHits();
+                    int count = 0;
+                    for (Hit h : hits) {
+                        if (count > 10) {
+                            break;
+                        }
+                %>
+                <span><b><%=h.getTerm() + ":" + new DecimalFormat("0.00").format(h.getScore())%></b></span>
+                <%
+                        count++;
+                    }
+                    s.close();
+                %>
+            </P>
+            <hr/>
             <p>
                 <em style="color:red">您认为我们正确提取了正文内容吗？</em>
                 <a href="commit.jsp?vote=true&url=<%=request.getParameter("url")%>">是</a>
                 <a href="commit.jsp?vote=false&url=<%=request.getParameter("url")%>">否</a>
             </p>
-            <%
-                    }
-                    String text = Utility.getWebContent(request.getParameter("url"));
-
-                    HTMLDocument doc = HTMLDocument.createHTMLDocument(request.getParameter("url"), text);
-            %>
-            <hr/>
             <p align="left">
                 <a href="<%=request.getParameter("url")%>" target="blank">
                     查看原网页
@@ -76,7 +101,7 @@
                     out.print("<b>");
                 }
                 %>
-                <%=p.getText() + "    <font color=red>权重：" + p.getWeight() + "</font>"%>
+                <%=p.getText().replaceAll("\r\n", "<br/><br/>") + "    <font color=red>权重：" + new DecimalFormat("0.00").format(p.getWeight()) + "</font>"%>
                 <%
                 if (p.getWeight() >= 0.3) {
                     out.print("</b>");
