@@ -157,7 +157,7 @@ public class TextExtractor {
 //                System.out.println(t.getInnerText(false));
 //            }
             //print the method excution duration
-            System.out.print("\t" + (System.currentTimeMillis() - s) + "\t");
+            System.out.println("分析结果耗时\t" + (System.currentTimeMillis() - s) + "\t");
             //adjust((Element) max.node);
             bodyText = max.getInnerText(true);
 

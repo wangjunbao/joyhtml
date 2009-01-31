@@ -168,7 +168,6 @@ public class Main extends javax.swing.JFrame {
             for (Paragraph p : doc.getParagraphs()) {
                 if (p != null) {
                     setDocs(p.getText() + "     -----" + new DecimalFormat("0.00").format(p.getWeight()) + "偏移:" + p.getOffset() + "\n", Color.red, false, (int) (p.getWeight() * 30 + 10));
-                    System.out.println(offset);
                     offset += p.getText().length();
                 }
             }
