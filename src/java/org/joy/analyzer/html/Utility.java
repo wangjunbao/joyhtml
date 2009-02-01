@@ -37,7 +37,7 @@ public class Utility {
      * @param URL
      * @return
      */
-    public static String getWebContent(String URL) {
+    public static String getWebContent(String URL) throws IOException {
         String s = "";
         try {
             //从url打开stream
@@ -87,6 +87,7 @@ public class Utility {
             }
         } catch (IOException ex) {
             Logger.getLogger(Utility.class.getName()).log(Level.SEVERE, null, ex);
+            throw new IOException(ex);
         }
         return s;
     }
