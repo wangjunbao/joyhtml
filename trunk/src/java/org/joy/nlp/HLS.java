@@ -23,7 +23,7 @@ public class HLS {
 
       public static void main(String[] args) {
           HLS h=new HLS();
-          h.HLSplitInit("");
+          h.HLSplitInit("./data/");
           System.out.println(h.HLS_ParagraphProcess("胡新华是老大。", 1));
           System.out.println(h.HLS_ParagraphProcess("JOY柳松好。。。。", 0));
           h.HLFreeSplit();
