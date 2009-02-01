@@ -66,10 +66,13 @@ public class HLWordSpliter implements  WordSpliter {
       Word[] words=new Word[s.length];
       for(int i=0;i<s.length;i++)
       {
-          String wordText=s[i].split("/")[0];
-          String wordTag=s[i].split("/")[1];
+          if(s[i]!=null)
+          {
+              String wordText=s[i].split("/")[0];
+              String wordTag=s[i].split("/")[1];
 
-          words[i]=new Word(wordText,wordTag);
+              words[i]=new Word(wordText,wordTag);
+          }
       }
 
       return words;
