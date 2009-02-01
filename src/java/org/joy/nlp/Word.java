@@ -22,6 +22,9 @@ public class Word {
         text = s.substring(0, i);
     }
 
+
+
+
     public Word(String text, String tag) {
         this.text = text;
         this.tag = tag;
@@ -34,4 +37,6 @@ public class Word {
     public String getText() {
         return text;
     }
+
+    
 }
