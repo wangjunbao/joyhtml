@@ -33,6 +33,7 @@ public class HLWordSpliter implements  WordSpliter {
             if(h!=null)
             {
                 h.HLFreeSplit();
+                h=null;
             }
         }
 
