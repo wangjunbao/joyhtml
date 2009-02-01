@@ -81,6 +81,7 @@ public class Main extends javax.swing.JFrame {
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
         jLabel2 = new javax.swing.JLabel();
+        jProgressBar1 = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("JoyHTML功能演示");
@@ -140,9 +141,11 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(urlText, javax.swing.GroupLayout.DEFAULT_SIZE, 493, Short.MAX_VALUE)
                         .addGap(10, 10, 10)
                         .addComponent(doAnalysis))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
+                            .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(jRadioButton2)
@@ -160,17 +163,19 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(doAnalysis))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jLabel2)
+                    .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jRadioButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jRadioButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE))
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -180,40 +185,51 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void urlTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_urlTextActionPerformed
-        try {
-            urlArea.setText("");
-            textArea.setText("");
-            // TODO add your handling code here:
-            HTMLDocument doc = HTMLDocument.createHTMLDocument(urlText.getText(), Utility.getWebContent(urlText.getText()));
-            for (Anchor a : doc.getAnchors()) {
-                if (a != null) {
-                    urlArea.setText(urlArea.getText() + a.getText() + "   =>   " + a.getURL() + "\n");
-                }
-            }
-            int offset = 0;
-            for (Paragraph p : doc.getParagraphs()) {
-                if (p != null) {
-                    setDocs(p.getText() + "     -----" + new DecimalFormat("0.00").format(p.getWeight()) + "偏移:" + p.getOffset() + "\n", Color.red, false, (int) (p.getWeight() * 30 + 10));
-                    offset += p.getText().length();
-                }
-            }
-            WordSpliter w = null;
-            if (jRadioButton1.isSelected()) {
-                w = new ACWordSpliter();
-            } else {
-                w = new HLWordSpliter();
-            }
+        new Thread(new Runnable() {
 
-            HitAnalyzer a = new HitAnalyzer(doc, w);
-            a.doAnalyze();
-            hitList.setListData(a.getHits().toArray(new Hit[0]));
-            textArea.setSelectionStart(0);
-            textArea.setSelectionEnd(0);
-        } catch (Exception ex) {
-            hitList.setListData(new String[0]);
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "错误：" + ex, "发生错误咯！", 0);
-        }
+            public void run() {
+                try {
+                    jProgressBar1.setValue(0);
+                    urlArea.setText("");
+                    textArea.setText("");
+                    // TODO add your handling code here:
+                    HTMLDocument doc = HTMLDocument.createHTMLDocument(urlText.getText(), Utility.getWebContent(urlText.getText()));
+                    jProgressBar1.setValue(20);
+                    for (Anchor a : doc.getAnchors()) {
+                        if (a != null) {
+                            urlArea.setText(urlArea.getText() + a.getText() + "   =>   " + a.getURL() + "\n");
+                        }
+                    }
+                    jProgressBar1.setValue(30);
+                    int offset = 0;
+                    for (Paragraph p : doc.getParagraphs()) {
+                        if (p != null) {
+                            setDocs(p.getText() + "     -----" + new DecimalFormat("0.00").format(p.getWeight()) + "偏移:" + p.getOffset() + "\n", Color.red, false, (int) (p.getWeight() * 30 + 10));
+                            offset += p.getText().length();
+                        }
+                    }
+                    jProgressBar1.setValue(40);
+                    WordSpliter w = null;
+                    if (jRadioButton1.isSelected()) {
+                        w = new ACWordSpliter();
+                    } else {
+                        w = new HLWordSpliter();
+                    }
+                    jProgressBar1.setValue(70);
+                    HitAnalyzer a = new HitAnalyzer(doc, w);
+                    a.doAnalyze();
+                    jProgressBar1.setValue(90);
+                    hitList.setListData(a.getHits().toArray(new Hit[0]));
+                    textArea.setSelectionStart(0);
+                    textArea.setSelectionEnd(0);
+                    jProgressBar1.setValue(100);
+                } catch (Exception ex) {
+                    hitList.setListData(new String[0]);
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "错误：" + ex, "发生错误咯！", 0);
+                }
+            }
+        }).start();
 }//GEN-LAST:event_urlTextActionPerformed
 
     private void doAnalysisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doAnalysisActionPerformed
@@ -239,6 +255,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JList hitList;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
