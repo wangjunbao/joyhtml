@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="GB2312"?>
 <ICTCLAS>
-	<DataPath>Data</DataPath>//Data文件夹路径
+	<DataPath>dicts</DataPath>//Data文件夹路径
 	<TagSet>ICTPOS.map</TagSet>//词性标注集映射文件
 	<UserDict>Off</UserDict>//On：User Dictionary applied; Off: not applied；
 	<UserDictPrior>On</UserDictPrior>//用户词典优先,Added in 2006-03-16, required by NEC On：用户词典和核心词典中同时有的词汇，用户词典优先，本功能不要滥用，如果将核心词典中的词都设置为用户词典，其效果适得其反

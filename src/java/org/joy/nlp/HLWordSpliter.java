@@ -19,7 +19,7 @@ public class HLWordSpliter implements WordSpliter {
         synchronized (waiter) {
             if (h == null) {
                 h = new HLS();
-                h.HLSplitInit("./data/");
+                h.HLSplitInit("./dicts/");
             }
         }
     }

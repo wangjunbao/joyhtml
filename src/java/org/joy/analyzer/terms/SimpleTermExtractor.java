@@ -24,7 +24,7 @@ public class SimpleTermExtractor extends TermExtractor {
 
     static {
         try {
-            BufferedReader br = new BufferedReader(new FileReader("./data/stop.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("./dicts/stop.txt"));
             String line = br.readLine();
             while (line != null) {
                 stopWords.add(line);
