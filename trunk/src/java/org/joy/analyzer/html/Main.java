@@ -14,7 +14,6 @@ import java.awt.Color;
 import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JList;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
@@ -22,7 +21,8 @@ import javax.swing.text.StyleConstants;
 import org.joy.analyzer.Hit;
 import org.joy.analyzer.HitAnalyzer;
 import org.joy.analyzer.Paragraph;
-import org.joy.nlp.ACWordSpliter;
+import org.joy.nlp.HLWordSpliter;
+import org.joy.nlp.WordSpliter;
 
 /**
  *
@@ -171,7 +171,7 @@ public class Main extends javax.swing.JFrame {
                     offset += p.getText().length();
                 }
             }
-            ACWordSpliter w = new ACWordSpliter();
+            WordSpliter w = new HLWordSpliter();
             HitAnalyzer a = new HitAnalyzer(doc,w);
             a.doAnalyze();
             hitList.setListData(a.getHits().toArray(new Hit[0]));
