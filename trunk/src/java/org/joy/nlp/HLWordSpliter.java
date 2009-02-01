@@ -56,7 +56,6 @@ public class HLWordSpliter implements WordSpliter {
         String[] s = split(text, true).replaceAll("\\s+/W", "").split(" ");
         Word[] words = new Word[s.length];
         for (int i = 0; i < s.length; i++) {
-            System.out.println(s[i]);
             String wordText = s[i].split("/")[0];
             String wordTag = s[i].split("/")[1];
 
