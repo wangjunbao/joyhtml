@@ -113,4 +113,12 @@ public class HTMLDocument extends Document {
     public String getBody() {
         return body;
     }
+
+    /**
+     * 获得网页的URL
+     * @return 获得网页的URL
+     */
+    public String getUrl() {
+        return url;
+    }
 }
