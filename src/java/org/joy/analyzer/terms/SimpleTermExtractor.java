@@ -30,6 +30,7 @@ public class SimpleTermExtractor extends TermExtractor {
                 stopWords.add(line);
                 line = br.readLine();
             }
+            br.close();
         } catch (IOException ex) {
             Logger.getLogger(SimpleTermExtractor.class.getName()).log(Level.SEVERE, null, ex);
         }
