@@ -12,7 +12,6 @@
 	<classpathentry kind="lib" path="lib/junit_4/junit-4.5-src.jar"/>
 	<classpathentry kind="lib" path="lib/junit_4/junit-4.5.jar"/>
 	<classpathentry kind="lib" path="lib/junit/junit-3.8.2.jar"/>
-	<classpathentry kind="lib" path="lib/JWSAntTasks/org-netbeans-modules-javawebstart-anttasks.jar"/>
 	<classpathentry kind="lib" path="lib/nekohtml.jar"/>
 	<classpathentry kind="lib" path="lib/resolver.jar"/>
 	<classpathentry kind="lib" path="lib/serializer.jar"/>
