@@ -62,11 +62,11 @@ public class HTMLDocument extends Document {
     /**
      * 受保护的方法，不可直接构造。
      * @param url 网页的URL地址
-     * @param content 描述文档的HTML字符串
+     * @param data 描述文档的HTML字符串
      * @param doc 由HTML字符串解析出的Dom文档。
      */
-    protected HTMLDocument(String url, String content, org.w3c.dom.Document doc) {
-        super(content);
+    protected HTMLDocument(String url, String data, org.w3c.dom.Document doc) {
+        super(data);
         this.doc = doc;
         this.url = url;
         parse();
