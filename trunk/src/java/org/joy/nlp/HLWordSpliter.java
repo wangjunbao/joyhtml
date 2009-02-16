@@ -18,8 +18,11 @@ public class HLWordSpliter implements WordSpliter {
     public HLWordSpliter() {
         synchronized (waiter) {
             if (h == null) {
+				System.out.println("Initialising dicts...");
                 h = new HLS();
                 h.HLSplitInit("./dicts/");
+            }else{
+            	System.err.println("尝试多次初始化分词词典！");
             }
         }
     }
@@ -73,7 +76,7 @@ public class HLWordSpliter implements WordSpliter {
             System.out.print(w.getText() + "/" + w.getTag() + " ");
         }
         System.out.println("");
-
+        new HLWordSpliter();
 
         System.out.println(h.split("我们在领导的帮助下，实现了这个功能。", true));
         h.close();
