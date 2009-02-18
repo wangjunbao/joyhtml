@@ -5,6 +5,7 @@
 package org.joy.analyzer;
 
 import java.text.DecimalFormat;
+import java.util.Collections;
 import java.util.Vector;
 
 /**
@@ -12,12 +13,18 @@ import java.util.Vector;
  * 
  * @author Lamfeeling
  */
-public class Hit implements Comparable<Hit> {
+public class Hit implements Comparable<Hit>, Cloneable {
 
 	private double score;
 	private String term;
-	private Vector<Integer> pos;
+	private Vector<Integer> pos ;
 
+	/**
+	 * 默认构造函数
+	 */
+	public Hit() {
+		pos = new Vector<Integer>();
+	}
 	/**
 	 * 用一個关键词文本初始化一个Hit，初始化后，pos为一个无长度的链表
 	 * 
@@ -95,5 +102,17 @@ public class Hit implements Comparable<Hit> {
 
 	public int compareTo(Hit h) {
 		return Double.compare(h.getScore(), getScore());
+	}
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		Hit h = new Hit();
+		h.setTerm(term);
+		h.setScore(score);
+		for(Integer i:getPos()){
+			h.addPos(i.intValue());
+		}
+		return h;
 	}
 }

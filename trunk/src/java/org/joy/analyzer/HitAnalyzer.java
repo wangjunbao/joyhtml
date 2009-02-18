@@ -6,6 +6,7 @@ package org.joy.analyzer;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -24,7 +25,7 @@ public class HitAnalyzer extends Analyzer {
 
     private WordSpliter spliter;
     private List<Hit> hitList = new ArrayList<Hit>();
-    private Set<String> termSet;
+    private Set<String> termSet = new HashSet<String>();
 
     public HitAnalyzer() {
     }
@@ -63,7 +64,9 @@ public class HitAnalyzer extends Analyzer {
     }
 
     public void doAnalyze(Class<? extends Scorer> scorerClass, Class<? extends TermExtractor> extractorClass) throws InstantiationException, IllegalAccessException {
-        Scorer scorer = scorerClass.newInstance();
+    	hitList.clear(); termSet.clear();
+    	
+         Scorer scorer = scorerClass.newInstance();
         TermExtractor extractor = extractorClass.newInstance();
 
         scorer.setParagraphs(doc.getParagraphs());
