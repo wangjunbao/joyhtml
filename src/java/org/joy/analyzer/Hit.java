@@ -5,7 +5,6 @@
 package org.joy.analyzer;
 
 import java.text.DecimalFormat;
-import java.util.Collections;
 import java.util.Vector;
 
 /**

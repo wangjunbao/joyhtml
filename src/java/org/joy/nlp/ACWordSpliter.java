@@ -26,7 +26,7 @@ public class ACWordSpliter implements WordSpliter {
 				try {
 					System.out.println("Initialising dicts...");
 					i = new ICTCLAS30();
-					i.ICTCLAS_Init("".getBytes("gb2312"));
+					i.ICTCLAS_Init(".".getBytes("gb2312"));
 				} catch (UnsupportedEncodingException ex) {
 					Logger.getLogger(ACWordSpliter.class.getName()).log(
 							Level.SEVERE, null, ex);
@@ -61,7 +61,7 @@ public class ACWordSpliter implements WordSpliter {
 	public Word[] splitToWords(String text) {
 		String t = new String(split(text, true));
 		String[] s = t.trim().split("\\s");
-		ArrayList<Word> words = new ArrayList();
+		ArrayList<Word> words = new ArrayList<Word>();
 		for (String cell : s) {
 			if (cell.contains("/")) {
 				words.add(new Word(cell));
