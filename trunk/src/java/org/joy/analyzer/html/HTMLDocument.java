@@ -35,7 +35,7 @@ public class HTMLDocument extends Document {
     public static HTMLDocument createHTMLDocument(String URL, String str) throws ParseException {
         DOMParser parser = new DOMParser();
         try {
-            parser.parse(new InputSource(new StringReader(str)));
+            parser.parse(new InputSource(new StringReader(str.trim())));
         } catch (SAXException ex) {
             //如果解析错误，要抛出异常
             Logger.getLogger(HTMLDocument.class.getName()).log(Level.SEVERE, null, ex);
