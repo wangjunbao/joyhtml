@@ -7,7 +7,7 @@ package org.joy.nlp;
 import java.util.Arrays;
 
 /**
- *
+ * NOTE: HLWordSpliter is not available for linux
  * @author Administrator
  */
 public class HLWordSpliter implements WordSpliter {

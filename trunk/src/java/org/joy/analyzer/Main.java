@@ -28,13 +28,9 @@ public class Main {
                 "http://news.sina.com.cn/c/2008-12-11/155516828944.shtml");
 
         HTMLDocument doc = HTMLDocument.createHTMLDocument(
-                "http://home.xiaonei.com/Home.do", data);
+                "http://news.sina.com.cn/c/2008-12-11/155516828944.shtml", data);
 
-        FileWriter w = new FileWriter("c:/output.txt");
-        w.write(doc.getContent());
-        w.close();
         HitAnalyzer a = new HitAnalyzer(doc, new ACWordSpliter());
-        System.setOut(new PrintStream("c:/a.txt"));
         a.doAnalyze();
         System.out.println(Arrays.toString(a.getTermSet().toArray(new String[0])));
         Hit[] hits = a.getHits().toArray(new Hit[0]);
