@@ -39,7 +39,7 @@ public class Parser {
                 //一律写成**/的形式
                 url = url + "/";
             }
-            return new Anchor(e.getTextContent(), url);
+            return new Anchor(TagWindow.getInnerText(e,false), url);
         } catch (MalformedURLException ex) {
             //ex.printStackTrace();
             //System.out.println("链接生成错误 " + ex.getMessage());
