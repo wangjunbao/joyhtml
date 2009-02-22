@@ -132,7 +132,7 @@ public class TextExtractor {
 	public String extract() {
 		long s = System.currentTimeMillis();
 		Node body = doc.getElementsByTagName("BODY").item(0);
-		if(body == null)
+		if (body == null)
 			return "";
 		// cleanup, remove the invalid tags,
 		cleanup((Element) body);
@@ -167,8 +167,8 @@ public class TextExtractor {
 			// System.out.println(t.getInnerText(false));
 			// }
 			// print the method excution duration
-//			System.out.println("分析结果耗时\t" + (System.currentTimeMillis() - s)
-//					+ "\t");
+			// System.out.println("分析结果耗时\t" + (System.currentTimeMillis() - s)
+			// + "\t");
 			// adjust((Element) max.node);
 			bodyText = max.getInnerText(true);
 
@@ -179,8 +179,8 @@ public class TextExtractor {
 		if (!whole.trim().startsWith("<TITLE>")
 				&& doc.getElementsByTagName("TITLE").getLength() != 0) {
 			whole = "<TITLE>"
-					+ Utility.filter(doc.getElementsByTagName("TITLE").item(0)
-							.getTextContent()) + "</TITLE>\r\n" + whole;
+					+ TagWindow.getInnerText(doc.getElementsByTagName("TITLE")
+							.item(0), false) + "</TITLE>\r\n" + whole;
 		}
 
 		if (!bodyText.trim().equals("")) {
@@ -206,7 +206,9 @@ public class TextExtractor {
 			if (Utility.isInvalidElement(element)) {
 				return;
 			}
-			if (!TagWindow.getInnerText(node, false).trim().equals("")) // add the tags
+			if (!TagWindow.getInnerText(node, false).trim().equals("")) // add
+			// the
+			// tags
 			{
 				windowsList.add(new TagWindow(node));
 			}
@@ -238,9 +240,13 @@ public class TextExtractor {
 			DOMParser parser = new DOMParser();
 			BufferedReader reader = new BufferedReader(new FileReader(
 					"d://res2/" + f.getName()));
-			parser.parse(new InputSource(reader));
+			try {
+				parser.parse(new InputSource(reader));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			Document doc = parser.getDocument();
-
+			System.out.println(doc.getElementsByTagName("BODY").item(0).getTextContent());
 			System.out.print(f.getName() + "....");
 
 			TextExtractor extractor = new TextExtractor(doc);

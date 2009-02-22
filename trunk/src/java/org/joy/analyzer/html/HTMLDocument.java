@@ -95,7 +95,7 @@ public class HTMLDocument extends Document {
      */
     @Override
     public String getTitle() {
-        return doc.getElementsByTagName("TITLE").item(0).getTextContent();
+        return TagWindow.getInnerText(doc.getElementsByTagName("TITLE").item(0),false);
     }
 
     /**
