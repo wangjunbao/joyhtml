@@ -35,18 +35,6 @@ public class HTMLDocument extends Document {
     public static HTMLDocument createHTMLDocument(String URL, String str) throws ParseException {
         DOMParser parser = new DOMParser();
         try {
-
-            //是否允许命名空间
-            parser.setFeature("http://xml.org/sax/features/namespaces", false);
-            //是否允许增补缺失的标签。如果要以XML方式操作HTML文件，此值必须为真
-            parser.setFeature("http://cyberneko.org/html/features/balance-tags", true);
-            //是否剥掉<script>元素中的<!-- -->等注释符
-            parser.setFeature("http://cyberneko.org/html/features/scanner/script/strip-comment-delims", true);
-            parser.setFeature("http://cyberneko.org/html/features/augmentations", true);
-            parser.setProperty("http://cyberneko.org/html/properties/names/elems", "lower");
-
-            //解析HTML片段时是否作标签增补，此功能不要用在DOMParser上，而要用在DOMFragmentParser上
-            //parser.setFeature("http://cyberneko.org/features/document-fragment",true);
             parser.parse(new InputSource(new StringReader(str)));
         } catch (SAXException ex) {
             //如果解析错误，要抛出异常
