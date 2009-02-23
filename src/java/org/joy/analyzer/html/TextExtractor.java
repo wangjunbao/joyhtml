@@ -69,7 +69,10 @@ public class TextExtractor {
 	 * w3cHTML文档模型
 	 */
 	private Document doc;
-
+	/**
+	 * 允许最大递归深度
+	 */
+	private final static int MAX_DEPTH = 512;
 	/**
 	 * 利用給定的W3C文檔對象模型構造一個TextExtractor
 	 * 
@@ -82,16 +85,17 @@ public class TextExtractor {
 
 	}
 
-	private final static int MAX_DEPTH = 512;
 	/**
 	 * 删除文档中的一些显然不会包含主题信息的节点，例如script,style,等等，它们将影响我们的文本抽取器的分析。
-	 * 
+	 * 这个函数也负责检测最大递归深度的作用
 	 * @param e
 	 *            所需要清除地w3c节点
+	 * @throws ParseException
+	 *             当超过最大递归深度之后抛出
 	 */
-	private void cleanup(Element e, int level) {
-		if(level >= MAX_DEPTH){
-			return;
+	private void cleanup(Element e, int level) throws ParseException {
+		if (level >= MAX_DEPTH) {
+			throw new ParseException("超过最大深度！");
 		}
 		NodeList c = e.getChildNodes();
 		for (int i = 0; i < c.getLength(); i++) {
@@ -100,7 +104,7 @@ public class TextExtractor {
 				if (Utility.isInvalidElement(t)) {
 					e.removeChild(c.item(i));
 				} else {
-					cleanup(t,level+1);
+					cleanup(t, level + 1);
 				}
 			}
 		}
@@ -111,8 +115,9 @@ public class TextExtractor {
 	 * 
 	 * @deprecated 它将会扰乱评分系统的公平性。
 	 * @param e
+	 * @throws ParseException 当超过最大递归深度之后抛出
 	 */
-	private void adjust(Element e) {
+	private void adjust(Element e) throws ParseException {
 		NodeList c = e.getChildNodes();
 		for (int i = 0; i < c.getLength(); i++) {
 			if (c.item(i).getNodeType() == Node.ELEMENT_NODE) {
@@ -122,7 +127,7 @@ public class TextExtractor {
 								totalNumInfoNodes) > 0.5) {
 					e.removeChild(c.item(i));
 				} else {
-					cleanup((Element) c.item(i),0);
+					cleanup((Element) c.item(i), 0);
 				}
 			}
 		}
@@ -132,14 +137,15 @@ public class TextExtractor {
 	 * 抽取HTML文本信息，并且分段，为每一段文本的主题相关性打分。
 	 * 
 	 * @return 所抽取出的主题信息
+	 * @throws ParseException 超过最大递归深度之后会抛出解析异常
 	 */
-	public String extract() {
+	public String extract() throws ParseException {
 		long s = System.currentTimeMillis();
 		Node body = doc.getElementsByTagName("BODY").item(0);
 		if (body == null)
 			return "";
 		// cleanup, remove the invalid tags,
-		cleanup((Element) body,0);
+		cleanup((Element) body, 0);
 
 		totalTextLen = TagWindow.getInnerText(body, false).length();
 		// get anchor text length
@@ -250,7 +256,8 @@ public class TextExtractor {
 				e.printStackTrace();
 			}
 			Document doc = parser.getDocument();
-			System.out.println(doc.getElementsByTagName("BODY").item(0).getTextContent());
+			System.out.println(doc.getElementsByTagName("BODY").item(0)
+					.getTextContent());
 			System.out.print(f.getName() + "....");
 
 			TextExtractor extractor = new TextExtractor(doc);

@@ -30,7 +30,7 @@ public class HTMLDocument extends Document {
      * @param str 构造
      * @param URL 所需要解析的HTML文档的链接地址是什么
      * @return 由指定字符串够早的HTML文档
-     * @throws ParseException
+     * @throws ParseException 如果超过最大递归深度的文档会抛出解析错误
      */
     public static HTMLDocument createHTMLDocument(String URL, String str) throws ParseException {
         DOMParser parser = new DOMParser();
@@ -52,15 +52,16 @@ public class HTMLDocument extends Document {
      * @param url 网页的URL地址
      * @param data 描述文档的HTML字符串
      * @param doc 由HTML字符串解析出的Dom文档。
+     * @throws ParseException 
      */
-    protected HTMLDocument(String url, String data, org.w3c.dom.Document doc) {
+    protected HTMLDocument(String url, String data, org.w3c.dom.Document doc) throws ParseException {
         super(data);
         this.doc = doc;
         this.url = url;
         parse();
     }
 
-    private void parse() {
+    private void parse() throws ParseException {
         //TODO: 利用此类中的Document变量分析HTML，分析代码写这里。方法之後，扄1�7有的私有变量都被赋予合�1�7�的初始值�1�7�1�7
         Parser p = new Parser(url, doc);
         p.parse();
