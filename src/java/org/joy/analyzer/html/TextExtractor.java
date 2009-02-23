@@ -82,13 +82,17 @@ public class TextExtractor {
 
 	}
 
+	private final static int MAX_DEPTH = 512;
 	/**
 	 * 删除文档中的一些显然不会包含主题信息的节点，例如script,style,等等，它们将影响我们的文本抽取器的分析。
 	 * 
 	 * @param e
-	 *            所需要清楚地w3c节点
+	 *            所需要清除地w3c节点
 	 */
-	private void cleanup(Element e) {
+	private void cleanup(Element e, int level) {
+		if(level >= MAX_DEPTH){
+			return;
+		}
 		NodeList c = e.getChildNodes();
 		for (int i = 0; i < c.getLength(); i++) {
 			if (c.item(i).getNodeType() == Node.ELEMENT_NODE) {
@@ -96,7 +100,7 @@ public class TextExtractor {
 				if (Utility.isInvalidElement(t)) {
 					e.removeChild(c.item(i));
 				} else {
-					cleanup(t);
+					cleanup(t,level+1);
 				}
 			}
 		}
@@ -118,7 +122,7 @@ public class TextExtractor {
 								totalNumInfoNodes) > 0.5) {
 					e.removeChild(c.item(i));
 				} else {
-					cleanup((Element) c.item(i));
+					cleanup((Element) c.item(i),0);
 				}
 			}
 		}
@@ -135,7 +139,7 @@ public class TextExtractor {
 		if (body == null)
 			return "";
 		// cleanup, remove the invalid tags,
-		cleanup((Element) body);
+		cleanup((Element) body,0);
 
 		totalTextLen = TagWindow.getInnerText(body, false).length();
 		// get anchor text length
