@@ -61,8 +61,9 @@ public class Parser {
 
     /**
      * 解析网页文本
+     * @throws ParseException 
      */
-    public void parse() {
+    public void parse() throws ParseException {
         extractLinks();
         mainBody = textExtractor.extract();
     }

@@ -21,8 +21,6 @@ public class TagWindow {
 	private String anchorText = "";
 	private int numInfoNodes = 0;
 
-	private final static int MAX_DEPTH = 512;
-
 	/**
 	 * 用一个标准的w3cNode对象来生成一个Tag对象。
 	 * 
@@ -175,10 +173,6 @@ public class TagWindow {
 	}
 
 	private static String getInnerText(Node node, boolean viewMode, int level) {
-		if (level == MAX_DEPTH) {
-			System.err.println("超出最大递归深度！");
-			return "";
-		}
 		if (node.getNodeType() == Node.TEXT_NODE) {
 			return Utility.filter(((Text) node).getData());
 		}
