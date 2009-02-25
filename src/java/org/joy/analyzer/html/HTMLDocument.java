@@ -62,6 +62,13 @@ public class HTMLDocument extends Document {
         this.url = url;
         parse();
     }
+    
+    /**
+     * 测试dom树递归深度的算法。如果深度超过可以接受的范围，就返回false
+     * @param node 根节点
+     * @param level 当前递归层
+     * @return 如果递归超过规定层数，那么就返回true，如果没有，返回false
+     */
     private boolean testRecursiveDepth(Node node,int level){
     	if(level ==MAX_DEPTH)
     		return false;
