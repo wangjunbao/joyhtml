@@ -69,10 +69,7 @@ public class TextExtractor {
 	 * w3cHTML文档模型
 	 */
 	private Document doc;
-	/**
-	 * 允许最大递归深度
-	 */
-	private final static int MAX_DEPTH = 512;
+
 	/**
 	 * 利用給定的W3C文檔對象模型構造一個TextExtractor
 	 * 
@@ -91,12 +88,9 @@ public class TextExtractor {
 	 * @param e
 	 *            所需要清除地w3c节点
 	 * @throws ParseException
-	 *             当超过最大递归深度之后抛出
+	 *         
 	 */
 	private void cleanup(Element e, int level) throws ParseException {
-		if (level >= MAX_DEPTH) {
-			throw new ParseException("超过最大深度！");
-		}
 		NodeList c = e.getChildNodes();
 		for (int i = 0; i < c.getLength(); i++) {
 			if (c.item(i).getNodeType() == Node.ELEMENT_NODE) {
@@ -137,7 +131,7 @@ public class TextExtractor {
 	 * 抽取HTML文本信息，并且分段，为每一段文本的主题相关性打分。
 	 * 
 	 * @return 所抽取出的主题信息
-	 * @throws ParseException 超过最大递归深度之后会抛出解析异常
+	 * @throws ParseException 
 	 */
 	public String extract() throws ParseException {
 		long s = System.currentTimeMillis();

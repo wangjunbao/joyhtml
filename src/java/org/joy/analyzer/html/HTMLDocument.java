@@ -11,6 +11,8 @@ import java.util.logging.Logger;
 import java.util.List;
 import org.cyberneko.html.parsers.DOMParser;
 import org.joy.analyzer.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -24,7 +26,7 @@ public class HTMLDocument extends Document {
     private List<Anchor> anchors;
     private String url;
     private String body;
-
+    private static final int MAX_DEPTH=512;
     /**
      * 利用指定的，符合HTML语法规则的字符串中构造一个HTML文档
      * @param str 构造
@@ -60,8 +62,23 @@ public class HTMLDocument extends Document {
         this.url = url;
         parse();
     }
-
+    private boolean testRecursiveDepth(Node node,int level){
+    	if(level ==MAX_DEPTH)
+    		return false;
+    	NodeList children = node.getChildNodes();
+    	for (int i = 0; i < children.getLength(); i++) {
+			if(! testRecursiveDepth(children.item(i),level+1)){
+				return false;
+			}
+		}
+    	return true;
+    }
+    
     private void parse() throws ParseException {
+    	//测试递归深度是否超出接受范围
+    	if(!testRecursiveDepth(doc, 0)){
+    		throw new ParseException("超过最大递归深度！");
+    	}
         //TODO: 利用此类中的Document变量分析HTML，分析代码写这里。方法之後，扄1�7有的私有变量都被赋予合�1�7�的初始值�1�7�1�7
         Parser p = new Parser(url, doc);
         p.parse();
