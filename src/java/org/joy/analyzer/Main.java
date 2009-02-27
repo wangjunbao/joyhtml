@@ -45,8 +45,10 @@ public class Main {
 				new Analyzer[] {
 						new TokenAnalyzer(),
 						// 分词分析器
-						(Analyzer) Class.forName("PluginTest").newInstance() 
-						// 关键词分析器,您可以在管道里加入任何你自己的分析器
+						(Analyzer) Class.forName("org.joy.analyzer.plugins.AnalyzerPluginExample").newInstance() 
+						// 关键词分析器,您可以在管道里加入任何
+						//*你自己*的分析器插件，
+						//只要把你的分析器和所需类的Class文件加入到我们的plugins目录下即可
 				});
 		//设置分析文档
 		analyzer.setDoc(doc);
