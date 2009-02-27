@@ -17,6 +17,10 @@ public class DocumentFactory {
 	private static Hashtable<String, Class<? extends Document>> suffixTable = new Hashtable<String, Class<? extends Document>>();
 	private static final String PLUGINS_PATH = "./plugins";
 
+	/**
+	 * 在指定的目录中搜寻文档模型插件并且导入到相应的table中
+	 * @param path 要搜索的路径
+	 */
 	private static void searchPlugins(File path) {
 		try {
 			if (path.isDirectory()) {
