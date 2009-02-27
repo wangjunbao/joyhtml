@@ -229,7 +229,7 @@ public class Main extends javax.swing.JFrame {
             				new Analyzer[] {
             						new TokenAnalyzer(),
             						// 分词分析器
-            						new HitAnalyzer() 
+            						(Analyzer) Class.forName("org.joy.analyzer.plugins.AnalyzerPluginExample").newInstance()
             						// 关键词分析器
             				});
             		a.setDoc(doc);
