@@ -12,5 +12,6 @@
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/nekohtml-customized.jar"/>
+	<classpathentry kind="lib" path="plugins"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
