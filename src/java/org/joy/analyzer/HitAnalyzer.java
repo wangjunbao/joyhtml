@@ -11,27 +11,23 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.joy.analyzer.scoring.PWFScorer;
 import org.joy.analyzer.scoring.Scorer;
 import org.joy.analyzer.terms.SimpleTermExtractor;
 import org.joy.analyzer.terms.TermExtractor;
-import org.joy.nlp.WordSpliter;
+import org.joy.nlp.Word;
 
 /**
  * 用于分析和提取文章中Hit的分析器
  * @author Administrator
  */
-public class HitAnalyzer extends Analyzer {
+public class HitAnalyzer extends Analyzer<List<Word>, List<Hit>> {
 
-    private WordSpliter spliter;
     private List<Hit> hitList = new ArrayList<Hit>();
     private Set<String> termSet = new HashSet<String>();
 
     public HitAnalyzer() {
-    }
-
-    public void setSpliter(WordSpliter spliter) {
-        this.spliter = spliter;
     }
 
     /**
@@ -39,9 +35,8 @@ public class HitAnalyzer extends Analyzer {
      * @param doc 所要分析的文档对象
      * @param spliter 所用的分词器
      */
-    public HitAnalyzer(Document doc, WordSpliter spliter) {
+    public HitAnalyzer(Document doc) {
         super(doc);
-        this.spliter = spliter;
     }
 
     /**
@@ -70,7 +65,7 @@ public class HitAnalyzer extends Analyzer {
         TermExtractor extractor = extractorClass.newInstance();
 
         scorer.setParagraphs(doc.getParagraphs());
-        extractor.setWords(spliter.splitToWords(doc.getContent()));
+        extractor.setWords(input.toArray(new Word[0]));
         termSet = extractor.getTerms();
         
         String content = doc.getContent();
@@ -86,9 +81,11 @@ public class HitAnalyzer extends Analyzer {
         }
         //排序hitList
         Collections.sort(hitList);
+        output = hitList;
     }
 
     public Set<String> getTermSet() {
         return termSet;
     }
+
 }

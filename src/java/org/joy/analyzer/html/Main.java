@@ -12,6 +12,7 @@ package org.joy.analyzer.html;
 
 import java.awt.Color;
 import java.text.DecimalFormat;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -19,9 +20,13 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
+
+import org.joy.analyzer.Analyzer;
 import org.joy.analyzer.Hit;
 import org.joy.analyzer.HitAnalyzer;
 import org.joy.analyzer.Paragraph;
+import org.joy.analyzer.PipelineAnalyzer;
+import org.joy.analyzer.TokenAnalyzer;
 import org.joy.nlp.ACWordSpliter;
 import org.joy.nlp.HLWordSpliter;
 import org.joy.nlp.WordSpliter;
@@ -187,11 +192,14 @@ public class Main extends javax.swing.JFrame {
     private void urlTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_urlTextActionPerformed
         new Thread(new Runnable() {
 
-            public void run() {
+            @SuppressWarnings("unchecked")
+			public void run() {
                 try {
                     jProgressBar1.setValue(0);
                     urlArea.setText("");
                     textArea.setText("");
+                    doAnalysis.setText("分析中...");
+                    doAnalysis.setEnabled(false);
                     // TODO add your handling code here:
                     HTMLDocument doc = HTMLDocument.createHTMLDocument(urlText.getText(), Utility.getWebContent(urlText.getText()));
                     jProgressBar1.setValue(20);
@@ -216,10 +224,19 @@ public class Main extends javax.swing.JFrame {
                         w = new HLWordSpliter();
                     }
                     jProgressBar1.setValue(70);
-                    HitAnalyzer a = new HitAnalyzer(doc, w);
+            		//初始化一个管道分析器，把分词和关键词分析结合起来。
+            		PipelineAnalyzer<WordSpliter, List<Hit>> a = new PipelineAnalyzer<WordSpliter, List<Hit>>(
+            				new Analyzer[] {
+            						new TokenAnalyzer(),
+            						// 分词分析器
+            						new HitAnalyzer() 
+            						// 关键词分析器
+            				});
+            		a.setDoc(doc);
+            		a.input(w);
                     a.doAnalyze();
                     jProgressBar1.setValue(90);
-                    hitList.setListData(a.getHits().toArray(new Hit[0]));
+                    hitList.setListData(a.output().toArray(new Hit[0]));
                     textArea.setSelectionStart(0);
                     textArea.setSelectionEnd(0);
                     jProgressBar1.setValue(100);
@@ -228,6 +245,8 @@ public class Main extends javax.swing.JFrame {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(null, "错误：" + ex, "发生错误咯！", 0);
                 }
+                doAnalysis.setText("JoyHTML!");
+                doAnalysis.setEnabled(true);
             }
         }).start();
 }//GEN-LAST:event_urlTextActionPerformed
