@@ -67,21 +67,8 @@ public class Main {
 		Document txtDoc = DocumentFactory
 				.createDocumentFromURL(new URL("file://c:/a.html"));
 
-		// 初始化一个管道分析器，把分词和关键词分析结合起来。
-		analyzer = new PipelineAnalyzer<WordSpliter, List<Hit>>(new Analyzer[] {
-				new TokenAnalyzer(),
-				// 分词分析器
-				(Analyzer) Class.forName(
-						"org.joy.analyzer.plugins.AnalyzerPluginExample")
-						.newInstance()
-		// 关键词分析器,您可以在管道里加入任何
-				// *你自己*的分析器插件，
-				// 只要把你的分析器和所需类的Class文件加入到我们的plugins目录下即可
-				});
 		// 设置分析文档
 		analyzer.setDoc(txtDoc);
-		// 输入
-		analyzer.input(spliter);
 		// 执行分析操作
 		analyzer.doAnalyze();
 		// 打印输出

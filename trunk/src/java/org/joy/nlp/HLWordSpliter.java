@@ -69,9 +69,9 @@ public class HLWordSpliter implements WordSpliter {
 
     public static void main(String[] args) {
         HLWordSpliter h = new HLWordSpliter();
-        System.out.println(h.split("美国中央情报局是   特务间谍机构。", true));
+        System.out.println(h.split("圆明园兔首将被拍卖。", true));
 
-        for (Word w : h.splitToWords("世界十大色狼之柳松大侠！")) {
+        for (Word w : h.splitToWords("他从马上摔下来。")) {
             System.out.print(w.getText() + "/" + w.getTag() + " ");
         }
         System.out.println("");
@@ -79,6 +79,6 @@ public class HLWordSpliter implements WordSpliter {
 
         System.out.println(h.split("我们在领导的帮助下，实现了这个功能。", true));
         h.close();
-        System.out.println(h.split("中国人  是好人", false));
+        System.out.println(h.split("刘挺拔出宝剑。", false));
     }
 }

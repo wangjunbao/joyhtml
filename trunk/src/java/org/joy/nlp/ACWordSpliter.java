@@ -81,11 +81,11 @@ public class ACWordSpliter implements WordSpliter {
 
 	public static void main(String[] args) {
 		ACWordSpliter w = new ACWordSpliter();
-		System.out.println(w.split("美国中央情报局是特务间谍机构。", true));
-		System.out.println(Arrays.asList(w.split("中国人都是好人啊！")));
+		System.out.println(w.split("2008年奥运会安保工作无与伦比。", true));
+		System.out.println(Arrays.asList(w.split("刘挺拔出宝剑！")));
 		new ACWordSpliter();
-		w.splitToWords("中国大陆是共产党控制的。");
+		w.splitToWords("他从马上摔下来。");
 		w.close();
-		System.out.println(w.split("中国人是好人", false));
+		System.out.println(w.split("圆明园兔首鼠首将被拍卖。", false));
 	}
 }

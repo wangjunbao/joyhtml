@@ -9,7 +9,7 @@ import org.joy.nlp.WordSpliter;
 public class TokenAnalyzer extends Analyzer<WordSpliter, List<Word>> {
 	@Override
 	public void doAnalyze() {
-		// TODO Auto-generated method stub
+		//分词器直接输出分词结果。
 		output = Arrays.asList(input.splitToWords(doc.getContent()));
 	}
 }
