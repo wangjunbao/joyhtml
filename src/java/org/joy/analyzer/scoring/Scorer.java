@@ -46,4 +46,12 @@ public abstract class Scorer {
      * @return 指定关键词的分数
      */
     public abstract double getScore(String term);
+    
+    /**
+     * 获取指定关键词的分数，继承这个类的子类需要实现这个方法
+     * @param term 关键词
+     * @param pos 关键词出现的文档当中的位置
+     * @return 指定关键词的分数
+     */
+    public abstract double getScore(String term, List<Integer> pos);
 }

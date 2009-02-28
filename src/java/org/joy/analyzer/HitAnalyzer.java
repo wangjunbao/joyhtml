@@ -73,10 +73,10 @@ public class HitAnalyzer extends Analyzer<List<Word>, List<Hit>> {
             int index = content.indexOf(term);
             Hit h = new Hit(term);
             while (index != -1) {
-                h.setScore(scorer.getScore(h.getTerm()));
                 h.addPos(index);
                 index = content.indexOf(term, index + 1);
             }
+            h.setScore(scorer.getScore(h.getTerm(),h.getPos()));
             hitList.add(h);
         }
         //排序hitList
