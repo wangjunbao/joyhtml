@@ -12,6 +12,7 @@ public class PipelineAnalyzer<K, E> extends Analyzer<K, E> {
 
 	@Override
 	public void doAnalyze() {
+		output = null;
 		Object in = input;
 		for (Analyzer<Object, Object> a : analyzers) {
 			a.setDoc(doc);
