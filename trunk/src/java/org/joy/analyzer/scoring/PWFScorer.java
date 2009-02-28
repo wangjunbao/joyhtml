@@ -4,6 +4,8 @@
  */
 package org.joy.analyzer.scoring;
 
+import java.util.List;
+
 import org.joy.analyzer.Paragraph;
 
 /**
@@ -30,4 +32,18 @@ public class PWFScorer extends Scorer {
         }
         return score*Math.log(term.length());
     }
+
+	@Override
+	public double getScore(String term, List<Integer> pos) {
+        double score = .0;
+        for(int i:pos){
+        	for(Paragraph p: paragraphs){
+        		if(i >= p.getOffset() && i < p.getOffset()+p.getText().length()){
+        			score += p.getWeight();
+        			break;
+        		}
+        	}
+        }
+        return score*Math.log(term.length());
+	}
 }

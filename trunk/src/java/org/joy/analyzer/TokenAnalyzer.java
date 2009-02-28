@@ -1,5 +1,9 @@
 package org.joy.analyzer;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,7 +13,20 @@ import org.joy.nlp.WordSpliter;
 public class TokenAnalyzer extends Analyzer<WordSpliter, List<Word>> {
 	@Override
 	public void doAnalyze() {
-		//分词器直接输出分词结果。
-		output = Arrays.asList(input.splitToWords(doc.getContent()));
+		try {
+			output = new ArrayList<Word>();
+			BufferedReader br = new BufferedReader(new StringReader(doc
+					.getContent()));
+			String line = br.readLine();
+			while (line != null) {
+				// 分词器直接输出分词结果。
+				output.addAll(Arrays.asList(input.splitToWords(line)));
+				line = br.readLine();
+			}
+			br.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
