@@ -35,9 +35,11 @@ public abstract class Scorer {
      */
     public void setParagraphs(List<Paragraph> paragraphs) {
         this.paragraphs = paragraphs;
+        StringBuffer sb = new StringBuffer();
         for (Paragraph p : paragraphs) {
-            fulltext += p.getText();
+        	sb.append(p.getText());
         }
+        fulltext = sb.toString();
     }
 
     /**
