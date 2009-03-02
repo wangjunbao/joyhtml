@@ -5,11 +5,13 @@
 package org.joy.analyzer.terms;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.joy.nlp.Word;
 
 /**
@@ -24,8 +26,8 @@ public class SimpleTermExtractor extends TermExtractor {
 
 	static {
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(
-					"./dicts/stop.txt"));
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(
+			"./dicts/stop.txt"),"utf-8"));
 			String line = br.readLine();
 			while (line != null) {
 				stopWords.add(line);
