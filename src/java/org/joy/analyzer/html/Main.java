@@ -29,6 +29,7 @@ import org.joy.analyzer.PipelineAnalyzer;
 import org.joy.analyzer.TokenAnalyzer;
 import org.joy.nlp.ACWordSpliter;
 import org.joy.nlp.HLWordSpliter;
+import org.joy.nlp.PDWordSpliter;
 import org.joy.nlp.WordSpliter;
 
 /**
@@ -221,7 +222,7 @@ public class Main extends javax.swing.JFrame {
                     if (jRadioButton1.isSelected()) {
                         w = new ACWordSpliter();
                     } else {
-                        w = new HLWordSpliter();
+                        w = new PDWordSpliter();
                     }
                     jProgressBar1.setValue(70);
             		//初始化一个管道分析器，把分词和关键词分析结合起来。
