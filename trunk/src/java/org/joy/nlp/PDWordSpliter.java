@@ -36,7 +36,6 @@ public class PDWordSpliter implements WordSpliter {
 			stream.close();
 			return tokens.toArray(new String[0]);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -58,6 +57,7 @@ public class PDWordSpliter implements WordSpliter {
 	}
 
 	public static void main(String[] args){
-		System.out.println(Arrays.asList(new PDWordSpliter().split("中国人是好人")));
+		System.out.println(Arrays.asList(
+				new PDWordSpliter().split("欧盟轮值主席国主持每一届欧盟领导人峰会。")));
 	}
 }
