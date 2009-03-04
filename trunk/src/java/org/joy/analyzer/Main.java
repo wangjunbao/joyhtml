@@ -12,6 +12,7 @@ import java.util.List;
 import org.joy.analyzer.html.HTMLDocument;
 import org.joy.analyzer.html.ParseException;
 import org.joy.nlp.ACWordSpliter;
+import org.joy.nlp.PDWordSpliter;
 import org.joy.nlp.WordSpliter;
 
 /**
@@ -39,7 +40,7 @@ public class Main {
 				.createDocumentFromURL(new URL("http://news.sina.com.cn/c/2008-12-11/155516828944.shtml"));
 
 		// 初始化分词器
-		WordSpliter spliter = new ACWordSpliter();
+		WordSpliter spliter = new PDWordSpliter();
 		// 初始化一个管道分析器，把分词和关键词分析结合起来。
 		PipelineAnalyzer<WordSpliter, List<Hit>> analyzer = new PipelineAnalyzer<WordSpliter, List<Hit>>(
 				new Analyzer[] {
