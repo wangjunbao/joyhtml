@@ -19,7 +19,6 @@ public class TokenAnalyzer extends Analyzer<WordSpliter, List<Word>> {
 					.getContent()));
 			String line = br.readLine();
 			while (line != null) {
-				// 分词器直接输出分词结果。
 				output.addAll(Arrays.asList(input.splitToWords(line)));
 				line = br.readLine();
 			}

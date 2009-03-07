@@ -128,7 +128,7 @@ public class Main extends javax.swing.JFrame {
         jRadioButton1.setText("中科院分词");
 
         buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setText("海量分词");
+        jRadioButton2.setText("庖丁解牛分词");
 
         jLabel2.setText("分词器选择：");
 

@@ -14,6 +14,11 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import net.paoding.analysis.analyzer.PaodingAnalyzer;
 import net.paoding.analysis.analyzer.PaodingAnalyzerBean;
 
+/**
+ * 客观的说，这是效果最差的一个分词器。适合找不到合适平台分词器的童鞋用。
+ * @author Andy
+ *
+ */
 public class PDWordSpliter implements WordSpliter {
 	private static PaodingAnalyzer analyzer  = new PaodingAnalyzer();
 	static {
