@@ -14,5 +14,6 @@
 	<classpathentry kind="lib" path="lib/paoding.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging.jar"/>
 	<classpathentry kind="lib" path="lib/ICTCLAS.jar"/>
+	<classpathentry kind="lib" path="lib/hadoop-0.19.1-core.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

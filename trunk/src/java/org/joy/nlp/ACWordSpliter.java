@@ -26,7 +26,12 @@ public class ACWordSpliter implements WordSpliter {
 				try {
 					System.out.println("Initialising dicts...");
 					i = new ICTCLAS30();
-					i.ICTCLAS_Init(".".getBytes("gb2312"));
+					if (System.getenv("DIC_HOME") != null) {
+						i.ICTCLAS_Init(System.getenv("DIC_HOME").getBytes(
+								"gb2312"));
+					} else {
+						i.ICTCLAS_Init(".".getBytes("gb2312"));
+					}
 				} catch (UnsupportedEncodingException ex) {
 					Logger.getLogger(ACWordSpliter.class.getName()).log(
 							Level.SEVERE, null, ex);
