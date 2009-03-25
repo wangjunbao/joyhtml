@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * 
+ * 中科院分词ICTCLAS分词，分词可以再x86的机器上使用。
  * @author Administrator
  */
 public class ACWordSpliter implements WordSpliter {
@@ -26,12 +26,7 @@ public class ACWordSpliter implements WordSpliter {
 				try {
 					System.out.println("Initialising dicts...");
 					i = new ICTCLAS30();
-					if (System.getenv("DIC_HOME") != null) {
-						i.ICTCLAS_Init(System.getenv("DIC_HOME").getBytes(
-								"gb2312"));
-					} else {
-						i.ICTCLAS_Init(".".getBytes("gb2312"));
-					}
+					i.ICTCLAS_Init(".".getBytes("gb2312"));
 				} catch (UnsupportedEncodingException ex) {
 					Logger.getLogger(ACWordSpliter.class.getName()).log(
 							Level.SEVERE, null, ex);

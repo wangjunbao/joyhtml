@@ -15,24 +15,27 @@ import net.paoding.analysis.analyzer.PaodingAnalyzer;
 import net.paoding.analysis.analyzer.PaodingAnalyzerBean;
 
 /**
- * 客观的说，这是效果最差的一个分词器。适合找不到合适平台分词器的童鞋用。
+ * 客观的说，这是效果最差的一个分词器。但它也是唯一一个可以跨平移台的分词。
+ * 适合找不到合适平台分词器的童鞋用。
  * @author Andy
- *
+ * 
  */
 public class PDWordSpliter implements WordSpliter {
-	private static PaodingAnalyzer analyzer  = new PaodingAnalyzer();
+	private static PaodingAnalyzer analyzer = new PaodingAnalyzer();
 	static {
 		analyzer.setMode("max-word-length");
 	}
+
 	@Override
 	public void close() {
-		
+
 	}
 
 	@Override
 	public String[] split(String text) {
 		try {
-			TokenStream stream = analyzer.tokenStream("", new StringReader(text));
+			TokenStream stream = analyzer.tokenStream("",
+					new StringReader(text));
 			Token token;
 			Vector<String> tokens = new Vector<String>();
 			while ((token = stream.next()) != null) {
@@ -53,16 +56,16 @@ public class PDWordSpliter implements WordSpliter {
 
 	@Override
 	public Word[] splitToWords(String text) {
-		String [] res = split(text);
+		String[] res = split(text);
 		Vector<Word> words = new Vector<Word>();
-		for(String t :res){
-			words.add(new Word(t+"/x"));
+		for (String t : res) {
+			words.add(new Word(t + "/x"));
 		}
 		return words.toArray(new Word[0]);
 	}
 
-	public static void main(String[] args){
-		System.out.println(Arrays.asList(
-				new PDWordSpliter().split("欧盟轮值主席国主持每一届欧盟领导人峰会。")));
+	public static void main(String[] args) {
+		System.out.println(Arrays.asList(new PDWordSpliter()
+				.split("欧盟轮值主席国主持每一届欧盟领导人峰会。")));
 	}
 }
