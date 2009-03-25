@@ -6,6 +6,7 @@ package org.joy.analyzer;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +33,7 @@ public abstract class Document {
 	 */
 	public Document() {
 		// TODO Auto-generated constructor stub
+		paragraphs = new ArrayList<Paragraph>();
 	}
 	/**
 	 * 构造一个抽象文档

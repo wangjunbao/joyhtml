@@ -4,6 +4,19 @@
  */
 package org.joy.nlp;
 
+class HLS {
+	static {
+		System.loadLibrary("HLS");
+	}
+
+	public native boolean HLSplitInit(String path);
+
+	public native void HLFreeSplit();
+
+	public native String HLS_ParagraphProcess(String content, int bPOSTagged);
+
+}
+
 /**
  * NOTE: HLWordSpliter is not available for linux
  * 
