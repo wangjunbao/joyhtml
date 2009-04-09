@@ -18,12 +18,22 @@ package org.joy.analyzer;
 public abstract class Analyzer<K, E> {
 
 	protected Document doc;
+	protected Paragraph para;
 	protected K input;
 	protected E output;
 
 	public Analyzer() {
 	}
-
+	
+	/**
+	 * 设置这个Analyzer需要分析的Paragraph,如果这个分析器不是基于Paragraph的，这个参数可以不设置
+	 * 
+	 * @param para
+	 */
+	public void setPara(Paragraph para) {
+		this.para = para;
+	}
+	
 	/**
 	 * 设置这个Analyzer需要分析的Doc,如果这个分析器不是基于Docment的，这个参数可以不设置
 	 * 
