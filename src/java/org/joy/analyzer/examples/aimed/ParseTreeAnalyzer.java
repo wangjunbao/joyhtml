@@ -20,7 +20,7 @@ import edu.stanford.nlp.trees.Tree;
  * 
  */
 public class ParseTreeAnalyzer extends Analyzer<LexicalizedParser, Tree> {
-	private void insertEmbededProtein(Tree t, String host, Integer[] children) {
+	private void insertNestedProtein(Tree t, String host, Integer[] children) {
 		// for (Tree c : t.children()) {
 		// if (c.value().contains(host)) {
 		// for (Integer i : children) {
@@ -58,7 +58,7 @@ public class ParseTreeAnalyzer extends Analyzer<LexicalizedParser, Tree> {
 		}
 		ts = t.children();
 		for (int i = 0; i < ts.length; i++) {
-			insertEmbededProtein(ts[i], host, children);
+			insertNestedProtein(ts[i], host, children);
 		}
 	}
 
@@ -86,9 +86,9 @@ public class ParseTreeAnalyzer extends Analyzer<LexicalizedParser, Tree> {
 				t.addChild(input.apply(sentences.get(i)).getChild(0));
 		}
 		// 把语法树当中的嵌套结构表现出来
-		for (Integer[] em : aimedPara.getEmbedmentList()) {
+		for (Integer[] em : aimedPara.getNestList()) {
 			String host = "PROTEIN" + (em[em.length - 1] + 1);
-			insertEmbededProtein(t, host, em);
+			insertNestedProtein(t, host, em);
 		}
 		// 打印输出语法树，only for debug
 		StringWriter sw = new StringWriter();
