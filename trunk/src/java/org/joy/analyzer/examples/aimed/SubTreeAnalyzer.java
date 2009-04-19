@@ -80,6 +80,8 @@ public class SubTreeAnalyzer extends Analyzer<Tree, Tree[]> {
 		return root;
 	}
 
+
+
 	@Override
 	public void doAnalyze() {
 		AimedParagraph para = (AimedParagraph) this.para;
@@ -91,12 +93,14 @@ public class SubTreeAnalyzer extends Analyzer<Tree, Tree[]> {
 		ArrayList<Tree> res = new ArrayList<Tree>();
 		for (int i = 0; i < para.getRelation().length; i++) {
 			for (int j = 0; j < para.getRelation()[i].length; j++) {
-				if (i == j || i > j)
+				if (i == j || i > j )
 					continue;
 				Tree common = findSmallestCommonTree(input.deeperCopy(),
 						"PROTEIN" + i, "PROTEIN" + j);
 				Tree pt = convertToPathTree(common, "PROTEIN" + i, "PROTEIN"
 						+ j);
+
+				// print the tree, only for debug
 				StringWriter sw = new StringWriter();
 				treePrint.printTree(pt, new PrintWriter(sw, true));
 				System.out.println(para.getRelation()[i][j]

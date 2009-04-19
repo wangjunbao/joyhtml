@@ -164,7 +164,7 @@ public class AIMEDDocument extends Document {
 			// 标定Entities
 			int j = 0;
 			for (EntityPosition pos : rangeList) {
-				String sen1 = sen.substring(0, sen.indexOf("_")) + "PROTEIN";
+				String sen1 = sen.substring(0, sen.indexOf("_")) + "\\PROTEIN";
 				String sen2 = sen.substring(sen.indexOf("_")
 						+ (pos.end - pos.start) + 1);
 				// 如果有嵌套实体

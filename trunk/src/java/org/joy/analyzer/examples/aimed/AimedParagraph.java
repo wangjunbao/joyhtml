@@ -10,18 +10,27 @@ public class AimedParagraph extends Paragraph {
 	private static final String PAIR_TAG = "pair";
 	private static final String ENTITY_TAG = "entity";
 	private boolean[][] relation;
-	private ArrayList<Integer[]> embedmentList;
+	private ArrayList<Integer[]> nestList;
 	public static int numpairs = 0;
 	private int numInterations = 0;
 
-	public ArrayList<Integer[]> getEmbedmentList() {
-		return embedmentList;
+	public ArrayList<Integer[]> getNestList() {
+		return nestList;
 	}
-
+	
+	public boolean isNested(int i) {
+		for (Integer[] n : getNestList()) {
+			for (Integer j : n) {
+				if (i == j)
+					return true;
+			}
+		}
+		return false;
+	}
 	public AimedParagraph(String text, double weight, int offset,
 			Element senTag, ArrayList<Integer[]> embededList) {
 		super(text, weight, offset);
-		this.embedmentList = embededList;
+		this.nestList = embededList;
 		NodeList children = senTag.getElementsByTagName(PAIR_TAG);
 		int numEntities = senTag.getElementsByTagName(ENTITY_TAG).getLength();
 		relation = new boolean[numEntities][numEntities];
