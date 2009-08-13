@@ -28,14 +28,15 @@ public class Parser {
     private Anchor generateLink(Element e) {
         try {
             URL u = new URL(new URL(context), e.getAttribute("href"));
-            String url = u.toString().toLowerCase();
+            String url = u.toString();
+            String suffix = u.getFile();
             url = url.replaceAll("\\.\\/", "");
             //避免主页重定向
-            if (url.endsWith("index.htm") || url.endsWith("index.html") ||
-                    url.endsWith("index.asp") || url.endsWith("default.aspx") ||
-                    url.endsWith("index.php") || url.endsWith("index.jsp")) {
+            if (suffix.endsWith("index.htm") || suffix.endsWith("index.html") ||
+            		suffix.endsWith("index.asp") || suffix.endsWith("default.aspx") ||
+            		suffix.endsWith("index.php") || suffix.endsWith("index.jsp")) {
                 url = url.substring(0, url.lastIndexOf("/") + 1);
-            } else if (u.getPath().indexOf(".") == -1 && !url.endsWith("/")) {
+            } else if (u.getPath().trim().equals("") && !url.endsWith("/")) {
                 //一律写成**/的形式
                 url = url + "/";
             }
