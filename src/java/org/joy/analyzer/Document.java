@@ -6,7 +6,6 @@ package org.joy.analyzer;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.channels.UnsupportedAddressTypeException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,10 +25,8 @@ public abstract class Document {
 	 * 
 	 * @param in
 	 */
-	public void createFromInputStream(InputStream in, String URL)
-			throws IOException,DocumentCreationException{
-	    throw new UnsupportedOperationException();
-	}
+	public abstract void createFromInputStream(InputStream in, String URL)
+			throws IOException,DocumentCreationException;
 
 	/**
 	 * 构造一个缺省文档
