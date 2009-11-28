@@ -4,44 +4,59 @@
  */
 package org.joy.analyzer.html;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Random;
+
+import org.joy.analyzer.Document;
+import org.joy.analyzer.DocumentCreationException;
+import org.joy.analyzer.Paragraph;
+
 /**
  * 描述锚文本实体类。
+ * 
  * @author Lamfeeling
  */
-public class Anchor {
-
-    private String text;
-    private String url;
+public class Anchor extends Document {
 
     /**
      * 构造函数
-     * @param text 锚文本
-     * @param url 锚文本指向的链接
+     * 
+     * @param text
+     *            锚文本
+     * @param url
+     *            锚文本指向的链接
      */
     public Anchor(String text, String url) {
-        this.text = text;
-        this.url = url;
+	setUrl(url);
+	setData(text);
+	Random r = new Random();
+	//random the offset of links
+	paragraphs.add(new Paragraph(text, 0, r.nextInt()));
     }
 
-    /**
-     * bean 方法，默认构造函数
-     */
-    public Anchor() {
+    @Override
+    public void createFromInputStream(InputStream in, String URL)
+	    throws IOException, DocumentCreationException {
+	// TODO Auto-generated method stub
+
     }
 
-    /**
-     * 獲取超鏈接锚文本
-     * @return 返回超鏈接錨文本
-     */
-    public String getText() {
-        return text;
+    @Override
+    public String getMineType() {
+	// TODO Auto-generated method stub
+	return null;
     }
 
-    /**
-     * 获取超链接的URL地址
-     * @return 超链接的URL地址
-     */
-    public String getURL() {
-        return url;
+    @Override
+    public String getSuffix() {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public String getTitle() {
+	// TODO Auto-generated method stub
+	return null;
     }
 }
