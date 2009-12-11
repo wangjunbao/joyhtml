@@ -206,7 +206,7 @@ public class Main extends javax.swing.JFrame {
                     jProgressBar1.setValue(20);
                     for (Anchor a : doc.getAnchors()) {
                         if (a != null) {
-                            urlArea.setText(urlArea.getText() + a.getText() + "   =>   " + a.getURL() + "\n");
+                            urlArea.setText(urlArea.getText() + a.getContent() + "   =>   " + a.getUrl() + "\n");
                         }
                     }
                     jProgressBar1.setValue(30);

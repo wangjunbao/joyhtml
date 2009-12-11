@@ -18,7 +18,9 @@ import org.joy.analyzer.Paragraph;
  * @author Lamfeeling
  */
 public class Anchor extends Document {
-
+    private final static int OFFSET_RANDOM_BOUNDARY = 32000; 
+    private final static double ANCHOR_WEIGHT = 1.0;
+    
     /**
      * 构造函数
      * 
@@ -32,7 +34,7 @@ public class Anchor extends Document {
 	setData(text);
 	Random r = new Random();
 	//random the offset of links
-	paragraphs.add(new Paragraph(text, 0, r.nextInt()));
+	paragraphs.add(new Paragraph(text, ANCHOR_WEIGHT, -r.nextInt(OFFSET_RANDOM_BOUNDARY)));
     }
 
     @Override

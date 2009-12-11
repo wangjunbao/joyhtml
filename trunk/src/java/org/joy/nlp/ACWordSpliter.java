@@ -81,7 +81,7 @@ public class ACWordSpliter implements WordSpliter {
 
 	public static void main(String[] args) {
 		ACWordSpliter w = new ACWordSpliter();
-		System.out.println(w.split("2008年奥运会安保工作无与伦比。", true));
+		System.out.println(w.split("科学发展观", true));
 		System.out.println(Arrays.asList(w.split("刘挺拔出宝剑！")));
 		new ACWordSpliter();
 		w.splitToWords("他从马上摔下来。");
