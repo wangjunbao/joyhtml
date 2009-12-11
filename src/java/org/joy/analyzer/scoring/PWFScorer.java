@@ -44,6 +44,6 @@ public class PWFScorer extends Scorer {
         		}
         	}
         }
-        return score*Math.log(term.length());
+        return score*Math.log(term.length()+1);
 	}
 }
