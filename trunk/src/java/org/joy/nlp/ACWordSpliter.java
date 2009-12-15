@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  * 中科院分词ICTCLAS分词，分词可以再x86的机器上使用。
  * @author Administrator
  */
-public class ACWordSpliter implements WordSpliter {
+public class ACWordSpliter extends WordSpliter {
 
 	private static ICTCLAS30 i = null;
 	private final static Object waiter = new Object();
