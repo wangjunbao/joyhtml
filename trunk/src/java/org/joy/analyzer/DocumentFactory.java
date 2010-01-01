@@ -75,7 +75,7 @@ public class DocumentFactory {
 			if (u.getProtocol().toLowerCase().equals("http")) {
 				// TODO: 尝试获取MIME 类型。
 				HttpURLConnection conn = (HttpURLConnection) u.openConnection();
-				String mine = conn.getContentType();
+				String mine = conn.getContentType().split(";")[0];
 				// 获取Mime指定的文档对象模型
 				if (mine == null ||!mineTable.containsKey(mine))
 					throw new UnsupportedOperationException("不支持的文件格式！");
