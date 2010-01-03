@@ -81,10 +81,12 @@ public class HitAnalyzer extends Analyzer<List<Word>, List<Hit>> {
 	for (String term : termSet) {
 	    Hit h = new Hit(term);
 	    for (Paragraph p : doc.paragraphs) {
-		int index = p.getText().indexOf(term);
+		//ignore the case
+		int index = p.getText().toLowerCase().indexOf(term);
 		while (index != -1) {
 		    h.addPos(index + p.getOffset());
-		    index = p.getText().indexOf(term, index + 1);
+		    //ignore the case
+		    index = p.getText().toLowerCase().indexOf(term, index + 1);
 		}
 	    }
 	    h.setScore(scorer.getScore(h.getTerm(), h.getPos()));

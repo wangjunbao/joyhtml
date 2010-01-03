@@ -40,25 +40,21 @@ public class Anchor extends Document {
     @Override
     public void createFromInputStream(InputStream in, String URL)
 	    throws IOException, DocumentCreationException {
-	// TODO Auto-generated method stub
 
     }
 
     @Override
     public String getMineType() {
-	// TODO Auto-generated method stub
 	return null;
     }
 
     @Override
     public String getSuffix() {
-	// TODO Auto-generated method stub
 	return null;
     }
 
     @Override
     public String getTitle() {
-	// TODO Auto-generated method stub
 	return null;
     }
 }
