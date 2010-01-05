@@ -27,7 +27,12 @@ public class ACWordSpliter extends WordSpliter {
 		try {
 		    System.out.println("Initialising dicts...");
 		    i = new ICTCLAS30();
-		    i.ICTCLAS_Init(System.getenv("DIC_HOME").getBytes("gb2312"));
+		    if (System.getenv("DIC_HOME") != null)
+			i.ICTCLAS_Init(System.getenv("DIC_HOME").getBytes(
+				"gb2312"));
+		    else {
+			i.ICTCLAS_Init("./".getBytes("gb2312"));
+		    }
 		} catch (UnsupportedEncodingException ex) {
 		    Logger.getLogger(ACWordSpliter.class.getName()).log(
 			    Level.SEVERE, null, ex);
@@ -50,7 +55,8 @@ public class ACWordSpliter extends WordSpliter {
 	    }
 	    try {
 		return new String(i.ICTCLAS_ParagraphProcess(text
-			.getBytes("gb2312"), isTagged ? 1 : 0), "gb2312").trim();
+			.getBytes("gb2312"), isTagged ? 1 : 0), "gb2312")
+			.trim();
 	    } catch (UnsupportedEncodingException ex) {
 		Logger.getLogger(ACWordSpliter.class.getName()).log(
 			Level.SEVERE, null, ex);
