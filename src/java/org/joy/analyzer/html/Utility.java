@@ -33,7 +33,7 @@ public class Utility {
 			"H4", "H5", "H6", "H7" };
 	private static final String[] INVALID_TAGS = { "STYLE", "COMMENT",
 			"SCRIPT", "OPTION", "IFRAME" };
-	private static final String[] SPACING_TAGS = { "BR", "SPAN" };
+	private static final String[] SPACING_TAGS = { "BR", "SPAN","LI" };
 	private static final String LINK_NODE = "A";
 
 	/**
