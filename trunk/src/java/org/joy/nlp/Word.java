@@ -19,7 +19,8 @@ public class Word {
     public Word(String s) {
         int i = s.lastIndexOf("/");
         tag = s.substring(i + 1, s.length());
-        text = s.substring(0, i);
+        //we store word ignoring its case
+        text = s.substring(0, i).toLowerCase();
     }
 
 
