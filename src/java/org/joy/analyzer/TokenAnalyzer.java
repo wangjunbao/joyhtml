@@ -38,6 +38,7 @@ public class TokenAnalyzer extends Analyzer<WordSpliter, List<Word>> {
 	    while (line != null) {
 		ArrayList<Word> lst = new ArrayList<Word>();
 		for (Word w : input.splitToWords(line)) {
+		    //stop word list filter
 		    if (!w.getText().equals("")
 			    && !stopWords.contains(w.getText())) {
 			lst.add(w);
