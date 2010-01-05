@@ -4,7 +4,6 @@
  */
 package org.joy.analyzer;
 
-import java.util.ArrayList;
 
 /**
  * 用来描述文本中的一个段落，段落的概念是，一个独立语义的，可以单独划分的段落。
@@ -27,7 +26,6 @@ public class Paragraph {
      * 段落开始相对于整个文章的偏移
      */
     private int offset;
-    private ArrayList<String> highlight = new ArrayList<String>();
 
     public Paragraph() {
     }
