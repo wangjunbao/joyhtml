@@ -13,7 +13,7 @@ public class EnglishWordSpliter extends WordSpliter {
 
     @Override
     public String[] split(String text) {
-	String[] words = text.replaceAll("[^a-zA-Z0-9\\s]+", "").split("\\s+");
+	String[] words = text.toLowerCase().replaceAll("[^a-zA-Z0-9\\s]+", "").split("\\s+");
 	return words;
     }
 
