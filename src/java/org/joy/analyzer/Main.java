@@ -11,8 +11,8 @@ import java.util.List;
 
 import org.joy.analyzer.html.HTMLDocument;
 import org.joy.analyzer.html.ParseException;
-import org.joy.nlp.ACWordSpliter;
 import org.joy.nlp.WordSpliter;
+import org.joy.nlp.ac.ACWordSpliter;
 
 /**
  * 
