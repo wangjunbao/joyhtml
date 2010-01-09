@@ -28,9 +28,9 @@ import org.joy.analyzer.Paragraph;
 import org.joy.analyzer.PipelineAnalyzer;
 import org.joy.analyzer.TokenAnalyzer;
 import org.joy.nlp.HLWordSpliter;
+import org.joy.nlp.PDWordSpliter;
 import org.joy.nlp.WordSpliter;
 import org.joy.nlp.ac.ACWordSpliter;
-import org.joy.nlp.pd.PDWordSpliter;
 
 /**
  *
