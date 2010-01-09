@@ -1,4 +1,4 @@
-package org.joy.nlp;
+package org.joy.nlp.pd;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -8,6 +8,7 @@ import java.util.Vector;
 
 import org.apache.lucene.analysis.Token;
 import org.apache.lucene.analysis.TokenStream;
+import org.joy.nlp.WordSpliter;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
