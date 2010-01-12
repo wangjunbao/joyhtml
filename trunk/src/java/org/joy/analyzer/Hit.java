@@ -1,117 +1,116 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.joy.analyzer;
 
 import java.text.DecimalFormat;
 import java.util.Vector;
 
 /**
- * Hit类表示一个关键词在文章当中的所有命中位置， 以及它在文章当中所占比重的抽象。
+ * Hit is a data structure stores all the positions and score for a given term
+ * in a document.
  * 
- * @author Lamfeeling
+ * @author Song Liu(lamfeeling2@gmail.com)
  */
 public class Hit implements Comparable<Hit>, Cloneable {
 
-	private double score;
-	private String term;
-	private Vector<Integer> pos ;
+    private double score;
+    private String term;
+    private Vector<Integer> pos;
 
-	/**
-	 * 默认构造函数
-	 */
-	public Hit() {
-		pos = new Vector<Integer>();
-	}
-	/**
-	 * 用一個关键词文本初始化一个Hit，初始化后，pos为一个无长度的链表
-	 * 
-	 * @param term
-	 *            Hit的关键词文本。
-	 */
-	public Hit(String term) {
-		this.term = term;
-		pos = new Vector<Integer>();
-	}
+    /**
+     * default constructor
+     */
+    public Hit() {
+	pos = new Vector<Integer>();
+    }
 
-	/**
-	 * 获取这个关键词的分数。
-	 * 
-	 * @return 关键词分数
-	 */
-	public double getScore() {
-		return score;
-	}
+    /**
+     * construct a hit using given term. the positions for this term is empyer
+     * 
+     * @param term
+     *            term for this hit
+     */
+    public Hit(String term) {
+	this.term = term;
+	pos = new Vector<Integer>();
+    }
 
-	/**
-	 * 设置这个Hit的分数
-	 * 
-	 * @param score
-	 *            关键词的分数
-	 */
-	public void setScore(double score) {
-		this.score = score;
-	}
+    /**
+     * get score for this hit
+     * 
+     * @return hit score
+     */
+    public double getScore() {
+	return score;
+    }
 
-	/**
-	 * 获取这个关键词hit中的在文本中的所有位置
-	 * 
-	 * @return 关键词在文本中的所有位置
-	 */
-	public Vector<Integer> getPos() {
-		return pos;
-	}
+    /**
+     * set score for this hit
+     * 
+     * @param score
+     *            hit score
+     */
+    public void setScore(double score) {
+	this.score = score;
+    }
 
-	/**
-	 * 像該hit中添加一個文章位置
-	 * 
-	 * @param pos
-	 */
-	public void addPos(int pos) {
-		this.pos.add(pos);
-	}
+    /**
+     * get positions for this term in a document
+     * 
+     * @return positions
+     */
+    public Vector<Integer> getPos() {
+	return pos;
+    }
 
-	/**
-	 * 设置这个Hit的关键词
-	 * @param term 关键词文本
-	 */
-	public void setTerm(String term) {
-		this.term = term;
-	}
+    /**
+     * add one position for this hit.
+     * 
+     * @param pos
+     */
+    public void addPos(int pos) {
+	this.pos.add(pos);
+    }
 
-	/**
-	 * 获取这个关键词的文本
-	 * 
-	 * @return 关键词的文本
-	 */
-	public String getTerm() {
-		return term;
-	}
+    /**
+     * set term for this term
+     * 
+     * @param term
+     *            term
+     */
+    public void setTerm(String term) {
+	this.term = term;
+    }
 
-	/**
-	 * Hit类的字符串表示，用于测试，不应用于阁下的编码中
-	 * 
-	 * @return
-	 */
-	@Override
-	public String toString() {
-		return term + ":" + new DecimalFormat("0.00").format(score);
-	}
+    /**
+     * get hit term
+     * 
+     * @return term
+     */
+    public String getTerm() {
+	return term;
+    }
 
-	public int compareTo(Hit h) {
-		return Double.compare(h.getScore(), getScore());
+    /**
+     * string format. for debugging
+     * 
+     * @return
+     */
+    @Override
+    public String toString() {
+	return term + ":" + new DecimalFormat("0.00").format(score);
+    }
+
+    public int compareTo(Hit h) {
+	return Double.compare(h.getScore(), getScore());
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+	Hit h = new Hit();
+	h.setTerm(term);
+	h.setScore(score);
+	for (Integer i : getPos()) {
+	    h.addPos(i.intValue());
 	}
-	
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		// TODO Auto-generated method stub
-		Hit h = new Hit();
-		h.setTerm(term);
-		h.setScore(score);
-		for(Integer i:getPos()){
-			h.addPos(i.intValue());
-		}
-		return h;
-	}
+	return h;
+    }
 }

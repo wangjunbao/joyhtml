@@ -9,15 +9,15 @@ import java.util.HashSet;
 import org.joy.nlp.Word;
 
 /**
- * 简单的关键词提取，返回所有的分词结果，过滤掉停用词
+ * SimpleTermExtractor simply returns the segmented words as indexable terms
  * 
- * @author Administrator
+ * @author Song Liu(lamfeeling2@Gmail.com)
  */
 public class SimpleTermExtractor extends TermExtractor {
 
     @Override
     public HashSet<String> getTerms() {
-	// 直接把分词结果作为term返回
+	// return the segmented words
 	HashSet<String> termSet = new HashSet<String>();
 	for (Word w : words) {
 	    // ignore the case

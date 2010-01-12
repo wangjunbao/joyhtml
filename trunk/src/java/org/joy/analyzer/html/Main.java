@@ -28,6 +28,7 @@ import org.joy.analyzer.Paragraph;
 import org.joy.analyzer.PipelineAnalyzer;
 import org.joy.analyzer.TokenAnalyzer;
 import org.joy.nlp.HLWordSpliter;
+import org.joy.nlp.LuceneWordSpliter;
 import org.joy.nlp.PDWordSpliter;
 import org.joy.nlp.WordSpliter;
 import org.joy.nlp.ac.ACWordSpliter;
@@ -128,7 +129,7 @@ public class Main extends javax.swing.JFrame {
         jRadioButton1.setText("中科院分词");
 
         buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setText("庖丁解牛分词");
+        jRadioButton2.setText("Lucene分词");
 
         jLabel2.setText("分词器选择：");
 
@@ -222,7 +223,7 @@ public class Main extends javax.swing.JFrame {
                     if (jRadioButton1.isSelected()) {
                         w = new ACWordSpliter();
                     } else {
-                        w = new PDWordSpliter();
+                        w = new LuceneWordSpliter();
                     }
                     jProgressBar1.setValue(70);
             		//初始化一个管道分析器，把分词和关键词分析结合起来。

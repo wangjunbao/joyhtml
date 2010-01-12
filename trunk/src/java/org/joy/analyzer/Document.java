@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.joy.analyzer;
 
 import java.io.IOException;
@@ -10,113 +6,117 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 抽象文档类,用来描述一个的属性，比如一个HTML文档，或者一个Doc文档。
+ * Document describes an document analyzed in joydoc.
  * 
- * @author Lamfeeling
+ * @author Song Liu(lamfeeling2@gmail.com)
  */
 public abstract class Document {
 
-	private String data;
-	private String url;
-	protected List<Paragraph> paragraphs;
+    private String data;
+    private String url;
+    protected List<Paragraph> paragraphs;
 
-	/**
-	 * 从输入流创建文档对象
-	 * 
-	 * @param in
-	 */
-	public abstract void createFromInputStream(InputStream in, String URL)
-			throws IOException,DocumentCreationException;
+    /**
+     * create document from inputstream
+     * 
+     * @param in
+     */
+    public abstract void createFromInputStream(InputStream in, String URL)
+	    throws IOException, DocumentCreationException;
 
-	/**
-	 * 构造一个缺省文档
-	 */
-	public Document() {
-		// TODO Auto-generated constructor stub
-		paragraphs = new ArrayList<Paragraph>();
+    /**
+     * construct a document using default constuctor
+     */
+    public Document() {
+	paragraphs = new ArrayList<Paragraph>();
+    }
+
+    /**
+     * Construct an document with given URL and document data
+     * 
+     * @param data
+     *            raw data for document.
+     */
+    public Document(String URL, String data) {
+	this.data = data;
+	this.url = URL;
+    }
+
+    /**
+     * get paragraphs for this document
+     * 
+     * @return paragraphs for this document
+     */
+    public List<Paragraph> getParagraphs() {
+	return paragraphs;
+    }
+
+    /**
+     * content(friendly representation) for current document
+     * 
+     * @return content for current document
+     */
+    public String getContent() {
+	StringBuffer sb = new StringBuffer();
+	for (Paragraph p : paragraphs) {
+	    sb.append(p.getText());
 	}
-	/**
-	 * 构造一个抽象文档
-	 * 
-	 * @param content
-	 *            文档的自负表现形式，即未经改变的纯字符串形式
-	 */
-	public Document(String URL, String data) {
-		this.data = data;
-		this.url = URL;
-	}
-	
-	/**
-	 * 获取文本中的正文段落
-	 * 
-	 * @return 返回文档中的正文段落的集合
-	 */
-	public List<Paragraph> getParagraphs() {
-		return paragraphs;
-	}
+	return sb.toString();
+    }
 
-	/**
-	 * 获取文章的全部文字。
-	 * 
-	 * @return 文章的全部文字
-	 */
-	public String getContent() {
-		StringBuffer sb = new StringBuffer();
-		for (Paragraph p : paragraphs) {
-			sb.append(p.getText());
-		}
-		return sb.toString();
-	}
+    /**
+     * get document title
+     * 
+     * @return document title
+     */
+    public abstract String getTitle();
 
-	/**
-	 * 获取文档的标题
-	 * 
-	 * @return 文档的标题
-	 */
-	public abstract String getTitle();
+    /**
+     * set the document raw data
+     * 
+     * @param data
+     *            set document raw data
+     */
+    protected void setData(String data) {
+	this.data = data;
+    }
 
-	/**
-	 * 设置这个文档的数据文字
-	 * @param data 需要传输的数据文字
-	 */
-	protected void setData(String data){
-		this.data = data;
-	}
+    /**
+     * get raw data of this document
+     * 
+     * @return raw data of this document
+     */
+    public String getData() {
+	return data;
+    }
 
-	/**
-	 * 获取文档的纯字符串形式。
-	 * 
-	 * @return 要解析的文档字符串形式
-	 */
-	public String getData() {
-		return data;
-	}
+    /**
+     * set URL for current document
+     */
+    protected void setUrl(String URL) {
+	this.url = URL;
+    }
 
-	/**
-	 * 设置文档的URL
-	 */
-	protected void setUrl(String URL){
-		this.url = URL;
-	}
-	/**
-	 * 获取文件的URL
-	 * @return 文件URL
-	 */
-	public String getUrl() {
-		return url;
-	}
+    /**
+     * get URL for current document
+     * 
+     * @return docuemnt URL
+     */
+    public String getUrl() {
+	return url;
+    }
 
-	/**
-	 * 获取该文档的MIME的类型
-	 * 
-	 * @return 该文档的MIME的类型
-	 */
-	public abstract String getMineType();
+    /**
+     * get MIME type for current document.
+     * 
+     * @return  MIME type for current document.
+     */
+    public abstract String getMineType();
 
-	/**
-	 * 获取该文档的文件名后缀
-	 * 
-	 * @return 文档的文件名后缀
-	 */
-	public abstract String getSuffix();
+    /**
+     * file suffix for current document.
+     * 
+     * @return file suffix for current document.
+     */
+    public abstract String getSuffix();
 }

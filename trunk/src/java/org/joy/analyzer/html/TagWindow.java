@@ -10,245 +10,249 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 /**
- * 一个HTML标记窗在此文本抽取系统中的抽象。 可以用它来获取此标记本身的一些特征参数，例如超文本密度等等。
+ * An abstract for a HTML tag. It may contains some informations that used for
+ * TextExtractor to decide whether it is a main body tag
  * 
- * @author Lamfeeling
+ * @author Song Liu(lamfeeling2@gmail.com)
  */
 public class TagWindow {
 
-	private Node node = null;
-	private String text = "";
-	private String anchorText = "";
-	private int numInfoNodes = 0;
+    private Node node = null;
+    private String text = "";
+    private String anchorText = "";
+    private int numInfoNodes = 0;
 
-	/**
-	 * 用一个标准的w3cNode对象来生成一个Tag对象。
-	 * 
-	 * @param node
-	 *            w3cNode对象。
-	 */
-	public TagWindow(Node node) {
-		this.node = node;
-		text = getInnerText(node, false);
-		anchorText = getAnchorText();
+    /**
+     * construct a TagWindow using DOM Object Node.
+     * 
+     * @param node
+     *            w3cNode object
+     */
+    public TagWindow(Node node) {
+	this.node = node;
+	text = getInnerText(node, false);
+	anchorText = getAnchorText();
 
-		if (node.getNodeType() == Node.ELEMENT_NODE) {
-			numInfoNodes = getNumInfoNode((Element) node);
-		}
+	if (node.getNodeType() == Node.ELEMENT_NODE) {
+	    numInfoNodes = getNumInfoNode((Element) node);
+	}
+    }
+
+    /**
+     * Smooth function. We use a step function for efficiency
+     * 
+     * @param x
+     * 
+     * @return
+     */
+    private static double fn(double x) {
+	if (x > 0.8f) {
+	    return 0.8f;
+	}
+	return x;
+    }
+
+    /**
+     * Compute the weight that this Tag Window donates to the main idea of the
+     * current HTML documents.
+     * 
+     * @param totalT
+     *            Total number of chars in current HTML document
+     * @param totalA
+     *            total number of chars in all anchors of current HTML document
+     * @param totalNumInfoNodes
+     *            total number of info nodes in current HTML document
+     * @return weight that this Tag Window donates to the main idea of curret
+     *         HTML document
+     */
+    public double weight(int totalT, int totalA, int totalNumInfoNodes) {
+	double weight = 0;
+	if (node.getNodeType() == Node.ELEMENT_NODE) {
+	    Element e = (Element) node;
+	    weight += Utility.isTableNodes(e) ? .1 : 0;
+	    weight += Utility.isLargeNode(e) ? .1 : 0;
+	    weight += 0.2 * fn(numInfoNodes / (double) (totalNumInfoNodes));
+	    weight -= Utility.containsInput(e) ? .5 : 0;
 	}
 
-	/**
-	 * 平滑函数，用来平滑我们的算法中的一些值。目前为了效率，我们使用非常粗糙的解题函数
-	 * 
-	 * @param x
-	 *            参数
-	 * @return 平滑后的参数
-	 */
-	private static double fn(double x) {
-		if (x > 0.8f) {
-			return 0.8f;
-		}
-		return x;
+	if (Utility.containsNoise(text)) {
+	    weight -= 0.5;
 	}
 
-	/**
-	 * 通过所给的HTML全文参数，计算该链接在该HTML文档中的权重。
-	 * 
-	 * @param totalT
-	 *            HTML文档的总字数。
-	 * @param totalA
-	 *            HTML文档的总超链接字数。
-	 * @param totalNumInfoNodes
-	 *            HTML文档的<a href="#">infoNode</a>个数。
-	 * @return 该标签在所给参数的HTML文档当中的权重
-	 */
-	public double weight(int totalT, int totalA, int totalNumInfoNodes) {
-		double weight = 0;
-		if (node.getNodeType() == Node.ELEMENT_NODE) {
-			Element e = (Element) node;
-			weight += Utility.isTableNodes(e) ? .1 : 0;
-			weight += Utility.isLargeNode(e) ? .1 : 0;
-			weight += 0.2 * fn(numInfoNodes / (double) (totalNumInfoNodes));
-			weight -= Utility.containsInput(e) ? .5 : 0;
-		}
+	weight += 1.0 - anchorDensity();
+	weight += share(totalA, totalT);
+	return weight;
+    }
 
-		if (Utility.containsNoise(text)) {
-			weight -= 0.5;
-		}
+    /**
+     * Definition for anchorDensity is, the ratio between # chars of anchor text
+     * and # chars of total text.
+     * 
+     * @note if there's no anchor text or total text, returns 0.
+     * @return anchor density
+     */
+    private double anchorDensity() {
+	int anchorLen = anchorText.length();
+	int textLen = text.length();
+	if (anchorLen == 0 || textLen == 0) {
+	    return 0;
+	}
+	return anchorLen / (double) textLen;
+    }
 
-		weight += 1.0 - anchorDensity();
-		weight += share(totalA, totalT);
-		return weight;
+    /**
+     * compute the share of current Tag alpha * text ratio - beta * anchor ratio
+     * 
+     * @param totalA
+     *            total number of chars in anchor text
+     * @param totalT
+     *            total number of chars in text
+     * @return the share of this tag
+     */
+    private double share(int totalA, int totalT) {
+	if (totalA == 0) {
+	    return 1.6 * fn((double) text.length() / totalT);
+	}
+	return 1.6 * fn((double) text.length() / totalT) - .8
+		* anchorText.length() / totalA;
+    }
+
+    /**
+     * get inner text of this tag
+     * 
+     * @param visualMode
+     *            whether adjust for visual tags? (add extra space or line
+     *            breaker)
+     * @return inner text
+     */
+    public String getInnerText(boolean visualMode) {
+	if (visualMode) {
+	    return getInnerText(node, visualMode);
+	} else {
+	    return text;
+	}
+    }
+
+    /**
+     * number of info nodes in this Tag
+     * 
+     * @return number of info nodes inthis tag
+     */
+    public int getNumInfoNodes() {
+	return numInfoNodes;
+    }
+
+    /**
+     * Anchor text in this element
+     * 
+     * @return anchor text
+     */
+    private String getAnchorText() {
+	if (node.getNodeType() == Node.ELEMENT_NODE) {
+	    return getAnchorText((Element) node);
+	}
+	return "";
+    }
+
+    /**
+     * get w3c DOM object for this tag
+     * 
+     * @return
+     */
+    public Node getNode() {
+	return node;
+    }
+
+    /**
+     * get inner text for given Node
+     * 
+     * @param node
+     * 
+     * @param visualMode
+     *            add extra space and line breaker
+     * @return get inner text for given node
+     */
+    public static String getInnerText(Node node, boolean visualMode) {
+	return getInnerText(node, visualMode, 0);
+    }
+
+    private static String getInnerText(Node node, boolean viewMode, int level) {
+	if (node.getNodeType() == Node.TEXT_NODE) {
+	    return Utility.filter(((Text) node).getData());
 	}
 
-	/**
-	 * 定义：锚文本和整体文本的比值
-	 * 
-	 * @note 特别的：如果text或者anchorText为空，那么这个anchorDensity为0
-	 * @return
-	 */
-	private double anchorDensity() {
-		int anchorLen = anchorText.length();
-		int textLen = text.length();
-		if (anchorLen == 0 || textLen == 0) {
-			return 0;
-		}
-		return anchorLen / (double) textLen;
-	}
-
-	/**
-	 * 通过所给的HTML参数计算该标记在该HTML文档中所站的份额比例。
-	 * 计算方法是，alpha*文字所占的比例-beta超链接所占比例，公式参数详见函数内
-	 * 
-	 * @param totalA
-	 *            该HTML文档包含的超链接文本的字数。
-	 * @param totalT
-	 *            该HTML文档包含的文本字数。
-	 * @return 这个标记所占的比例。
-	 */
-	private double share(int totalA, int totalT) {
-		if (totalA == 0) {
-			return 1.6 * fn((double) text.length() / totalT);
-		}
-		return 1.6 * fn((double) text.length() / totalT) - .8
-				* anchorText.length() / totalA;
-	}
-
-	/**
-	 * 获取这个标签包含的文本
-	 * 
-	 * @param viewMode
-	 *            是否依照浏览器显示的方式进行优化（将加入额外的空格和换行）？
-	 * @return 这个标签所包含的实际文本。
-	 */
-	public String getInnerText(boolean viewMode) {
-		if (viewMode) {
-			return getInnerText(node, viewMode);
-		} else {
-			return text;
-		}
-	}
-
-	/**
-	 * 这个标签包含的infoNode的个数。
-	 * 
-	 * @return 这个标签包含的infoNode的个数。
-	 */
-	public int getNumInfoNodes() {
-		return numInfoNodes;
-	}
-
-	/**
-	 * 这个标签所包含的锚文本字符
-	 * 
-	 * @return 这个标签所包含的锚文本字符
-	 */
-	private String getAnchorText() {
-		if (node.getNodeType() == Node.ELEMENT_NODE) {
-			return getAnchorText((Element) node);
-		}
+	if (node.getNodeType() == Node.ELEMENT_NODE) {
+	    Element element = (Element) node;
+	    if (Utility.isInvalidElement(element)) {
 		return "";
-	}
-
-	/**
-	 * 获取这个类里的w3cNode对象
-	 * 
-	 * @return
-	 */
-	public Node getNode() {
-		return node;
-	}
-
-	/**
-	 * 获取指定标签内所包含的有效文字
-	 * 
-	 * @param node
-	 *            所指定的标签
-	 * @param viewMode
-	 *            viewMode 是否依照浏览器显示的方式进行优化（将加入额外的空格和换行）？
-	 * @return 获取指定标签内所包含的有效文字
-	 */
-	public static String getInnerText(Node node, boolean viewMode) {
-		return getInnerText(node, viewMode, 0);
-	}
-
-	private static String getInnerText(Node node, boolean viewMode, int level) {
-		if (node.getNodeType() == Node.TEXT_NODE) {
-			return Utility.filter(((Text) node).getData());
+	    }
+	    StringBuilder nodeText = new StringBuilder();
+	    // replace the line break with space,
+	    // beacause inappropriate line break may cause the paragraph
+	    // corrupt.
+	    if (viewMode && element.getTagName().equals("BR")) {
+		nodeText.append(" ");
+	    }
+	    // let the appearance tags stay
+	    if (viewMode && Utility.isHeading(element)) {
+		nodeText.append("<" + element.getTagName() + ">");
+	    }
+	    NodeList list = element.getChildNodes();
+	    for (int i = 0; i < list.getLength(); i++) {
+		String t = getInnerText(list.item(i), viewMode, level + 1);
+		// whether we need to add extra space?
+		if (viewMode && Utility.needSpace(element)) {
+		    t += " ";
 		}
-
-		if (node.getNodeType() == Node.ELEMENT_NODE) {
-			Element element = (Element) node;
-			if (Utility.isInvalidElement(element)) {
-				return "";
-			}
-			StringBuilder nodeText = new StringBuilder();
-			// replace the line break with space,
-			// beacause inappropriate line break may cause the paragraph
-			// corrupt.
-			if (viewMode && element.getTagName().equals("BR")) {
-				nodeText.append(" ");
-			}
-			// let the appearance tags stay
-			if (viewMode && Utility.isHeading(element)) {
-				nodeText.append("<" + element.getTagName() + ">");
-			}
-			NodeList list = element.getChildNodes();
-			for (int i = 0; i < list.getLength(); i++) {
-				String t = getInnerText(list.item(i), viewMode, level + 1);
-				// whether we need to add extra space?
-				if (viewMode && Utility.needSpace(element)) {
-					t += " ";
-				}
-				nodeText.append(t);
-			}
-			if (viewMode && Utility.isHeading(element)) {
-				nodeText.append("</" + element.getTagName() + ">");
-			}
-			// break the line, if the element is a REAL BIG tag, such as
-			// DIV,TABLE
-			if (viewMode && Utility.needWarp(element)
-					&& nodeText.toString().trim().length() != 0) {
-				nodeText.append("\r\n");
-			}
-			return nodeText.toString().replaceAll("[\r\n]+", "\r\n");
-		}
-
-		return "";
+		nodeText.append(t);
+	    }
+	    if (viewMode && Utility.isHeading(element)) {
+		nodeText.append("</" + element.getTagName() + ">");
+	    }
+	    // break the line, if the element is a REAL BIG tag, such as
+	    // DIV,TABLE
+	    if (viewMode && Utility.needWarp(element)
+		    && nodeText.toString().trim().length() != 0) {
+		nodeText.append("\r\n");
+	    }
+	    return nodeText.toString().replaceAll("[\r\n]+", "\r\n");
 	}
 
-	/**
-	 * 这个标签所包含的锚文本字符
-	 * 
-	 * @param e
-	 *            所指定的w3cHTML元素
-	 * @return 这个标签所包含的锚文本字符
-	 */
-	public static String getAnchorText(Element e) {
-		StringBuilder anchorLen = new StringBuilder();
-		// get anchor text length
-		NodeList anchors = e.getElementsByTagName("A");
-		for (int i = 0; i < anchors.getLength(); i++) {
-			anchorLen.append(getInnerText(anchors.item(i), false));
-		}
-		return anchorLen.toString();
-	}
+	return "";
+    }
 
-	/**
-	 * 当前这个节点下包含多少个InfoNode?
-	 * 
-	 * @param e
-	 *            所给定的w3c元素
-	 * @return 当前这个节点下包含多少个InfoNode?
-	 */
-	public static int getNumInfoNode(Element e) {
-		int num = Utility.isInfoNode(e) ? 1 : 0;
-		NodeList children = e.getChildNodes();
-		for (int i = 0; i < children.getLength(); i++) {
-			if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-				num += getNumInfoNode((Element) children.item(i));
-			}
-		}
-		return num;
+    /**
+     * get anchor text for given element
+     * 
+     * @param e
+     *            w3c DOM element
+     * @return anchor text in given element
+     */
+    public static String getAnchorText(Element e) {
+	StringBuilder anchorLen = new StringBuilder();
+	// get anchor text length
+	NodeList anchors = e.getElementsByTagName("A");
+	for (int i = 0; i < anchors.getLength(); i++) {
+	    anchorLen.append(getInnerText(anchors.item(i), false));
 	}
+	return anchorLen.toString();
+    }
+
+    /**
+     * get number of info node in element
+     * 
+     * @param e
+     *            w3c element
+     * @return number of info node in element
+     */
+    public static int getNumInfoNode(Element e) {
+	int num = Utility.isInfoNode(e) ? 1 : 0;
+	NodeList children = e.getChildNodes();
+	for (int i = 0; i < children.getLength(); i++) {
+	    if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
+		num += getNumInfoNode((Element) children.item(i));
+	    }
+	}
+	return num;
+    }
 }

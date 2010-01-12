@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.joy.analyzer;
 
 import java.util.ArrayList;
@@ -19,9 +15,9 @@ import org.joy.analyzer.terms.TermExtractor;
 import org.joy.nlp.Word;
 
 /**
- * 用于分析和提取文章中Hit的分析器
+ * find all the hits from one document.
  * 
- * @author Administrator
+ * @author Song Liu(lamfeeling2@Gmail.com)
  */
 public class HitAnalyzer extends Analyzer<List<Word>, List<Hit>> {
 
@@ -32,21 +28,19 @@ public class HitAnalyzer extends Analyzer<List<Word>, List<Hit>> {
     }
 
     /**
-     * 构造一个HitAnaylzer
+     * construct a HitAnalyzer
      * 
      * @param doc
-     *            所要分析的文档对象
-     * @param spliter
-     *            所用的分词器
+     *            document you want to analyze with
      */
     public HitAnalyzer(Document doc) {
 	super(doc);
     }
 
     /**
-     * 获取分析结果
+     * get Hits for this document
      * 
-     * @return 该片文章当中的Hits
+     * @return hits for this document
      */
     public List<Hit> getHits() {
 	return hitList;
@@ -81,18 +75,18 @@ public class HitAnalyzer extends Analyzer<List<Word>, List<Hit>> {
 	for (String term : termSet) {
 	    Hit h = new Hit(term);
 	    for (Paragraph p : doc.paragraphs) {
-		//ignore the case
+		// ignore the case
 		int index = p.getText().toLowerCase().indexOf(term);
 		while (index != -1) {
 		    h.addPos(index + p.getOffset());
-		    //ignore the case
+		    // ignore the case
 		    index = p.getText().toLowerCase().indexOf(term, index + 1);
 		}
 	    }
 	    h.setScore(scorer.getScore(h.getTerm(), h.getPos()));
 	    hitList.add(h);
 	}
-	// 排序hitList
+	// sort hitList
 	Collections.sort(hitList);
 	output = hitList;
     }

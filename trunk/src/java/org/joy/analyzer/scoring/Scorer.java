@@ -4,13 +4,15 @@
  */
 package org.joy.analyzer.scoring;
 
-import org.joy.analyzer.*;
 import java.util.List;
 import java.util.Set;
 
+import org.joy.analyzer.Paragraph;
+
 /**
- * 打分器抽象类，继承它的子类给关键词提取器提取到的关键词依据一定的算法打分
- * @author Administrator
+ * Scorer, scores all the terms using specific criteria.
+ * 
+ * @author Song Liu(lamfeeling2@gmail.com)
  */
 public abstract class Scorer {
 
@@ -22,38 +24,48 @@ public abstract class Scorer {
     }
 
     /**
-     * 设置关键词集合，以用与分数分析，如果需要的话
-     * @param termSet 关键词集合
+     * Set terms which are being scored
+     * 
+     * @param termSet
+     *            Term Set
      */
     public void setTermSet(Set<String> termSet) {
-        this.termSet = termSet;
+	this.termSet = termSet;
     }
 
     /**
-     * 设置段落集合，以用与分数分析，如果需要的话
-     * @param paragraphs 段落集合
+     * Set Paragraphs used in scoring
+     * 
+     * @param paragraphs
+     *            Paragraph List
      */
     public void setParagraphs(List<Paragraph> paragraphs) {
-        this.paragraphs = paragraphs;
-        StringBuffer sb = new StringBuffer();
-        for (Paragraph p : paragraphs) {
-        	sb.append(p.getText());
-        }
-        fulltext = sb.toString();
+	this.paragraphs = paragraphs;
+	StringBuffer sb = new StringBuffer();
+	for (Paragraph p : paragraphs) {
+	    sb.append(p.getText());
+	}
+	fulltext = sb.toString();
     }
 
     /**
-     * 获取指定关键词的分数，继承这个类的子类需要实现这个方法
-     * @param term 关键词
-     * @return 指定关键词的分数
+     * Get score for specified term
+     * 
+     * @param term
+     *            term
+     * @return score of the term you queried
      */
     public abstract double getScore(String term);
-    
+
     /**
-     * 获取指定关键词的分数，继承这个类的子类需要实现这个方法
-     * @param term 关键词
-     * @param pos 关键词出现的文档当中的位置
-     * @return 指定关键词的分数
+     * Get the score for specified term and given positions of this term in
+     * document
+     * 
+     * @param term
+     *            score of which you want to get
+     * @param pos
+     *            term
+     * @return score of the term you queried
      */
     public abstract double getScore(String term, List<Integer> pos);
 }

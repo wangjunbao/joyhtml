@@ -1,10 +1,12 @@
 package org.joy.nlp;
 
-import java.util.HashSet;
 import java.util.Vector;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+/**
+ * EnglisWordSpliter one simple English tokenizer
+ */
 public class EnglishWordSpliter extends WordSpliter {
 
     @Override
@@ -14,8 +16,7 @@ public class EnglishWordSpliter extends WordSpliter {
 
     @Override
     public String[] split(String text) {
-	String[] words = text.replaceAll("[^a-zA-Z0-9\\s]+", "")
-		.split("\\s+");
+	String[] words = text.replaceAll("[^a-zA-Z0-9\\s]+", "").split("\\s+");
 	return words;
     }
 
