@@ -1,12 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.joy.nlp.ac;
 
-import ICTCLAS.I3S.AC.ICTCLAS30;
-
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -18,16 +11,18 @@ import java.util.logging.Logger;
 import org.joy.nlp.Word;
 import org.joy.nlp.WordSpliter;
 
+import ICTCLAS.I3S.AC.ICTCLAS30;
+
 /**
- * 中科院分词ICTCLAS分词，分词可以再x86的机器上使用。
+ * ICTCLAS Word Spliter
  * 
- * @author Administrator
+ * @author Song Liu(lamfeeling2@gmail.com)
  */
 public class ACWordSpliter extends WordSpliter {
 
     private static ICTCLAS30 i = null;
     private final static Object waiter = new Object();
-    private static final String DIC_HOME = "/tmp/";
+    private static final String DIC_HOME = "c:/tmp/";
 
     public ACWordSpliter() {
 	synchronized (waiter) {
@@ -57,7 +52,8 @@ public class ACWordSpliter extends WordSpliter {
 		    }
 		    fos.close();
 		    Runtime.getRuntime().exec(
-			    "unzip -o" + DIC_HOME + "dicts.zip -d " + DIC_HOME+"dicts/");
+			    "unzip -o" + DIC_HOME + "dicts.zip -d " + DIC_HOME
+				    + "dicts/");
 
 		    i = new ICTCLAS30();
 		    i.ICTCLAS_Init(DIC_HOME.getBytes("gb2312"));
