@@ -7,24 +7,22 @@ package org.joy.analyzer.scoring;
 import java.util.List;
 
 /**
- * 零分算法，给所有的关键词打0分
+ * score all the terms 0
  * 
- * @note 需要传入的打分参数：无
- * @author Administrator
+ * @author Song Liu(lamfeeling2@gmail.com)
  */
 public class ZeroScorer extends Scorer {
 
-	public ZeroScorer() {
-	}
+    public ZeroScorer() {
+    }
 
-	@Override
-	public double getScore(String term) {
-		return .0;
-	}
+    @Override
+    public double getScore(String term) {
+	return .0;
+    }
 
-	@Override
-	public double getScore(String term, List<Integer> pos) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public double getScore(String term, List<Integer> pos) {
+	return 0;
+    }
 }

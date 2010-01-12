@@ -10,8 +10,9 @@ import java.util.regex.Pattern;
 import org.joy.nlp.Word;
 
 /**
- *
- * @author Administrator
+ * LinguisticTermExtractor merges the words with specific pattern of POS tags
+ * 
+ * @author Song Liu(lamfeeling2@gmail.com)
  */
 public class LinguisticTermExtractor extends TermExtractor {
 
@@ -20,19 +21,19 @@ public class LinguisticTermExtractor extends TermExtractor {
 
     @Override
     public HashSet<String> getTerms() {
-        Pattern p1 = Pattern.compile(pattern);
-        Matcher matcher = p1.matcher(taggedtext);
-        HashSet<String> terms = new HashSet<String>();
-        while (matcher.find()) {
-            String t = matcher.group().trim();
-            StringBuffer sb = new StringBuffer();
-            for (String s : t.split("\\s")) {
-                sb.append(new Word(s).getText());
-            }
-            if (sb.length() <= MAX_LENGTH) {
-                terms.add(sb.toString());
-            }
-        }
-        return terms;
+	Pattern p1 = Pattern.compile(pattern);
+	Matcher matcher = p1.matcher(taggedtext);
+	HashSet<String> terms = new HashSet<String>();
+	while (matcher.find()) {
+	    String t = matcher.group().trim();
+	    StringBuffer sb = new StringBuffer();
+	    for (String s : t.split("\\s")) {
+		sb.append(new Word(s).getText());
+	    }
+	    if (sb.length() <= MAX_LENGTH) {
+		terms.add(sb.toString());
+	    }
+	}
+	return terms;
     }
 }

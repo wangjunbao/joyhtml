@@ -15,7 +15,7 @@ import net.paoding.analysis.analyzer.PaodingAnalyzer;
 import net.paoding.analysis.analyzer.PaodingAnalyzerBean;
 
 /**
- * 客观的说，这是效果最差的一个分词器。但它也是唯一一个可以跨平移台的分词。 适合找不到合适平台分词器的童鞋用。
+ * Paoding word spliter, written in java.
  * 
  * @author Andy
  * 

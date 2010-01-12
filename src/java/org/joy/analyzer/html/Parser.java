@@ -13,9 +13,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 /**
- * 网页解析类用来解析网页中的正文文本和链接
+ * Parses the Anchors and the Body Text in HTML
  * 
- * @author Lamfeeling
+ * @author Song Liu (lamfeeling2@Gmail.com)
  */
 public class Parser {
 
@@ -25,7 +25,7 @@ public class Parser {
     private TextExtractor textExtractor;
     private String mainBody;
 
-    // 用网页中的元素生成链接
+    // gengerate the anchor using the A element
     private Anchor generateLink(Element e) {
 	try {
 	    URL u = new URL(new URL(context), e.getAttribute("href"));
@@ -54,7 +54,7 @@ public class Parser {
 	return null;
     }
 
-    // 从网页DOM树中提取A元素
+    // Extract A element from DOM tree
     private void extractLinks() {
 	NodeList nl = doc.getElementsByTagName("A");
 	for (int i = 0; i < nl.getLength(); i++) {
@@ -67,7 +67,7 @@ public class Parser {
     }
 
     /**
-     * 解析网页文本
+     * do the parse action
      * 
      * @throws ParseException
      */
@@ -82,11 +82,6 @@ public class Parser {
 	textExtractor = new TextExtractor(doc);
     }
 
-    /**
-     * 获取网页中所有链接。
-     * 
-     * @return 网页中所有链接
-     */
     public Vector<Anchor> getAnchors() {
 	return anchors;
     }

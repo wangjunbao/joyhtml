@@ -1,87 +1,79 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.joy.analyzer;
 
 /**
- * 分析器抽象类，这个类完成一个对文档的分析操作， 
- * 可以是Hits提取，命名实体提取，以及其他的自然语言分析。
+ * Analyzer is the operator for doing some analysis for a single document. By
+ * extending this class, many operations can be intergrated with JoyDoc system
  * 
- * 每个分析器都使用一个给定的输入和输出来完成一个指定的操作。
+ * Each analyzer has an input and output, which are indicated by parameter K,
+ * and E.
+ * 
+ * Each analyzer is also a pipe line that can be cooperated with other analyzer,
+ * by specifying proper input and output classes and using pipelineAnalyzer.
+ * 
  * @param <K>
- *            这个分析器的输入类别
+ *            Input Class for this analyzer
  * @param <E>
- *            这个分析器的输出类别
- * @author Lamfeeling
+ *            Output Class for this analyzer
+ * @author Song Liu(lamfeeling2@gmail.com)
  */
 public abstract class Analyzer<K, E> {
 
-	protected Document doc;
-	protected Paragraph para;
-	protected K input;
-	protected E output;
+    protected Document doc;
+    protected Paragraph para;
+    protected K input;
+    protected E output;
 
-	public Analyzer() {
-	}
-	
-	/**
-	 * 设置这个Analyzer需要分析的Paragraph,如果这个分析器不是基于Paragraph的，这个参数可以不设置
-	 * 
-	 * @param para
-	 */
-	public void setPara(Paragraph para) {
-		this.para = para;
-	}
-	
-	/**
-	 * 设置这个Analyzer需要分析的Doc,如果这个分析器不是基于Docment的，这个参数可以不设置
-	 * 
-	 * @param doc
-	 */
-	public void setDoc(Document doc) {
-		this.doc = doc;
-	}
+    public Analyzer() {
+    }
 
-	/**
-	 * 分析器构造函数
-	 * 
-	 * @param doc
-	 *            传入一个文档对象以供分析用途。
-	 */
-	public Analyzer(Document doc) {
-		this.doc = doc;
-	}
+    /**
+     * set the document you want to analyze with.
+     * 
+     * @param doc
+     */
+    public void setDoc(Document doc) {
+	this.doc = doc;
+    }
 
-	/**
-	 * 这个分析器的管道方法，输入一个资源
-	 * 
-	 * @param inputResource
-	 *            输入资源
-	 */
-	public void input(K inputResource) {
-		input = inputResource;
-	}
+    /**
+     * constructor
+     * 
+     * @param doc
+     *            the document you want to analyze with.
+     */
+    public Analyzer(Document doc) {
+	this.doc = doc;
+    }
 
-	/**
-	 * 这个分析器的管道方法，输出
-	 * 
-	 * @return 输出的资源
-	 */
-	public E output() {
-		return output;
-	}
+    /**
+     * input resource for this analyzer
+     * 
+     * @param inputResource
+     * 
+     */
+    public void input(K inputResource) {
+	input = inputResource;
+    }
 
-	public Class<?> getInputClass() {
-		return input.getClass();
-	}
+    /**
+     * output for this analyzer
+     * 
+     * @return output
+     */
+    public E output() {
+	return output;
+    }
 
-	public Class<?> getOutputClass() {
-		return output.getClass();
-	}
+    public Class<?> getInputClass() {
+	return input.getClass();
+    }
 
-	/**
-	 * 执行分析操作。子类可以继承此方法以用于分析操作。
-	 */
-	public abstract void doAnalyze();
+    public Class<?> getOutputClass() {
+	return output.getClass();
+    }
+
+    /**
+     * do actual operation on document.
+     */
+    public abstract void doAnalyze();
 }
